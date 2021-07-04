@@ -6,8 +6,6 @@ namespace RedWire
 {
 	struct Cell
 	{
-		virtual uint32_t getColor();
-
-		const static Cell null;
+		virtual uint32_t getColor() const = 0;
 	};
 }

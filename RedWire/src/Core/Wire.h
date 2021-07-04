@@ -10,7 +10,7 @@ namespace RedWire
 
 		bool isSource;
 
-		uint32_t getColor() const;
+		uint32_t getColor() const override;
 
 		bool getPowered() const;
 		void setPowered(const bool powered);

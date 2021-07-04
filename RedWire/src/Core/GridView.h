@@ -15,9 +15,9 @@ namespace RedWire
 	{
 	private:
 		Int2 size;
-		sf::Texture gridTexture;
-		sf::Sprite gridSprite;
-		sf::Image gridImage;
+		sf::Sprite sprite;
+		sf::Texture texture;
+		sf::Image image;
 		sf::View gridView;
 		std::shared_ptr<Grid> grid;
 
@@ -25,11 +25,11 @@ namespace RedWire
 		static const Int2 DefaultSize;
 
 		//Change this later into Float2 or FloatRect
-		GridView( const Int2& size, const std::shared_ptr<Grid>& grid );
+		GridView(const Int2& size, const std::shared_ptr<Grid>& grid);
 
 		void start();
 
-		void update( const sf::RenderWindow& renderWindow );
+		void update(const sf::RenderWindow& renderWindow);
 
 		void updateTexture();
 
@@ -37,7 +37,7 @@ namespace RedWire
 
 		const sf::View& getView() const;
 
-		void display( sf::RenderWindow& renderWindow );
+		void display(sf::RenderWindow& renderWindow);
 	};
 }
 

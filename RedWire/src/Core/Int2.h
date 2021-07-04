@@ -6,6 +6,8 @@ namespace RedWire
 {
 	struct Int2
 	{
+		Int2(size_t x = 0, size_t y = 0);
+
 		size_t x;
 		size_t y;
 

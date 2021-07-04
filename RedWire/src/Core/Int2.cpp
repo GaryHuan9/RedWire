@@ -3,6 +3,11 @@
 
 using namespace RedWire;
 
+Int2::Int2(size_t x, size_t y) : x(x), y(y)
+{
+
+}
+
 Int2& Int2::operator+=(const Int2& other)
 {
 	x += other.x;

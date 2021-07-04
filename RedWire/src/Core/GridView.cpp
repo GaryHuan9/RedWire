@@ -1,22 +1,23 @@
 #include "GridView.h"
+#include "Wire.h"
 
 using namespace RedWire;
 
-const Int2 GridView::DefaultSize = Int2 { 40, 20 };
+const Int2 GridView::DefaultSize = Int2{ 40, 20 };
 
-GridView::GridView( const Int2& size, const std::shared_ptr<Grid>& grid ) : size( size ), grid( grid )
+GridView::GridView(const Int2& size, const std::shared_ptr<Grid>& grid) : size(size), grid(grid)
 {
 	//this is not ideal, will change after I eat
-	if ( !gridTexture.create( static_cast<unsigned int>( size.x ), static_cast<unsigned int>( size.y ) ) )
+	if (!texture.create(static_cast<unsigned int>(size.x), static_cast<unsigned int>(size.y)))
 	{
 		std::cout << "gridTexture not created!";
 	}
 
-	gridImage = gridTexture.copyToImage();
+	image = texture.copyToImage();
 
 	//we only set the texture once since it stores a pointer instead
-	gridSprite.setTexture( gridTexture );
-	gridView.reset( sf::FloatRect( 0.f, 0.f, (float) size.x, (float) size.y ) );
+	sprite.setTexture(texture);
+	gridView.reset(sf::FloatRect(0.f, 0.f, (float)size.x, (float)size.y));
 }
 
 void GridView::start()
@@ -24,32 +25,28 @@ void GridView::start()
 	updateTexture();
 }
 
-void RedWire::GridView::update( const sf::RenderWindow& renderWindow )
+void GridView::update(const sf::RenderWindow& renderWindow)
 {
 	//this checks for click left mouse button
-	if ( !sf::Mouse::isButtonPressed( sf::Mouse::Button::Left ) ) return;
+	if (!sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) return;
 
-	if ( !renderWindow.hasFocus() ) return;
+	if (!renderWindow.hasFocus()) return;
 
 	std::cout << "Clicked!\n";
+
+	grid.get()->addWire(Int2{ 3,4 });
 }
 
 void GridView::updateTexture()
 {
 	//updates the grid texture
-	for ( unsigned int y = 0; y < size.y; y++ )
-		for ( unsigned int x = 0; x < size.x; x++ )
+	for (unsigned int y = 0; y < size.y; y++)
+		for (unsigned int x = 0; x < size.x; x++)
 		{
-			auto resultCell = ( *grid )[Int2 { static_cast<size_t>( x ), static_cast<size_t>( y ) }];
+			const uint32_t color = grid->getColor(Int2{ static_cast<size_t>(x), static_cast<size_t>(y) });
 
 			//if the cell doesn't exist
-			if ( resultCell == nullptr )
-			{
-				gridImage.setPixel( x, y, sf::Color::Black );
-				continue;
-			}
-
-			gridImage.setPixel( x, y, sf::Color( resultCell->getColor() ) );
+			image.setPixel(x, y, sf::Color(color));
 
 			//comment above and uncomment this to see uv rainbow :D
 			/*float percentageX = (float) x / size.x,
@@ -58,7 +55,7 @@ void GridView::updateTexture()
 			gridImage.setPixel( x, y, sf::Color( (sf::Uint8) ( percentageX * 255 ), (sf::Uint8) ( percentageY * 255 ), (sf::Uint8) 255 ) );*/
 		}
 
-	gridTexture.update( gridImage );
+	texture.update(image);
 }
 
 const Int2& GridView::getSize() const
@@ -71,9 +68,9 @@ const sf::View& GridView::getView() const
 	return gridView;
 }
 
-void GridView::display( sf::RenderWindow& renderWindow )
+void GridView::display(sf::RenderWindow& renderWindow)
 {
 	//draws the grid sprite to the view
-	renderWindow.draw( gridSprite );
+	renderWindow.draw(sprite);
 }
 
