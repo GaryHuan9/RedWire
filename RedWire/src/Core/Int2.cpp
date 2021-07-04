@@ -77,15 +77,9 @@ bool Int2::operator!=(const Int2& other) const
 	return x != other.x && y != other.y;
 }
 
-namespace std
+size_t std::hash<RedWire::Int2>::operator()(const RedWire::Int2& value) const noexcept
 {
-	template<> struct hash<Int2>
-	{
-		size_t operator()(const Int2& value) const
-		{
-			size_t x = hash<decltype(value.x)>{}(value.x);
-			size_t y = hash<decltype(value.y)>{}(value.y);
-			return (x * 397) ^ y;
-		}
-	};
+	size_t x = std::hash<decltype(value.x)>{}(value.x);
+	size_t y = std::hash<decltype(value.y)>{}(value.y);
+	return (x * 397) ^ y;
 }

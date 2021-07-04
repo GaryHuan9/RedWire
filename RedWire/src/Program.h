@@ -4,8 +4,6 @@ namespace RedWire
 {
 	using namespace sf;
 
-	int main();
-
 	struct Application : RenderWindow
 	{
 		Application();

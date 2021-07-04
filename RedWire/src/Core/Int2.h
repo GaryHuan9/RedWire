@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include <functional>
 
 namespace RedWire
 {
@@ -21,5 +21,13 @@ namespace RedWire
 
 		bool operator== (const Int2& other) const;
 		bool operator!= (const Int2& other) const;
+	};
+}
+
+namespace std
+{
+	template<> struct hash<RedWire::Int2>
+	{
+		size_t operator()(const RedWire::Int2& value) const noexcept;
 	};
 }
