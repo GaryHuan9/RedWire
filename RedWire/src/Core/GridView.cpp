@@ -16,6 +16,7 @@ GridView::GridView( const Int2& size, const std::shared_ptr<Grid>& grid ) : size
 
 	//we only set the texture once since it stores a pointer instead
 	gridSprite.setTexture( gridTexture );
+	gridView.reset( sf::FloatRect( 0.f, 0.f, (float) size.x, (float) size.y ) );
 }
 
 void GridView::start()
@@ -63,6 +64,11 @@ void GridView::updateTexture()
 const Int2& GridView::getSize() const
 {
 	return size;
+}
+
+const sf::View& GridView::getView() const
+{
+	return gridView;
 }
 
 void GridView::display( sf::RenderWindow& renderWindow )

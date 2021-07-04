@@ -18,6 +18,7 @@ namespace RedWire
 		sf::Texture gridTexture;
 		sf::Sprite gridSprite;
 		sf::Image gridImage;
+		sf::View gridView;
 		std::shared_ptr<Grid> grid;
 
 	public:
@@ -32,9 +33,9 @@ namespace RedWire
 
 		void updateTexture();
 
-		//Int2 GetSize() const;
-
 		const Int2& getSize() const;
+
+		const sf::View& getView() const;
 
 		void display( sf::RenderWindow& renderWindow );
 	};

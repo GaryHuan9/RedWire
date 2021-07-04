@@ -7,7 +7,7 @@ Grid::Grid() : tiles()
 
 }
 
-Int2& getTilePosition(const Int2& position)
+const Int2 getTilePosition(const Int2& position)
 {
 	const int size = Grid::Tile::size;
 
