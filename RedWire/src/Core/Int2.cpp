@@ -35,6 +35,22 @@ Int2& Int2::operator/=(const Int2& other)
 	return *this;
 }
 
+Int2& Int2::operator*=(const size_t other)
+{
+	x *= other;
+	y *= other;
+
+	return *this;
+}
+
+Int2& Int2::operator/=(const size_t other)
+{
+	x /= other;
+	y /= other;
+
+	return *this;
+}
+
 Int2 Int2::operator+(const Int2& other) const
 {
 	Int2 copy(*this);
@@ -60,6 +76,22 @@ Int2 Int2::operator*(const Int2& other) const
 }
 
 Int2 Int2::operator/(const Int2& other) const
+{
+	Int2 copy(*this);
+	copy /= other;
+
+	return copy;
+}
+
+Int2 Int2::operator*(const size_t other) const
+{
+	Int2 copy(*this);
+	copy *= other;
+
+	return copy;
+}
+
+Int2 Int2::operator/(const size_t other) const
 {
 	Int2 copy(*this);
 	copy /= other;

@@ -13,13 +13,13 @@ namespace RedWire
 		{
 			static const int size = 32;
 
-			std::shared_ptr<Cell> cells[size][size];
+			std::shared_ptr<Cell> cells[size][size]{};
 		};
 
 		Grid();
 
-		const Cell& operator [] (const Int2& position) const;
-		Cell& operator [] (const Int2& position);
+		const std::shared_ptr<Cell> operator [] (const Int2& position) const;
+		std::shared_ptr<Cell> operator [] (const Int2& position);
 
 	private:
 		const std::unordered_map<Int2, Tile> tiles;
