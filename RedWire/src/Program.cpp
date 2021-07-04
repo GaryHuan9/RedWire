@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include "Program.h"
 
-using namespace sf;
 using namespace RedWire;
 
 int main()
@@ -25,30 +24,28 @@ int main()
 	return 0;
 }
 
-namespace RedWire
+Application::Application() : RenderWindow(VideoMode::getDesktopMode(), "Red Wire")
 {
-	Application::Application() : RenderWindow(VideoMode::getDesktopMode(), "Red Wire")
+
+}
+
+void Application::start()
+{
+	setVerticalSyncEnabled(true);
+}
+
+void Application::dispatchEvents()
+{
+	Event event;
+
+	while (pollEvent(event))
 	{
+		if (event.type == Event::Closed) close();
 
 	}
+}
 
-	void Application::start()
-	{
+void Application::update()
+{
 
-	}
-
-	void Application::dispatchEvents()
-	{
-		Event event;
-
-		while (pollEvent(event))
-		{
-			if (event.type == Event::Closed) close();
-		}
-	}
-
-	void Application::update()
-	{
-
-	}
-};
+}

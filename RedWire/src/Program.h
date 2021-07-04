@@ -1,12 +1,9 @@
 #pragma once
 
-#include <SFML/System.hpp>
-#include <SFML/Graphics.hpp>
-
-using namespace sf;
-
 namespace RedWire
 {
+	using namespace sf;
+
 	int main();
 
 	struct Application : RenderWindow

@@ -145,10 +145,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Program.cpp" />
+    <ClCompile Include="src\Core\Cell.cpp" />
+    <ClCompile Include="src\core\Grid.cpp" />
+    <ClCompile Include="src\Core\Int2.cpp" />
+    <ClCompile Include="src\Core\Wire.cpp" />
+    <ClCompile Include="src\Program.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Program.h" />
+    <ClInclude Include="src\Core\Grid.h" />
+    <ClInclude Include="src\Core\Int2.h" />
+    <ClInclude Include="src\Core\Cell.h" />
+    <ClInclude Include="src\Core\Wire.h" />
+    <ClInclude Include="src\Program.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
