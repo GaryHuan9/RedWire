@@ -46,8 +46,8 @@ void GridView::updateTexture()
 			image.setPixel(x, y, sf::Color(color));*/
 
 			//comment above and uncomment this to see uv rainbow :D
-			float percentageX = (float)x / size.x,
-				percentageY = (float)y / size.y;
+			float percentageX = CXUtils::CXMath::fract((float)(topLeftCellPosInt.x + x) / size.x),
+				percentageY = CXUtils::CXMath::fract((float)(topLeftCellPosInt.y + y) / size.y);
 
 			image.setPixel(x, y, sf::Color((sf::Uint8)(percentageX * 255), (sf::Uint8)(percentageY * 255), (sf::Uint8)255));
 		}
@@ -108,12 +108,18 @@ void GridView::doMoveCamera(sf::RenderWindow& renderWindow, const sf::Time& delt
 
 	topLeftCamPosition += movementDelta * deltaTime.asSeconds() * camMoveSpeed;
 
-	Float2 resultCamPos = Float2(CXUtils::CXMath::fract(topLeftCamPosition.x), CXUtils::CXMath::fract(topLeftCamPosition.y)) * .5f; // a pixel is .5 in scene just found out
+	Float2 resultOffset = Float2(CXUtils::CXMath::fract(topLeftCamPosition.x), CXUtils::CXMath::fract(topLeftCamPosition.y));
 
 	//just checking
-	//std::cout << "cam top left position: " << resultCamPos.x << ", " << resultCamPos.y << "\n";
+	//std::cout << "cam top left position: " << resultOffset.x << ", " << resultOffset.y << "\n";
 
-	view.reset(sf::FloatRect(resultCamPos.x, resultCamPos.y, resultCamPos.x + size.x, resultCamPos.y + size.y));
+	//view.reset(sf::FloatRect(resultCamPos.x, resultCamPos.y, resultCamPos.x + size.x, resultCamPos.y + size.y));
+
+	Float2 center((float)size.x / 2.f, (float)size.y / 2.f);
+
+	Float2 resultCenter = center + resultOffset;
+
+	view.setCenter(resultCenter.x, resultCenter.y);
 
 	renderWindow.setView(view);
 }
