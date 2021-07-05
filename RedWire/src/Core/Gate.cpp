@@ -10,7 +10,7 @@ Gate::Gate() : enabled(), sourcePosition(), targetPosition(), controlPosition()
 
 uint32_t Gate::getColor() const
 {
-	return 0x000CFFFFu;
+	return 0x0003FFFFu;
 }
 
 void Gate::disable()

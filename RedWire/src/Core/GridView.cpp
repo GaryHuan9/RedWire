@@ -30,18 +30,12 @@ void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
 	if (renderWindow.hasFocus())
 	{
 		//Click check
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-		{
-			std::cout << "Clicked!\n";
 
-			sf::Vector2f mousePosOnWorld = renderWindow.mapPixelToCoords(sf::Mouse::getPosition(renderWindow));
+		sf::Vector2f mouseOnWorld = renderWindow.mapPixelToCoords(sf::Mouse::getPosition(renderWindow));
+		Int2 mouseOnGrid = Int2((int)std::floorf(mouseOnWorld.x), (int)std::floorf(mouseOnWorld.y)) + getTopLeftCellPositionInt();
 
-			Int2 mouseOnGridPos = Int2((int)std::floorf(mousePosOnWorld.x), (int)std::floorf(mousePosOnWorld.y)) + getTopLeftCellPositionInt();
-
-			std::cout << "Clicked grid pos: " << mouseOnGridPos.x << ", " << mouseOnGridPos.y << "\n";
-
-			grid->addWire(mouseOnGridPos);
-		}
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) grid->addWire(mouseOnGrid);
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) grid->remove(mouseOnGrid);
 
 		//Move camera
 		const float deltaTimeAsSec = deltaTime.asSeconds();

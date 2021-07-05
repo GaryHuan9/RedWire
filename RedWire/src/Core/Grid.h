@@ -56,6 +56,7 @@ namespace RedWire
 		void floodSearch(const SearchPack& pack, const Int2& source, const Int2& direction);
 
 		void scanCrossings(const Int2& position);
+		bool splitNeighbors(const Int2& position);
 
 		void removeWire(const Int2& position);
 		void removeGate(const Int2& position);

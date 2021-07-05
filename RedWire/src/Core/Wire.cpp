@@ -6,7 +6,7 @@ using namespace RedWire;
 
 std::random_device device;
 std::mt19937 generator(device());
-std::uniform_int_distribution<uint16_t> distribution(15, 255);
+std::uniform_int_distribution<uint16_t> distribution(255);
 
 Wire::Wire() : isSource(false), poweredLast(false), poweredNext(false)
 {
@@ -25,10 +25,10 @@ uint32_t Wire::getColor() const
 {
 	return debugColor;
 
-	if (isSource) return 0xFFAA0CFFu;
-	if (getPowered()) return 0xFF550CFFu;
+	if (isSource) return 0xFFAA03FFu;
+	if (getPowered()) return 0xFF5503FFu;
 
-	return 0xFF000CFFu;
+	return 0xFF0003FFu;
 }
 
 bool Wire::getPowered() const

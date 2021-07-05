@@ -157,7 +157,7 @@
     <ClCompile Include="src\core\Grid.cpp" />
     <ClCompile Include="src\Core\Join.cpp" />
     <ClCompile Include="src\Core\Wire.cpp" />
-    <ClCompile Include="src\Program.cpp" />
+    <ClCompile Include="src\Application.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\CXMath.h" />
@@ -168,7 +168,7 @@
     <ClInclude Include="src\Core\Cell.h" />
     <ClInclude Include="src\Core\Join.h" />
     <ClInclude Include="src\Core\Wire.h" />
-    <ClInclude Include="src\Program.h" />
+    <ClInclude Include="src\Application.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

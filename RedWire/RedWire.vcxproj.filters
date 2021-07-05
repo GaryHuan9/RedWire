@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Program.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\Wire.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -30,17 +27,17 @@
     <ClCompile Include="src\Core\Gate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Junction.cpp">
+    <ClCompile Include="src\Core\CXMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\CXMath.cpp">
+    <ClCompile Include="src\Core\Join.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Program.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\Grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -56,14 +53,17 @@
     <ClInclude Include="src\Core\Gate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Junction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\Type2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\CXMath.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Join.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Application.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -27,7 +27,7 @@ Cell* const Grid::get(const Int2& position) const
 uint32_t Grid::getColor(const Int2& position) const
 {
 	Cell* const cell = get(position);
-	if (cell == nullptr) return 0x00000CFFu;
+	if (cell == nullptr) return 0x000003FFu;
 	return cell->getColor();
 }
 
@@ -93,9 +93,7 @@ void Grid::addWire(const Int2& position)
 		const Int2 local = position + offset;
 		shared_ptr<Cell> neighbor = getPtr(local);
 
-		if (neighbor == nullptr) continue;
-
-		Wire* wire = static_cast<Wire*>(neighbor.get());
+		Wire* wire = neighbor == nullptr ? nullptr : static_cast<Wire*>(neighbor.get());
 
 		if (wire == nullptr) continue;
 
@@ -132,10 +130,30 @@ void Grid::addJoin(const Int2& position)
 {}
 
 void Grid::remove(const Int2& position)
-{}
+{
+	Cell* const previous = get(position);
+
+	if (static_cast<Wire*>(previous) != nullptr) removeWire(position);
+	if (static_cast<Gate*>(previous) != nullptr) removeGate(position);
+	if (static_cast<Join*>(previous) != nullptr) removeJoin(position);
+}
 
 void Grid::removeWire(const Int2& position)
-{}
+{
+	Cell* const previous = get(position);
+
+	set(position, nullptr);
+
+	if (splitNeighbors(position))
+	{
+		removeFrom(wires, (Wire* const)previous);
+
+		//After the previous method our wire is actually deleted!
+		//The variable previous is now invalid and undefined!
+	}
+
+	scanCrossings(position);
+}
 
 void Grid::removeGate(const Int2& position)
 {}
@@ -176,6 +194,41 @@ void Grid::scanCrossings(const Int2& position)
 	{
 
 	}
+}
+
+/// <summary>
+/// Splits the neighbor connections by making them distinct.
+/// </summary>
+bool Grid::splitNeighbors(const Int2& position)
+{
+	unordered_set<Int2> visited;
+
+	for (const Int2& offset : Int2::edges4)
+	{
+		const Int2 local = position + offset;
+		shared_ptr<Cell> neighbor = getPtr(local);
+
+		Wire* wire = neighbor == nullptr ? nullptr : static_cast<Wire*>(neighbor.get());
+
+		if (wire == nullptr || visited.count(local) > 0)
+		{
+			scanCrossings(local);
+			continue;
+		}
+
+		if (visited.size() > 0)
+		{
+			shared_ptr<Wire> bundle = make_shared<Wire>();
+			neighbor = static_pointer_cast<Cell>(bundle);
+
+			wires.push_back(bundle);
+		}
+
+		auto replaced = floodReplace(local, neighbor);
+		visited.insert(replaced.cbegin(), replaced.cend());
+	}
+
+	return visited.size() > 0;
 }
 
 Int2 getTilePosition(const Int2& position)
