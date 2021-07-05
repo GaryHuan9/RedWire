@@ -23,7 +23,6 @@ int main()
 		application.display();
 	}
 
-
 	return 0;
 }
 

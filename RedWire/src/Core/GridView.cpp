@@ -37,6 +37,8 @@ void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) grid->addWire(mouseOnGrid);
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) grid->remove(mouseOnGrid);
 
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle)) std::cout << mouseOnGrid.x << " " << mouseOnGrid.y << "\n";
+
 		//Move camera
 		const float deltaTimeAsSec = deltaTime.asSeconds();
 

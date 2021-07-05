@@ -4,13 +4,15 @@
 #include <unordered_set>
 #include <vector>
 #include <memory>
-#include "Cell.h"
 #include "Type2.h"
 
 namespace RedWire
 {
+	struct Grid;
+	struct Cell;
 	struct Wire;
 	struct Gate;
+	struct Join;
 
 	struct Grid
 	{
@@ -28,11 +30,16 @@ namespace RedWire
 		Cell* const get(const Int2& position) const;
 		uint32_t getColor(const Int2& position) const;
 
+		size_t getWireCount() const;
+		size_t getGateCount() const;
+
 		void addWire(const Int2& position);
 		void addGate(const Int2& position);
 		void addJoin(const Int2& position);
 
 		void remove(const Int2& position);
+
+		void update();
 
 	private:
 
@@ -55,8 +62,11 @@ namespace RedWire
 		std::unordered_set<Int2> floodReplace(const Int2& position, const std::shared_ptr<Cell>& bundle);
 		void floodSearch(const SearchPack& pack, const Int2& source, const Int2& direction);
 
-		void scanCrossings(const Int2& position);
 		bool splitNeighbors(const Int2& position);
+		void scanPort(const Int2& position);
+
+		void refreshGate(const Int2& position, const int neighborCount, Gate& gate);
+		void refreshJoin(const Int2& position, const int neighborCount, Join& join);
 
 		void removeWire(const Int2& position);
 		void removeGate(const Int2& position);

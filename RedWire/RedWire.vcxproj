@@ -156,11 +156,13 @@
     <ClCompile Include="src\Core\GridView.cpp" />
     <ClCompile Include="src\core\Grid.cpp" />
     <ClCompile Include="src\Core\Join.cpp" />
+    <ClCompile Include="src\Core\Port.cpp" />
     <ClCompile Include="src\Core\Wire.cpp" />
     <ClCompile Include="src\Application.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\CXMath.h" />
+    <ClInclude Include="src\Core\Port.h" />
     <ClInclude Include="src\Core\Type2.h" />
     <ClInclude Include="src\Core\Gate.h" />
     <ClInclude Include="src\Core\GridView.h" />

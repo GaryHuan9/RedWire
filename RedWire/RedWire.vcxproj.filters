@@ -36,6 +36,9 @@
     <ClCompile Include="src\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Port.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Grid.h">
@@ -64,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="src\Application.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Port.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

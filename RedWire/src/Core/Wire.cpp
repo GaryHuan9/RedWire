@@ -25,10 +25,10 @@ uint32_t Wire::getColor() const
 {
 	return debugColor;
 
-	if (isSource) return 0xFFAA03FFu;
-	if (getPowered()) return 0xFF5503FFu;
+	if (isSource) return 0xFFAA02FFu;
+	if (getPowered()) return 0xFF5502FFu;
 
-	return 0xFF0003FFu;
+	return 0xFF0002FFu;
 }
 
 bool Wire::getPowered() const

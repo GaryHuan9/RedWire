@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Cell.h"
-
 namespace RedWire
 {
-	struct Join : Cell
+	struct Port;
+
+	struct Join : Port
 	{
 		Join();
 
