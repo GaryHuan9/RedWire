@@ -27,15 +27,13 @@ int main()
 }
 
 Application::Application() : RenderWindow(VideoMode::getDesktopMode(), "Red Wire"),
-	grid(std::make_shared<Grid>()), gridView(GridView::DefaultSize, grid)
+grid(std::make_shared<Grid>()), gridView(GridView::DefaultSize, grid)
 {
 }
 
 void Application::start()
 {
 	setVerticalSyncEnabled(true);
-
-	setView(gridView.getView());
 }
 
 void Application::dispatchEvents()
@@ -50,7 +48,7 @@ void Application::dispatchEvents()
 
 void Application::update(const sf::Time& deltaTime)
 {
-	gridView.update(*this);
+	gridView.update(*this, deltaTime);
 	gridView.updateTexture();
 	gridView.display(*this);
 }
