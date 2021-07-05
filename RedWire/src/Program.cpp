@@ -19,7 +19,7 @@ int main()
 		application.dispatchEvents();
 
 		application.clear();
-		application.update(deltaClock.restart());
+		application.update();
 		application.display();
 	}
 
@@ -27,9 +27,8 @@ int main()
 }
 
 Application::Application() : RenderWindow(VideoMode::getDesktopMode(), "Red Wire"),
-grid(std::make_shared<Grid>()), gridView(GridView::DefaultSize, grid)
-{
-}
+clock(), grid(std::make_shared<Grid>()), gridView(GridView::DefaultSize, grid)
+{}
 
 void Application::start()
 {
@@ -46,9 +45,9 @@ void Application::dispatchEvents()
 	}
 }
 
-void Application::update(const sf::Time& deltaTime)
+void Application::update()
 {
+	const Time& deltaTime = clock.restart();
+
 	gridView.update(*this, deltaTime);
-	gridView.updateTexture();
-	gridView.display(*this);
 }

@@ -15,11 +15,13 @@ namespace RedWire
 
 		void dispatchEvents();
 
-		void update(const sf::Time& deltaTime);
+		void update();
 
 	private:
-		//not sure if I should put this here
+
 		std::shared_ptr<Grid> grid;
+
+		Clock clock;
 		GridView gridView;
 	};
 }

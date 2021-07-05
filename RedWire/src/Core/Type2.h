@@ -2,15 +2,14 @@
 
 namespace RedWire
 {
-	template<typename T>
-	struct Type2
+	template<typename T> struct Type2
 	{
 	public:
-		Type2(const T& _x = (T)0, const T& _y = (T)0) : x(_x), y(_y) {}
+		Type2(const T& x = (T)0, const T& y = (T)0) : x(x), y(y) {}
 
 		T x, y;
 
-	#pragma region Operator overloading
+#pragma region Operator overloading
 
 		Type2<T>& operator+= (const Type2<T>& other)
 		{
@@ -19,6 +18,7 @@ namespace RedWire
 
 			return *this;
 		}
+
 		Type2<T>& operator-= (const Type2<T>& other)
 		{
 			x -= other.x;
@@ -26,6 +26,7 @@ namespace RedWire
 
 			return *this;
 		}
+
 		Type2<T>& operator*= (const Type2<T>& other)
 		{
 			x *= other.x;
@@ -33,6 +34,7 @@ namespace RedWire
 
 			return *this;
 		}
+
 		Type2<T>& operator/= (const Type2<T>& other)
 		{
 			x /= other.x;
@@ -48,6 +50,7 @@ namespace RedWire
 
 			return *this;
 		}
+
 		Type2<T>& operator/= (const T& other)
 		{
 			x /= other;
@@ -63,6 +66,7 @@ namespace RedWire
 
 			return copy;
 		}
+
 		Type2<T> operator- (const Type2<T>& other) const
 		{
 			Type2<T> copy(*this);
@@ -70,6 +74,7 @@ namespace RedWire
 
 			return copy;
 		}
+
 		Type2<T> operator* (const Type2<T>& other) const
 		{
 			Type2<T> copy(*this);
@@ -77,6 +82,7 @@ namespace RedWire
 
 			return copy;
 		}
+
 		Type2<T> operator/ (const Type2<T>& other) const
 		{
 			Type2<T> copy(*this);
@@ -92,6 +98,7 @@ namespace RedWire
 
 			return copy;
 		}
+
 		Type2<T> operator/ (const T& other) const
 		{
 			Type2<T> copy(*this);
@@ -104,15 +111,16 @@ namespace RedWire
 		{
 			return x == other.x && y == other.y;
 		}
+
 		bool operator!= (const Type2<T>& other) const
 		{
 			return x != other.x && y != other.y;
 		}
 
-	#pragma endregion
+#pragma endregion
 
 
-	#pragma region Utility Methods
+#pragma region Utility Methods
 
 		Type2<T>& floor()
 		{
@@ -125,13 +133,7 @@ namespace RedWire
 		Type2<T> getFloored() const
 		{
 			Type2<T> copy(*this);
-
 			return copy.floor();
-		}
-
-		T getMagnitude() const
-		{
-			return std::sqrt(getSqrMagnitude());
 		}
 
 		T getSqrMagnitude() const
@@ -139,13 +141,17 @@ namespace RedWire
 			return x * x + y * y;
 		}
 
+		T getMagnitude() const
+		{
+			return std::sqrt(getSqrMagnitude());
+		}
+
 		Type2<T>& normalize()
 		{
-			T magnitude = getMagnitude();
+			T sqrMagnitude = getSqrMagnitude();
 
-			if (magnitude == 0) return *this;
-
-			(*this) /= magnitude;
+			if (sqrMagnitude == 0) return *this;
+			*this /= std::sqrt(sqrMagnitude);
 
 			return *this;
 		}
@@ -156,24 +162,20 @@ namespace RedWire
 			return copy.normalize();
 		}
 
-	#pragma endregion
+#pragma endregion
 
 	};
 
-	/// <summary>
-	/// A 2D float vector
-	/// </summary>
 	typedef Type2<float> Float2;
-	/// <summary>
-	/// A 2D unsigned int vector
-	/// </summary>
+
 	typedef Type2<unsigned int> UInt2;
+
+	typedef Type2<int> Int2;
 }
 
 namespace std
 {
-	template<typename T>
-	struct hash<RedWire::Type2<T>>
+	template<typename T> struct hash<RedWire::Type2<T>>
 	{
 		T operator()(const RedWire::Type2<T>& value) const noexcept
 		{

@@ -1,7 +1,7 @@
 #include <unordered_set>
 #include "Grid.h"
 #include "Wire.h"
-#include "Int2.h"
+#include "Type2.h"
 
 using namespace RedWire;
 

@@ -32,23 +32,13 @@ namespace RedWire
 		//Change this later into Float2 or FloatRect
 		GridView(const Int2& size, const std::shared_ptr<Grid>& grid);
 
-		void start();
-
 		void update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime);
 
-		void updateTexture();
-
-		const Int2& getSize() const;
-		const sf::View& getView() const;
+	private:
 
 		Int2 getTopLeftCellPositionInt() const;
 
-		void display(sf::RenderWindow& renderWindow);
-
-	private:
-		void doMouseClickCheck(const sf::RenderWindow& renderWindow) const;
-
-		void doMoveCamera(sf::RenderWindow& renderWindow, const sf::Time& deltaTime);
+		void updateTexture();
 	};
 }
 

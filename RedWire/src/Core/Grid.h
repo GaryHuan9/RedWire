@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 #include "Cell.h"
-#include "Int2.h"
+#include "Type2.h"
 
 namespace RedWire
 {
