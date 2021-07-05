@@ -87,6 +87,12 @@ void GridView::doMouseClickCheck(const sf::RenderWindow& renderWindow) const
 
 	std::cout << "Clicked!\n";
 
+	sf::Vector2f mousePosOnWorld = renderWindow.mapPixelToCoords(sf::Mouse::getPosition(renderWindow));
+
+	Int2 mouseOnGridPos = Int2(std::floorf(mousePosOnWorld.x), std::floorf(mousePosOnWorld.y)) + getTopLeftCellPositionInt();
+
+	std::cout << "Clicked grid pos: " << mouseOnGridPos.x << ", " << mouseOnGridPos.y << "\n";
+
 	//grid->addWire(Int2{3,4}); //This method is not functional yet!!
 }
 
@@ -113,8 +119,6 @@ void GridView::doMoveCamera(sf::RenderWindow& renderWindow, const sf::Time& delt
 	//just checking
 	//std::cout << "cam top left position: " << resultOffset.x << ", " << resultOffset.y << "\n";
 
-	//view.reset(sf::FloatRect(resultCamPos.x, resultCamPos.y, resultCamPos.x + size.x, resultCamPos.y + size.y));
-
 	Float2 center((float)size.x / 2.f, (float)size.y / 2.f);
 
 	Float2 resultCenter = center + resultOffset;
@@ -123,5 +127,3 @@ void GridView::doMoveCamera(sf::RenderWindow& renderWindow, const sf::Time& delt
 
 	renderWindow.setView(view);
 }
-
-
