@@ -81,6 +81,7 @@ void Grid::addWire(const Int2& position)
 		}
 		else if (wire != bundle)
 		{
+			floodReplace(local, bundle);
 			removeFrom(wires, wire);
 			bundle->combine(*wire);
 		}
