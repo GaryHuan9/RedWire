@@ -32,6 +32,12 @@ void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
 		{
 			std::cout << "Clicked!\n";
 
+			sf::Vector2f mousePosOnWorld = renderWindow.mapPixelToCoords(sf::Mouse::getPosition(renderWindow));
+
+			Int2 mouseOnGridPos = Int2(std::floorf(mousePosOnWorld.x), std::floorf(mousePosOnWorld.y)) + getTopLeftCellPositionInt();
+
+			std::cout << "Clicked grid pos: " << mouseOnGridPos.x << ", " << mouseOnGridPos.y << "\n";
+
 			//grid->addWire(Int2{3,4}); //This method is not functional yet!!
 		}
 
