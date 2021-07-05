@@ -155,6 +155,7 @@
     <ClCompile Include="src\Core\GridView.cpp" />
     <ClCompile Include="src\core\Grid.cpp" />
     <ClCompile Include="src\Core\Int2.cpp" />
+    <ClCompile Include="src\Core\Junction.cpp" />
     <ClCompile Include="src\Core\Wire.cpp" />
     <ClCompile Include="src\Program.cpp" />
   </ItemGroup>
@@ -164,6 +165,7 @@
     <ClInclude Include="src\Core\Grid.h" />
     <ClInclude Include="src\Core\Int2.h" />
     <ClInclude Include="src\Core\Cell.h" />
+    <ClInclude Include="src\Core\Junction.h" />
     <ClInclude Include="src\Core\Wire.h" />
     <ClInclude Include="src\Program.h" />
   </ItemGroup>

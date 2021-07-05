@@ -34,7 +34,7 @@ void GridView::update(const sf::RenderWindow& renderWindow)
 
 	std::cout << "Clicked!\n";
 
-	grid.get()->addWire(Int2{ 3,4 });
+	grid.get()->addWire(Int2{ 3,4 }); //This method is not functional yet!!
 }
 
 void GridView::updateTexture()

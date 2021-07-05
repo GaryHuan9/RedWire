@@ -8,6 +8,8 @@ Int2::Int2(size_t x, size_t y) : x(x), y(y)
 
 }
 
+const Int2 Int2::edges4[] = { Int2(1, 0), Int2(0, 1), Int2(-1, 0), Int2(0, -1) };
+
 Int2& Int2::operator+=(const Int2& other)
 {
 	x += other.x;

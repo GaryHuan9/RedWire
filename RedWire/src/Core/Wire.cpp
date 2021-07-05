@@ -9,10 +9,10 @@ Wire::Wire() : isSource(false), poweredLast(false), poweredNext(false)
 
 uint32_t Wire::getColor() const
 {
-	if (isSource) return 0xFF0CAAFFu;
-	if (getPowered()) return 0xFF0C55FFu;
+	if (isSource) return 0xFFAA0CFFu;
+	if (getPowered()) return 0xFF550CFFu;
 
-	return 0xFF0C00FFu;
+	return 0xFF000CFFu;
 }
 
 bool Wire::getPowered() const

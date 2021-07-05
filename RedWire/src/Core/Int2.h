@@ -11,6 +11,8 @@ namespace RedWire
 		size_t x;
 		size_t y;
 
+		static const Int2 edges4[4];
+
 		Int2& operator+= (const Int2& other);
 		Int2& operator-= (const Int2& other);
 		Int2& operator*= (const Int2& other);
