@@ -1,5 +1,7 @@
 #include "GridView.h"
 #include "Wire.h"
+#include "iostream"
+#include "CXMath.h"
 
 using namespace RedWire;
 
@@ -34,11 +36,11 @@ void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
 
 			sf::Vector2f mousePosOnWorld = renderWindow.mapPixelToCoords(sf::Mouse::getPosition(renderWindow));
 
-			Int2 mouseOnGridPos = Int2(std::floorf(mousePosOnWorld.x), std::floorf(mousePosOnWorld.y)) + getTopLeftCellPositionInt();
+			Int2 mouseOnGridPos = Int2((int)std::floorf(mousePosOnWorld.x), (int)std::floorf(mousePosOnWorld.y)) + getTopLeftCellPositionInt();
 
 			std::cout << "Clicked grid pos: " << mouseOnGridPos.x << ", " << mouseOnGridPos.y << "\n";
 
-			//grid->addWire(Int2{3,4}); //This method is not functional yet!!
+			grid->addWire(mouseOnGridPos);
 		}
 
 		//Move camera
@@ -82,15 +84,15 @@ void GridView::updateTexture()
 	{
 		for (unsigned int x = 0; x < size.x + 1u; x++)
 		{
-			/*const uint32_t color = grid->getColor(topLeftCellPosInt + Int2{static_cast<size_t>(x), static_cast<size_t>(y)});
+			const uint32_t color = grid->getColor(topLeftCellPosInt + Int2{ static_cast<int>(x), static_cast<int>(y) });
 
-			image.setPixel(x, y, sf::Color(color));*/
+			image.setPixel(x, y, sf::Color(color));
 
 			//comment above and uncomment this to see uv rainbow >:(
 			float percentageX = CXUtils::CXMath::fract((float)(topLeftCellPosInt.x + x) / size.x);
 			float percentageY = CXUtils::CXMath::fract((float)(topLeftCellPosInt.y + y) / size.y);
 
-			image.setPixel(x, y, sf::Color((sf::Uint8)(percentageX * 255), (sf::Uint8)(percentageY * 255), (sf::Uint8)255));
+			//image.setPixel(x, y, sf::Color((sf::Uint8)(percentageX * 255), (sf::Uint8)(percentageY * 255), (sf::Uint8)255));
 		}
 	}
 

@@ -4,9 +4,9 @@
 
 namespace RedWire
 {
-	struct Junction : Cell
+	struct Join : Cell
 	{
-		Junction();
+		Join();
 
 		uint32_t getColor() const override;
 	};

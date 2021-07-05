@@ -4,10 +4,11 @@ namespace RedWire
 {
 	template<typename T> struct Type2
 	{
-	public:
 		Type2(const T& x = (T)0, const T& y = (T)0) : x(x), y(y) {}
 
 		T x, y;
+
+		static const Type2 edges4[4];
 
 #pragma region Operator overloading
 
@@ -166,6 +167,8 @@ namespace RedWire
 
 	};
 
+	template<typename T> const Type2<T> Type2<T>::edges4[] = { Type2(1, 0), Type2(0, 1), Type2(-1, 0), Type2(0, -1) };
+
 	typedef Type2<float> Float2;
 
 	typedef Type2<unsigned int> UInt2;
@@ -177,10 +180,10 @@ namespace std
 {
 	template<typename T> struct hash<RedWire::Type2<T>>
 	{
-		T operator()(const RedWire::Type2<T>& value) const noexcept
+		size_t operator()(const RedWire::Type2<T>& value) const noexcept
 		{
-			T x = std::hash<T>{}(value.x);
-			T y = std::hash<T>{}(value.y);
+			size_t x = std::hash<T>{}(value.x);
+			size_t y = std::hash<T>{}(value.y);
 			return (x * 397) ^ y;
 		}
 	};

@@ -23,5 +23,7 @@ namespace RedWire
 
 		bool poweredLast;
 		bool poweredNext;
+
+		uint32_t debugColor;
 	};
 }

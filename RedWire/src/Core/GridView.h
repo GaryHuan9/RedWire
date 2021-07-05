@@ -1,10 +1,8 @@
 #pragma once
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Grid.h"
 #include "Type2.h"
-#include "CXMath.h"
 
 /*
 * The main idea of GridView is that the Texture is a fixed size(which is like the scale on how many it should show on the screen)

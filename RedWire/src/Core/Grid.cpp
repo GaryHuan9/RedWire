@@ -2,8 +2,11 @@
 #include "Grid.h"
 #include "Wire.h"
 #include "Type2.h"
+#include "Gate.h"
+#include "Join.h"
 
 using namespace RedWire;
+using namespace std;
 
 Grid::Grid() : tiles(), wires()
 {
@@ -17,8 +20,8 @@ Grid::Tile::Tile() : cells()
 
 Cell* const Grid::get(const Int2& position) const
 {
-	const std::shared_ptr<Cell>* const ptr = getPtr(position);
-	return ptr == nullptr ? nullptr : ptr->get();
+	shared_ptr<Cell> pointer = getPtr(position);
+	return pointer ? pointer.get() : nullptr;
 }
 
 uint32_t Grid::getColor(const Int2& position) const
@@ -28,7 +31,7 @@ uint32_t Grid::getColor(const Int2& position) const
 	return cell->getColor();
 }
 
-template<class Type> void removeFrom(std::vector<std::shared_ptr<Type>> vector, Type* target)
+template<class Type> void removeFrom(vector<shared_ptr<Type>> vector, Type* target)
 {
 	auto current = vector.begin();
 
@@ -38,7 +41,7 @@ template<class Type> void removeFrom(std::vector<std::shared_ptr<Type>> vector, 
 		++current;
 	}
 
-	if (current == vector.end()) throw std::exception("Not found!");
+	if (current == vector.end()) throw exception("Not found!");
 
 	*current = vector.back();
 	vector.pop_back();
@@ -46,60 +49,86 @@ template<class Type> void removeFrom(std::vector<std::shared_ptr<Type>> vector, 
 
 /// Looks through all connected Wire of the same instance and
 /// replace them with bundle. NOTE: Returns the positions replaced.
-const std::unordered_set<Int2> Grid::floodReplace(const Int2& position, const Wire* bundle)
+unordered_set<Int2> Grid::floodReplace(const Int2& position, const shared_ptr<Cell>& bundle)
 {
-	std::unordered_set<Int2> replaced;
+	Cell* const target = get(position);
+	unordered_set<Int2> replaced;
 
-	//Cell* target = get(position);
+	Wire* const wire = static_cast<Wire* const>(target);
+	if (wire == nullptr) return replaced;
+
+	replaced.insert(position);
+	set(position, bundle);
+
+	SearchPack pack(wire, replaced, bundle);
+	for (const Int2& offset : Int2::edges4) floodSearch(pack, position, offset);
 
 	return replaced;
 }
 
+void Grid::floodSearch(const SearchPack& pack, const Int2& source, const Int2& direction)
+{
+	const Int2 local = source + direction;
+	Cell* const cell = get(local);
+
+	if (static_cast<Join* const>(cell) != nullptr) floodSearch(pack, local, direction);
+	if (cell != pack.wire || !pack.replaced.insert(local).second) return;
+
+	for (const Int2& offset : Int2::edges4) floodSearch(pack, local, offset);
+
+	set(local, pack.bundle);
+}
+
 void Grid::addWire(const Int2& position)
 {
-	Cell* const previous = get(position);
+	Cell* previous = get(position);
 
-	if (static_cast<Wire* const>(previous) != nullptr) return;
+	if (static_cast<Wire*>(previous) != nullptr) return;
 	if (previous != nullptr) remove(position);
 
-	Wire* bundle = nullptr;
+	shared_ptr<Cell> bundle = nullptr;
 
 	for (const Int2& offset : Int2::edges4)
 	{
 		const Int2 local = position + offset;
+		shared_ptr<Cell> neighbor = getPtr(local);
 
-		auto& const neighborPtr = *getPtr(local);
-		Cell* const neighbor = neighborPtr.get();
+		if (neighbor == nullptr) continue;
 
-		Wire* const wire = static_cast<Wire* const>(neighbor);
+		Wire* wire = static_cast<Wire*>(neighbor.get());
+
 		if (wire == nullptr) continue;
 
 		if (bundle == nullptr)
 		{
-			bundle = wire;
-			set(position, neighborPtr);
+			bundle = neighbor;
+			previous = bundle.get();
+			set(position, neighbor);
 		}
-		else if (wire != bundle)
+		else if (wire != bundle.get())
 		{
 			floodReplace(local, bundle);
 			removeFrom(wires, wire);
-			bundle->combine(*wire);
+
+			static_cast<Wire*>(neighbor.get())->combine(*wire);
 		}
 	}
 
 	if (previous == nullptr)
 	{
-		std::shared_ptr<Wire> wire = std::make_shared<Wire>();
+		shared_ptr<Wire> wire = make_shared<Wire>();
 
 		set(position, wire);
 		wires.push_back(wire);
 	}
+
+	for (const Int2& offset : Int2::edges4) scanCrossings(position + offset);
 }
 
 void Grid::addGate(const Int2& position)
 {}
 
-void Grid::addJunction(const Int2& position)
+void Grid::addJoin(const Int2& position)
 {}
 
 void Grid::remove(const Int2& position)
@@ -111,8 +140,43 @@ void Grid::removeWire(const Int2& position)
 void Grid::removeGate(const Int2& position)
 {}
 
-void Grid::removeJunction(const Int2& position)
+void Grid::removeJoin(const Int2& position)
 {}
+
+/// <summary>
+/// Updates either the gate or join at position
+/// by scanning its neighbors/surroundings
+/// </summary>
+void Grid::scanCrossings(const Int2& position)
+{
+	Cell* const previous = get(position);
+	if (previous == nullptr) return;
+
+	Gate* const gate = static_cast<Gate* const>(previous);
+	Join* const join = static_cast<Join* const>(previous);
+
+	if (gate == nullptr && join == nullptr) return;
+
+	//Count all neighbors
+	int count = 0;
+
+	for (const Int2& offset : Int2::edges4)
+	{
+		Cell* const cell = get(position + offset);
+		Wire* const wire = static_cast<Wire* const>(cell);
+
+		if (wire != nullptr) ++count;
+	}
+
+	if (gate != nullptr)
+	{
+
+	}
+	else
+	{
+
+	}
+}
 
 Int2 getTilePosition(const Int2& position)
 {
@@ -127,7 +191,7 @@ Int2 getTilePosition(const Int2& position)
 	return result;
 }
 
-const std::shared_ptr<Cell>* const Grid::getPtr(const Int2& position) const
+shared_ptr<Cell> Grid::getPtr(const Int2& position) const
 {
 	Int2 tilePosition = getTilePosition(position);
 
@@ -137,10 +201,12 @@ const std::shared_ptr<Cell>* const Grid::getPtr(const Int2& position) const
 	tilePosition *= Grid::Tile::size;
 
 	const Int2 local = position - tilePosition;
-	return &iterator->second.cells[local.x][local.y];
+	auto& cells = iterator->second.cells;
+
+	return cells[local.x][local.y];
 }
 
-void Grid::set(const Int2& position, const std::shared_ptr<Cell> cell)
+void Grid::set(const Int2& position, const shared_ptr<Cell> cell)
 {
 	Int2 tilePosition = getTilePosition(position);
 
