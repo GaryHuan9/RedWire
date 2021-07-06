@@ -4,9 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include "Application.h"
 
-#include "Core/Cell.h"
-#include "Core/Wire.h"
-#include "Core/Gate.h"
 #include <iostream>
 
 using namespace RedWire;

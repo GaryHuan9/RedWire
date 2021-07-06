@@ -9,27 +9,9 @@
 using namespace RedWire;
 using namespace std;
 
-Grid::Grid() : tiles(), wires()
+Grid::Grid() : wires(), gates()
 {
 
-}
-
-Grid::Tile::Tile() : cells()
-{
-
-}
-
-Cell* const Grid::get(const Int2& position) const
-{
-	const auto& pointer = getPtr(position);
-	return pointer ? pointer.get() : nullptr;
-}
-
-uint32_t Grid::getColor(const Int2& position) const
-{
-	Cell* const cell = get(position);
-	if (cell == nullptr) return 0x000002FFu;
-	return cell->getColor();
 }
 
 template<class Type> void Grid::removeFrom(vector<shared_ptr<Type>>& vector, Type* target)
@@ -273,43 +255,4 @@ void Grid::update()
 {
 	for (shared_ptr<Gate>& gate : gates) gate->update();
 	for (shared_ptr<Wire>& wire : wires) wire->update();
-}
-
-Int2 getTilePosition(const Int2& position)
-{
-	static const int size = Grid::Tile::size;
-
-	//Floored integer divide
-	Int2&& result = position / size;
-
-	result.x = result.x * size == position.x ? result.x : result.x - (position.x < 0);
-	result.y = result.y * size == position.y ? result.y : result.y - (position.y < 0);
-
-	return result;
-}
-
-shared_ptr<Cell> Grid::getPtr(const Int2& position) const
-{
-	Int2&& tilePosition = getTilePosition(position);
-
-	const auto& iterator = tiles.find(tilePosition);
-	if (iterator == tiles.end()) return nullptr;
-
-	tilePosition *= Grid::Tile::size;
-
-	const Int2 local = position - tilePosition;
-	auto& cells = iterator->second.cells;
-
-	return cells[local.x][local.y];
-}
-
-void Grid::set(const Int2& position, const shared_ptr<Cell> cell)
-{
-	Int2&& tilePosition = getTilePosition(position);
-
-	Tile& tile = tiles[tilePosition];
-	tilePosition *= Grid::Tile::size;
-
-	const Int2 local = position - tilePosition;
-	tile.cells[local.x][local.y] = cell;
 }

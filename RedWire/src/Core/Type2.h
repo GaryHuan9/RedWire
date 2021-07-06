@@ -170,7 +170,7 @@ namespace RedWire
 
 	};
 
-	template<typename T> const Type2<T> Type2<T>::edges4[] = { Type2(1, 0), Type2(0, 1), Type2(-1, 0), Type2(0, -1) };
+	template<typename T> const Type2<T> Type2<T>::edges4[] = { Type2<T>(1, 0), Type2<T>(0, 1), Type2<T>(-1, 0), Type2<T>(0, -1) };
 
 	typedef Type2<float> Float2;
 

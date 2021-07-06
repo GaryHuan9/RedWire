@@ -151,8 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Core\CXMath.cpp" />
     <ClCompile Include="src\Core\Area.cpp" />
+    <ClCompile Include="src\Core\CXMath.cpp" />
     <ClCompile Include="src\Core\Gate.cpp" />
     <ClCompile Include="src\Core\GridView.cpp" />
     <ClCompile Include="src\core\Grid.cpp" />
@@ -163,8 +163,8 @@
     <ClCompile Include="src\Core\TestUI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\CXMath.h" />
     <ClInclude Include="src\Core\Area.h" />
+    <ClInclude Include="src\Core\CXMath.h" />
     <ClInclude Include="src\Core\Port.h" />
     <ClInclude Include="src\Core\Type2.h" />
     <ClInclude Include="src\Core\Gate.h" />

@@ -57,7 +57,7 @@ void GridView::onAppEventPoll(const sf::Event& appEvent, const sf::RenderWindow&
 
 		// == resize texture ==
 
-		Int2 newSizeInt(std::ceil(newSizeFloat.x), std::ceil(newSizeFloat.y));
+		Int2 newSizeInt((int)std::ceil(newSizeFloat.x), (int)std::ceil(newSizeFloat.y));
 
 		resize(newSizeInt);
 	}
