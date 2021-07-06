@@ -2,6 +2,7 @@
 
 #include "Core/Grid.h"
 #include "Core/GridView.h"
+#include "Core/TestUI.h"
 
 namespace RedWire
 {
@@ -19,9 +20,12 @@ namespace RedWire
 
 	private:
 
-		std::shared_ptr<Grid> grid;
-
 		Clock clock;
+
+		std::shared_ptr<Grid> grid;
 		GridView gridView;
+
+		// == UI ==
+		TestUI testUI;
 	};
 }

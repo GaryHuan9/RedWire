@@ -8,7 +8,7 @@ using namespace RedWire;
 const Int2 GridView::DefaultSize = Int2{ 35, 20 };
 
 GridView::GridView(const Int2& size, const std::shared_ptr<Grid>& grid) : size(size), grid(grid), topLeftCamPosition(.0f, .0f), camMoveSpeed(5.f),
-cameraViewSize(1.f), zoomMagnitude(1.f), zoomMin(.2f), zoomMax(5.f)
+cameraViewSize(1.f), zoomMagnitude(1.f), zoomMin(.2f), zoomMax(20.f)
 {
 	resize(size);
 
@@ -109,11 +109,17 @@ void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
 
 		cameraView.setCenter(resultCenter.x, resultCenter.y);
 
-		renderWindow.setView(cameraView);
+		//we don't set the render window's view
+		//renderWindow.setView(cameraView);
 	}
 
 	updateTexture();
 	renderWindow.draw(sprite);
+}
+
+const sf::View& RedWire::GridView::getCameraView() const
+{
+	return cameraView;
 }
 
 void GridView::updateTexture()

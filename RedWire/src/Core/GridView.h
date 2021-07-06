@@ -39,6 +39,9 @@ namespace RedWire
 
 		void update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime);
 
+		//getters
+		const sf::View& getCameraView() const;
+
 	private:
 
 		Int2 getTopLeftCellPositionInt() const;

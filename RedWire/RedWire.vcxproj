@@ -159,6 +159,7 @@
     <ClCompile Include="src\Core\Port.cpp" />
     <ClCompile Include="src\Core\Wire.cpp" />
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\Core\TestUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\CXMath.h" />
@@ -171,6 +172,10 @@
     <ClInclude Include="src\Core\Join.h" />
     <ClInclude Include="src\Core\Wire.h" />
     <ClInclude Include="src\Application.h" />
+    <ClInclude Include="src\Core\TestUI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Assets\Fonts\JetBrainsMono\JetBrainsMono-Bold.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
