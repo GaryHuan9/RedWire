@@ -174,9 +174,9 @@ namespace RedWire
 
 	typedef Type2<float> Float2;
 
-	typedef Type2<unsigned int> UInt2;
+	typedef Type2<uint32_t> UInt2;
 
-	typedef Type2<int> Int2;
+	typedef Type2<int32_t> Int2;
 }
 
 namespace std

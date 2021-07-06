@@ -15,6 +15,11 @@ uint32_t Gate::getColor() const
 	return getEnabled() ? 0x0002FFFFu : 0x000233FFu;
 }
 
+uint8_t Gate::getCellId() const
+{
+	return 5;
+}
+
 void Gate::refresh(Grid& grid, const Int2& position)
 {
 	//Count all wire neighbors

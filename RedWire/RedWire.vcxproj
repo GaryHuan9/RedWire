@@ -158,6 +158,7 @@
     <ClCompile Include="src\core\Grid.cpp" />
     <ClCompile Include="src\Core\Join.cpp" />
     <ClCompile Include="src\Core\Port.cpp" />
+    <ClCompile Include="src\Core\Region.cpp" />
     <ClCompile Include="src\Core\Wire.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Core\TestUI.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="src\Core\Area.h" />
     <ClInclude Include="src\Core\CXMath.h" />
     <ClInclude Include="src\Core\Port.h" />
+    <ClInclude Include="src\Core\Region.h" />
     <ClInclude Include="src\Core\Type2.h" />
     <ClInclude Include="src\Core\Gate.h" />
     <ClInclude Include="src\Core\GridView.h" />

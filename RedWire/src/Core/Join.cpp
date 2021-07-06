@@ -18,6 +18,11 @@ uint32_t Join::getColor() const
 	return getEnabled() ? 0x00FF02FFu : 0x003302FFu;
 }
 
+uint8_t Join::getCellId() const
+{
+	return 6;
+}
+
 void Join::refresh(Grid& grid, const Int2& position)
 {
 	setEnabled(false);

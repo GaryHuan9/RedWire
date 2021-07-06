@@ -11,6 +11,7 @@ namespace RedWire
 		bool isSource;
 
 		uint32_t getColor() const override;
+		uint8_t getCellId() const override;
 
 		bool getPowered() const;
 		void setPowered(const bool powered);
