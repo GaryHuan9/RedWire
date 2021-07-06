@@ -8,7 +8,7 @@ using namespace RedWire;
 const Int2 GridView::DefaultSize = Int2{ 35, 20 };
 
 GridView::GridView(const Int2& size, const std::shared_ptr<Grid>& grid) : size(size), grid(grid), topLeftCamPosition(.0f, .0f), camMoveSpeed(5.f),
-zoomLevel(1.f), zoomMin(.2f), zoomMax(5.f)
+cameraViewSize(1.f), zoomMagnitude(1.f), zoomMin(.2f), zoomMax(5.f)
 {
 	resize(size);
 
@@ -20,29 +20,43 @@ zoomLevel(1.f), zoomMin(.2f), zoomMax(5.f)
 	updateTexture();
 }
 
-void GridView::onAppEventPoll(const sf::Event& appEvent)
+void GridView::onAppEventPoll(const sf::Event& appEvent, const sf::RenderWindow& renderWindow)
 {
-	//scroll check
-
+	//scroll check, will move this method to other places
 	if (appEvent.type == sf::Event::MouseWheelScrolled)
 	{
-		int zoomDelta = (int)appEvent.mouseWheelScroll.delta; // between 0 and 1
+		// == calculate zoom level ==
+		float zoomDelta = appEvent.mouseWheelScroll.delta * zoomMagnitude;
 
-		float lastZoomLevel = zoomLevel;
+		float lastViewSize = cameraViewSize;
 
-		zoomLevel = CXUtils::CXMath::clamp(zoomLevel - zoomDelta, zoomMin, zoomMax);
+		cameraViewSize = CXUtils::CXMath::clamp(cameraViewSize - zoomDelta, zoomMin, zoomMax);
 
-		int zoomLevelDelta = std::ceil(zoomLevel - lastZoomLevel);
+		float zoomLevelDelta = cameraViewSize - lastViewSize;
 
-		Int2 addAmountInt(1, 1);
+		// == calculate pixel zoom percentage (so the y axis of a pixel will not be squashed by the x resolution) ==
 
-		Int2 newSizeInt(size.x + addAmountInt.x * 2, size.y + addAmountInt.y * 2);
+		sf::Vector2u windowResolution(renderWindow.getSize());
 
-		Float2 newSizeFloat((float)newSizeInt.x, (float)newSizeInt.y);
+		//this is how shader's scale the size of a pixel (I think)
+		Float2 windowResolutionPixelScalePercentage((float)windowResolution.x / windowResolution.y, 1.f);
+
+		Float2 zoomDeltaFloat2(windowResolutionPixelScalePercentage * zoomLevelDelta);
+
+		// == do zooming ==
+
+		sf::Vector2f cameraViewSizeFloat = cameraView.getSize();
+
+		//we multiply by 2 is because we are going to add both left and right, make sense? :D, so each side that is incremented
+		Float2 newSizeFloat(cameraViewSizeFloat.x + zoomDeltaFloat2.x * 2.f, cameraViewSizeFloat.y + zoomDeltaFloat2.y * 2.f);
 
 		cameraView.setSize(newSizeFloat.x, newSizeFloat.y);
 
-		topLeftCamPosition -= Float2((float)addAmountInt.x, (float)addAmountInt.y);
+		topLeftCamPosition -= zoomDeltaFloat2;
+
+		// == resize texture ==
+
+		Int2 newSizeInt(std::ceil(newSizeFloat.x), std::ceil(newSizeFloat.y));
 
 		resize(newSizeInt);
 	}
@@ -69,8 +83,6 @@ void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
 				case 1: grid->addGate(mouseOnGrid); break;
 				case 2: grid->addJoin(mouseOnGrid); break;
 			}
-
-			//std::cout << mouseOnGrid.x << " " << mouseOnGrid.y << std::endl;
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) grid->remove(mouseOnGrid);
@@ -118,9 +130,9 @@ void GridView::updateTexture()
 
 			image.setPixel(x, y, sf::Color(color));
 
-			//comment above and uncomment this to see uv rainbow >:(
-			float percentageX = CXUtils::CXMath::fract((float)(topLeftCellPosInt.x + x) / size.x);
-			float percentageY = CXUtils::CXMath::fract((float)(topLeftCellPosInt.y + y) / size.y);
+			//comment above and uncomment below to see uv rainbow >:(
+			/*float percentageX = CXUtils::CXMath::fract((float)(topLeftCellPosInt.x + x) / size.x);
+			float percentageY = CXUtils::CXMath::fract((float)(topLeftCellPosInt.y + y) / size.y);*/
 
 			//image.setPixel(x, y, sf::Color((sf::Uint8)(percentageX * 255), (sf::Uint8)(percentageY * 255), (sf::Uint8)255));
 		}
@@ -131,6 +143,7 @@ void GridView::updateTexture()
 
 void GridView::resize(const Int2& newSize)
 {
+	//the real texture size
 	UInt2 newTextureSize(static_cast<unsigned int>(newSize.x + 1), static_cast<unsigned int>(newSize.y + 1));
 
 	if (!texture.create(newTextureSize.x, newTextureSize.y))
@@ -142,15 +155,10 @@ void GridView::resize(const Int2& newSize)
 	image = texture.copyToImage(); // reset the image also
 
 	size = newSize;
-	std::cout << "new size: " << size.x << ", " << size.y << '\n';
-
-	//sprite.setTexture(texture, true); <-- wasteful! NO
+	//std::cout << "new size: " << size.x << ", " << size.y << '\n';
 
 	//because the stupid sprite doesn't know that the texture rect is changed, thus we need to tell it to update
 	sprite.setTextureRect(sf::IntRect(0, 0, newTextureSize.x, newTextureSize.y));
-
-	//we don't assign to the sprite here because it's assigned as a pointer,
-	//so whatever this texture is been resized to any size it's still the same :D
 }
 
 Int2 GridView::getTopLeftCellPositionInt() const

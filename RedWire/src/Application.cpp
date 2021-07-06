@@ -62,7 +62,7 @@ void Application::dispatchEvents()
 	{
 		if (event.type == Event::Closed) close();
 
-		gridView.onAppEventPoll(event);
+		gridView.onAppEventPoll(event, *this);
 	}
 }
 

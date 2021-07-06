@@ -20,7 +20,8 @@ namespace RedWire
 		sf::View cameraView;
 		Float2 topLeftCamPosition;
 
-		float zoomLevel;
+		float cameraViewSize;
+		float zoomMagnitude;
 		float zoomMin, zoomMax;
 
 		float camMoveSpeed;
@@ -34,7 +35,7 @@ namespace RedWire
 		//Change this later into Float2 or FloatRect
 		GridView(const Int2& size, const std::shared_ptr<Grid>& grid);
 
-		void onAppEventPoll(const sf::Event& appEvent);
+		void onAppEventPoll(const sf::Event& appEvent, const sf::RenderWindow& renderWindow);
 
 		void update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime);
 
