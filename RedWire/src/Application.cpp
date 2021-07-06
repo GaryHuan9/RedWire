@@ -4,9 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include "Application.h"
 
-#include "Core/Cell.h";
-#include "Core/Wire.h";
-#include "Core/Gate.h";
+#include "Core/Cell.h"
+#include "Core/Wire.h"
+#include "Core/Gate.h"
 #include <iostream>
 
 using namespace RedWire;
@@ -61,6 +61,8 @@ void Application::dispatchEvents()
 	while (pollEvent(event))
 	{
 		if (event.type == Event::Closed) close();
+
+		gridView.onAppEventPoll(event);
 	}
 }
 

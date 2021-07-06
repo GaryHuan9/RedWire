@@ -13,11 +13,11 @@ namespace CXUtils
 	{
 	public:
 		/// <summary>
-		/// The PI
+		/// TAU's small brother, half TAU
 		/// </summary>
 		static const float PI;
 		/// <summary>
-		/// The PI's brother, Double PI
+		/// PI's big brother, double PI
 		/// </summary>
 		static const float TAU;
 		/// <summary>

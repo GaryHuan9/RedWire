@@ -7,22 +7,45 @@ using namespace RedWire;
 
 const Int2 GridView::DefaultSize = Int2{ 35, 20 };
 
-GridView::GridView(const Int2& size, const std::shared_ptr<Grid>& grid) : size(size), grid(grid), topLeftCamPosition(.0f, .0f), camMoveSpeed(5.f)
+GridView::GridView(const Int2& size, const std::shared_ptr<Grid>& grid) : size(size), grid(grid), topLeftCamPosition(.0f, .0f), camMoveSpeed(5.f),
+zoomLevel(1.f), zoomMin(.2f), zoomMax(5.f)
 {
-	//this is not ideal, will change after I eat
-	if (!texture.create(static_cast<unsigned int>(size.x + 1u), static_cast<unsigned int>(size.y + 1u)))
-	{
-		std::cout << "gridTexture not created!";
-	}
-
-	image = texture.copyToImage();
+	resize(size);
 
 	//we only set the texture once since it stores a pointer instead
 	sprite.setTexture(texture);
 
-	view.reset(sf::FloatRect(topLeftCamPosition.x, topLeftCamPosition.y, static_cast<float>(size.x), static_cast<float>(size.y)));
+	cameraView.setSize(sf::Vector2f(static_cast<float>(size.x), static_cast<float>(size.y)));
 
 	updateTexture();
+}
+
+void GridView::onAppEventPoll(const sf::Event& appEvent)
+{
+	//scroll check
+
+	if (appEvent.type == sf::Event::MouseWheelScrolled)
+	{
+		int zoomDelta = (int)appEvent.mouseWheelScroll.delta; // between 0 and 1
+
+		float lastZoomLevel = zoomLevel;
+
+		zoomLevel = CXUtils::CXMath::clamp(zoomLevel - zoomDelta, zoomMin, zoomMax);
+
+		int zoomLevelDelta = std::ceil(zoomLevel - lastZoomLevel);
+
+		Int2 addAmountInt(1, 1);
+
+		Int2 newSizeInt(size.x + addAmountInt.x * 2, size.y + addAmountInt.y * 2);
+
+		Float2 newSizeFloat((float)newSizeInt.x, (float)newSizeInt.y);
+
+		cameraView.setSize(newSizeFloat.x, newSizeFloat.y);
+
+		topLeftCamPosition -= Float2((float)addAmountInt.x, (float)addAmountInt.y);
+
+		resize(newSizeInt);
+	}
 }
 
 void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
@@ -47,7 +70,7 @@ void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
 				case 2: grid->addJoin(mouseOnGrid); break;
 			}
 
-			std::cout << mouseOnGrid.x << " " << mouseOnGrid.y << std::endl;
+			//std::cout << mouseOnGrid.x << " " << mouseOnGrid.y << std::endl;
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) grid->remove(mouseOnGrid);
@@ -68,15 +91,13 @@ void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
 		//just checking
 		//std::cout << "cam top left position: " << resultOffset.x << ", " << resultOffset.y << "\n";
 
-		//view.reset(sf::FloatRect(resultCamPos.x, resultCamPos.y, resultCamPos.x + size.x, resultCamPos.y + size.y));
-
 		Float2 center((float)size.x / 2.f, (float)size.y / 2.f);
 
 		Float2 resultCenter = center + resultOffset;
 
-		view.setCenter(resultCenter.x, resultCenter.y);
+		cameraView.setCenter(resultCenter.x, resultCenter.y);
 
-		renderWindow.setView(view);
+		renderWindow.setView(cameraView);
 	}
 
 	updateTexture();
@@ -106,6 +127,30 @@ void GridView::updateTexture()
 	}
 
 	texture.update(image);
+}
+
+void GridView::resize(const Int2& newSize)
+{
+	UInt2 newTextureSize(static_cast<unsigned int>(newSize.x + 1), static_cast<unsigned int>(newSize.y + 1));
+
+	if (!texture.create(newTextureSize.x, newTextureSize.y))
+	{
+		std::cout << "gridTexture not created and resized to the target size: " << newSize.x << ", " << newSize.y << "\n";
+		throw std::exception();
+	}
+
+	image = texture.copyToImage(); // reset the image also
+
+	size = newSize;
+	std::cout << "new size: " << size.x << ", " << size.y << '\n';
+
+	//sprite.setTexture(texture, true); <-- wasteful! NO
+
+	//because the stupid sprite doesn't know that the texture rect is changed, thus we need to tell it to update
+	sprite.setTextureRect(sf::IntRect(0, 0, newTextureSize.x, newTextureSize.y));
+
+	//we don't assign to the sprite here because it's assigned as a pointer,
+	//so whatever this texture is been resized to any size it's still the same :D
 }
 
 Int2 GridView::getTopLeftCellPositionInt() const
