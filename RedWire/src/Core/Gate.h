@@ -1,9 +1,10 @@
 #pragma once
 
+#include "Port.h"
+
 namespace RedWire
 {
 	struct Grid;
-	struct Port;
 
 	struct Gate : Port
 	{
@@ -11,11 +12,13 @@ namespace RedWire
 
 		uint32_t getColor() const override;
 
-		void setPositions(const Int2& source, const Int2& target, const Int2& control);
+		void refresh(Grid& grid, const Int2& position) override;
 
-		void update(const Grid& grid) const;
+		void update() const;
 
 	private:
+
+		Grid* grid;
 
 		Int2 sourcePosition;
 		Int2 targetPosition;

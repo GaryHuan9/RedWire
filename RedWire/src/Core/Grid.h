@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include "Type2.h"
+#include "Join.h"
 
 namespace RedWire
 {
@@ -12,7 +13,6 @@ namespace RedWire
 	struct Cell;
 	struct Wire;
 	struct Gate;
-	struct Join;
 
 	struct Grid
 	{
@@ -30,8 +30,8 @@ namespace RedWire
 		Cell* const get(const Int2& position) const;
 		uint32_t getColor(const Int2& position) const;
 
-		size_t getWireCount() const;
-		size_t getGateCount() const;
+		inline size_t getWiresCount() const { return wires.size(); }
+		inline size_t getGatesCount() const { return gates.size(); }
 
 		void addWire(const Int2& position);
 		void addGate(const Int2& position);
@@ -43,15 +43,15 @@ namespace RedWire
 
 	private:
 
+		friend void Join::refresh(Grid& grid, const Int2& position);
+
 		std::shared_ptr<Cell> getPtr(const Int2& position) const;
 		void set(const Int2& position, const std::shared_ptr<Cell> cell);
 
 		struct SearchPack
 		{
 			SearchPack(Wire* const wire, std::unordered_set<Int2>& replaced, const std::shared_ptr<Cell>& bundle) : wire(wire), replaced(replaced), bundle(bundle)
-			{
-
-			}
+			{}
 
 			Wire* const wire;
 
@@ -65,12 +65,11 @@ namespace RedWire
 		bool splitNeighbors(const Int2& position);
 		void scanPort(const Int2& position);
 
-		void refreshGate(const Int2& position, const int neighborCount, Gate& gate);
-		void refreshJoin(const Int2& position, const int neighborCount, Join& join);
-
 		void removeWire(const Int2& position);
 		void removeGate(const Int2& position);
 		void removeJoin(const Int2& position);
+
+		template<class Type> static void removeFrom(std::vector<std::shared_ptr<Type>>& vector, Type* target);
 
 		std::unordered_map<Int2, Tile> tiles;
 		std::vector<std::shared_ptr<Wire>> wires;

@@ -32,22 +32,13 @@ uint32_t Grid::getColor(const Int2& position) const
 	return cell->getColor();
 }
 
-size_t Grid::getWireCount() const
+template<class Type> void Grid::removeFrom(vector<shared_ptr<Type>>& vector, Type* target)
 {
-	return wires.size();
-}
+	auto&& current = vector.begin();
+	const auto&& end = vector.end();
 
-size_t Grid::getGateCount() const
-{
-	return gates.size();
-}
-
-template<class Type> void removeFrom(vector<shared_ptr<Type>> vector, Type* target)
-{
-	auto current = vector.begin();
-
-	while (current != vector.end() && current->get() != target) ++current;
-	if (current == vector.end()) throw exception("Target item not found!");
+	while (current != end && current->get() != target) ++current;
+	if (current == end) throw exception("Target item not found!");
 
 	*current = vector.back();
 	vector.pop_back();
@@ -149,7 +140,7 @@ void Grid::addGate(const Int2& position)
 	set(position, gate);
 	gates.push_back(gate);
 
-	scanPort(position);
+	gate->refresh(*this, position);
 }
 
 void Grid::addJoin(const Int2& position)
@@ -159,8 +150,10 @@ void Grid::addJoin(const Int2& position)
 	if (dynamic_cast<Join*>(previous) != nullptr) return;
 	if (previous != nullptr) remove(position);
 
-	set(position, make_shared<Join>());
-	scanPort(position);
+	shared_ptr<Join> join = make_shared<Join>();
+
+	set(position, join);
+	join->refresh(*this, position);
 }
 
 void Grid::remove(const Int2& position)
@@ -180,15 +173,15 @@ void Grid::removeWire(const Int2& position)
 
 	set(position, nullptr);
 
-	if (splitNeighbors(position))
+	for (const Int2& offset : Int2::edges4) scanPort(position + offset);
+
+	if (!splitNeighbors(position))
 	{
 		removeFrom(wires, (Wire*)previous);
 
 		//After the previous method our wire is offically deleted!
 		//The variable previous is now invalid and undefined!
 	}
-
-	for (const Int2& offset : Int2::edges4) scanPort(position + offset);
 }
 
 void Grid::removeGate(const Int2& position)
@@ -246,80 +239,16 @@ void Grid::scanPort(const Int2& position)
 	Port* port = dynamic_cast<Port*>(get(position));
 	if (port == nullptr) return;
 
-	//Count all neighbors
-	int count = 0;
-
-	for (const Int2& offset : Int2::edges4)
-	{
-		Cell* const cell = get(position + offset);
-		Wire* const wire = dynamic_cast<Wire*>(cell);
-
-		if (wire != nullptr) ++count;
-	}
-
-	//Refresh
 	Gate* const gate = dynamic_cast<Gate*>(port);
 	Join* const join = dynamic_cast<Join*>(port);
 
-	if (gate != nullptr) refreshGate(position, count, *gate);
-	if (join != nullptr) refreshJoin(position, count, *join);
-}
-
-void Grid::refreshGate(const Int2& position, const int neighborCount, Gate& gate)
-{
-	gate.setEnabled(neighborCount == 3);
-	if (!gate.getEnabled()) return;
-
-	Int2 direction;
-
-	for (const Int2& offset : Int2::edges4)
-	{
-		Cell* const cell = get(position + offset);
-		Wire* const wire = dynamic_cast<Wire*>(cell);
-
-		if (wire != nullptr) continue;
-
-		direction = offset * -1;
-		break;
-	}
-
-	Int2 swizzle(-direction.y, direction.x);
-	Int2 control = position + direction;
-
-	Int2 source = position + swizzle;
-	Int2 target = position - swizzle;
-
-	gate.setPositions(source, target, control);
-}
-
-void Grid::refreshJoin(const Int2& position, const int neighborCount, Join& join)
-{
-	join.setEnabled(neighborCount == 4);
-
-	//TODO NOTE: We will change this later so that a T shaped join port will also work
-
-	if (join.getEnabled())
-	{
-		for (size_t i = 0; i < 2; i++)
-		{
-			Int2 offset = Int2::edges4[i];
-			Int2 local = position + offset;
-
-			Wire* wire = (Wire*)get(local);
-
-			shared_ptr<Cell> bundle = getPtr(position - offset);
-			static_cast<Wire*>(bundle.get())->combine(*wire);
-
-			floodReplace(local, bundle);
-			removeFrom(wires, wire); //wire is invalid after this point!
-		}
-	}
-	else splitNeighbors(position);
+	if (gate != nullptr) gate->refresh(*this, position);
+	if (join != nullptr) join->refresh(*this, position);
 }
 
 void Grid::update()
 {
-	for (shared_ptr<Gate>& gate : gates) gate->update(*this);
+	for (shared_ptr<Gate>& gate : gates) gate->update();
 	for (shared_ptr<Wire>& wire : wires) wire->update();
 }
 

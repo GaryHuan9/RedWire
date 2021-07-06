@@ -21,6 +21,7 @@ namespace RedWire
 		Float2 topLeftCamPosition;
 
 		float camMoveSpeed;
+		int selectedAdd{ 0 };
 
 		std::shared_ptr<Grid> grid;
 

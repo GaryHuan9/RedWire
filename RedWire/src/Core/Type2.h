@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cmath>
+#include <functional>
+
 namespace RedWire
 {
 	template<typename T> struct Type2

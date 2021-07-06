@@ -4,10 +4,29 @@
 #include <SFML/Graphics.hpp>
 #include "Application.h"
 
+#include "Core/Cell.h";
+#include "Core/Wire.h";
+#include "Core/Gate.h";
+#include <iostream>
+
 using namespace RedWire;
 
 int main()
 {
+	Wire w;/*
+	Gate g;
+
+	Wire* wp = &w;
+	Gate* gp = &g;
+
+	Cell* cp = wp;
+	Gate* dp = dynamic_cast<Gate*>(cp);
+
+	std::cout << cp << std::endl;
+	std::cout << dp << std::endl;
+
+	return 0;*/
+
 	Application application;
 
 	application.start();

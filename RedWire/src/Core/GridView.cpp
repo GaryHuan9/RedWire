@@ -29,15 +29,28 @@ void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
 {
 	if (renderWindow.hasFocus())
 	{
-		//Click check
+		//Adding selection (TODO: We should probably move this to somewhere nice and add a UI)
+		/**/ if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) selectedAdd = 0;
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) selectedAdd = 1;
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) selectedAdd = 2;
 
+		//Click check
 		sf::Vector2f mouseOnWorld = renderWindow.mapPixelToCoords(sf::Mouse::getPosition(renderWindow));
 		Int2 mouseOnGrid = Int2((int)std::floorf(mouseOnWorld.x), (int)std::floorf(mouseOnWorld.y)) + getTopLeftCellPositionInt();
 
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) grid->addWire(mouseOnGrid);
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) grid->remove(mouseOnGrid);
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+		{
+			switch (selectedAdd)
+			{
+				case 0: grid->addWire(mouseOnGrid); break;
+				case 1: grid->addGate(mouseOnGrid); break;
+				case 2: grid->addJoin(mouseOnGrid); break;
+			}
 
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle)) std::cout << mouseOnGrid.x << " " << mouseOnGrid.y << "\n";
+			std::cout << mouseOnGrid.x << " " << mouseOnGrid.y << std::endl;
+		}
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) grid->remove(mouseOnGrid);
 
 		//Move camera
 		const float deltaTimeAsSec = deltaTime.asSeconds();
