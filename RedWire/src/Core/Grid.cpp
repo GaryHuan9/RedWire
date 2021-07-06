@@ -167,13 +167,17 @@ void Grid::remove(const Int2& position)
 	else if (dynamic_cast<Join*>(previous) != nullptr) removeJoin(position);
 }
 
+void Grid::toggleSource(const Int2& position)
+{
+	Wire* wire = dynamic_cast<Wire*>(get(position));
+	if (wire != nullptr) wire->isSource = !wire->isSource;
+}
+
 void Grid::removeWire(const Int2& position)
 {
 	Cell* const previous = get(position);
 
 	set(position, nullptr);
-
-	for (const Int2& offset : Int2::edges4) scanPort(position + offset);
 
 	if (!splitNeighbors(position))
 	{
@@ -182,6 +186,8 @@ void Grid::removeWire(const Int2& position)
 		//After the previous method our wire is offically deleted!
 		//The variable previous is now invalid and undefined!
 	}
+
+	for (const Int2& offset : Int2::edges4) scanPort(position + offset);
 }
 
 void Grid::removeGate(const Int2& position)
@@ -204,22 +210,39 @@ void Grid::removeJoin(const Int2& position)
 bool Grid::splitNeighbors(const Int2& position)
 {
 	unordered_set<Int2> visited;
+	unordered_set<Wire*> unique;
 
 	for (const Int2& offset : Int2::edges4)
 	{
-		const Int2 local = position + offset;
+		Int2 local = position + offset;
 		shared_ptr<Cell> neighbor = getPtr(local);
 
 		if (neighbor == nullptr) continue;
 
+		//The the current cell is a Join, we move
+		//one block further to check for wires
+
+		Join* join = dynamic_cast<Join*>(neighbor.get());
+
+		if (join != nullptr)
+		{
+			local = position + offset * 2;
+			neighbor = getPtr(local);
+
+			if (neighbor == nullptr) continue;
+		}
+
+		//Skip if the wire does not exit or has been visited before
+
 		Wire* wire = dynamic_cast<Wire*>(neighbor.get());
 		if (wire == nullptr || visited.count(local) > 0) continue;
 
-		if (visited.size() > 0)
+		if (!unique.insert(wire).second)
 		{
 			shared_ptr<Wire> bundle = make_shared<Wire>();
 			neighbor = static_pointer_cast<Cell>(bundle);
 
+			bundle->combine(*wire);
 			wires.push_back(bundle);
 		}
 

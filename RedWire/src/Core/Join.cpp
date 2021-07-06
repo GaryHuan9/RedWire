@@ -1,10 +1,12 @@
 #include <memory>
+#include "Type2.h"
 #include "Grid.h"
 #include "Wire.h"
 #include "Port.h"
 #include "Join.h"
 
 using namespace RedWire;
+using namespace std;
 
 Join::Join()
 {
@@ -28,15 +30,14 @@ void Join::refresh(Grid& grid, const Int2& position)
 		Wire* wire1 = dynamic_cast<Wire*>(grid.get(position - offset));
 
 		if (wire0 == nullptr || wire1 == nullptr) continue;
+		setEnabled(true); if (wire0 == wire1) continue;
 
+		//Can create connection between two sides
 		wire1->combine(*wire0);
-		setEnabled(true);
 
-		std::shared_ptr<Cell> bundle = grid.getPtr(position - offset);
+		shared_ptr<Cell> bundle = grid.getPtr(position - offset);
 
 		grid.floodReplace(position + offset, bundle);
 		Grid::removeFrom(grid.wires, wire0);
 	}
-
-	if (!getEnabled()) grid.splitNeighbors(position);
 }

@@ -13,20 +13,6 @@ using namespace RedWire;
 
 int main()
 {
-	Wire w;/*
-	Gate g;
-
-	Wire* wp = &w;
-	Gate* gp = &g;
-
-	Cell* cp = wp;
-	Gate* dp = dynamic_cast<Gate*>(cp);
-
-	std::cout << cp << std::endl;
-	std::cout << dp << std::endl;
-
-	return 0;*/
-
 	Application application;
 
 	application.start();
@@ -64,7 +50,6 @@ void Application::dispatchEvents()
 	while (pollEvent(event))
 	{
 		if (event.type == Event::Closed) close();
-
 		gridView.onAppEventPoll(event, *this);
 	}
 }

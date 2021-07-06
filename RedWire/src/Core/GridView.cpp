@@ -3,6 +3,7 @@
 #include "iostream"
 #include "CXMath.h"
 
+
 using namespace RedWire;
 
 const Int2 GridView::DefaultSize = Int2{ 35, 20 };
@@ -70,6 +71,7 @@ void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
 		/**/ if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) selectedAdd = 0;
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) selectedAdd = 1;
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) selectedAdd = 2;
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) selectedAdd = 3;
 
 		//Click check
 		sf::Vector2f mouseOnWorld = renderWindow.mapPixelToCoords(sf::Mouse::getPosition(renderWindow));
@@ -82,10 +84,21 @@ void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
 				case 0: grid->addWire(mouseOnGrid); break;
 				case 1: grid->addGate(mouseOnGrid); break;
 				case 2: grid->addJoin(mouseOnGrid); break;
+				case 3:
+				{
+					if (mousePressed) break;
+
+					mousePressed = true;
+					grid->toggleSource(mouseOnGrid);
+
+					break;
+				}
 			}
 		}
+		else mousePressed = false;
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) grid->remove(mouseOnGrid);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) grid->update();
 
 		//Move camera
 		const float deltaTimeAsSec = deltaTime.asSeconds();

@@ -38,6 +38,7 @@ namespace RedWire
 		void addJoin(const Int2& position);
 
 		void remove(const Int2& position);
+		void toggleSource(const Int2& position);
 
 		void update();
 

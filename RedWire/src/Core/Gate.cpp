@@ -1,3 +1,4 @@
+#include "Type2.h"
 #include "Grid.h"
 #include "Wire.h"
 #include "Port.h"

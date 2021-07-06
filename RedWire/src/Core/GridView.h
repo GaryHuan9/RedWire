@@ -25,7 +25,8 @@ namespace RedWire
 		float zoomMin, zoomMax;
 
 		float camMoveSpeed;
-		int selectedAdd{0};
+		int selectedAdd{ 0 };
+		bool mousePressed{ false }; //Most of these parameters should get moved >:D
 
 		std::shared_ptr<Grid> grid;
 
