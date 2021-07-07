@@ -151,6 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\GridViewNew.cpp" />
+    <ClCompile Include="src\Core\InputManager.cpp" />
     <ClCompile Include="src\Core\Area.cpp" />
     <ClCompile Include="src\Core\CXMath.cpp" />
     <ClCompile Include="src\Core\Gate.cpp" />
@@ -164,6 +166,8 @@
     <ClCompile Include="src\Core\TestUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\GridViewNew.h" />
+    <ClInclude Include="src\Core\InputManager.h" />
     <ClInclude Include="src\Core\Area.h" />
     <ClInclude Include="src\Core\CXMath.h" />
     <ClInclude Include="src\Core\Port.h" />

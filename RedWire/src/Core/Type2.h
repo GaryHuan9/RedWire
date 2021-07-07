@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <functional>
+#include <string>
 
 namespace RedWire
 {
@@ -134,10 +135,24 @@ namespace RedWire
 			return *this;
 		}
 
-		Type2<T> getFloored() const
+		Type2<T>& ceil()
+		{
+			x = std::ceil(x);
+			y = std::ceil(y);
+
+			return *this;
+		}
+
+		Type2<T> getFloor() const
 		{
 			Type2<T> copy(*this);
 			return copy.floor();
+		}
+
+		Type2<T> getCeil() const
+		{
+			Type2<T> copy(*this);
+			return copy.ceil();
 		}
 
 		T getSqrMagnitude() const
@@ -164,6 +179,17 @@ namespace RedWire
 		{
 			Type2<T> copy(*this);
 			return copy.normalize();
+		}
+
+		template<typename convertToType>
+		Type2<convertToType> toType() const
+		{
+			return Type2<convertToType>(static_cast<convertToType>(x), static_cast<convertToType>(y));
+		}
+
+		std::string toString() const
+		{
+			return std::to_string(x) + std::string(", ") + std::to_string(y);
 		}
 
 #pragma endregion

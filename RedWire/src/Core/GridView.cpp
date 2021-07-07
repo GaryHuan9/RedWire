@@ -219,7 +219,7 @@ void GridView::resize(const Int2& newSize)
 
 Int2 GridView::getTopLeftCellPositionInt() const
 {
-	auto value = topLeftCamPosition.getFloored();
+	auto value = topLeftCamPosition.getFloor();
 
 	return Int2(static_cast<size_t>(value.x), static_cast<size_t>(value.y));
 }

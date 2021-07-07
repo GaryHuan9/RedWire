@@ -2,6 +2,8 @@
 
 #include "Core/Grid.h"
 #include "Core/GridView.h"
+#include "Core/GridViewNew.h"
+#include "Core/InputManager.h"
 #include "Core/TestUI.h"
 
 namespace RedWire
@@ -23,7 +25,11 @@ namespace RedWire
 		Clock clock;
 
 		std::shared_ptr<Grid> grid;
-		GridView gridView;
+		std::shared_ptr<InputManager> inputManager;
+		//GridView gridView;
+
+		//InputManager inputManager;
+		GridViewNew gridViewNew;
 
 		// == UI ==
 		TestUI testUI;
