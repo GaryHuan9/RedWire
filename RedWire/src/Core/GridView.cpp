@@ -1,8 +1,8 @@
+#include <iostream>
 #include "GridView.h"
+#include "Region.h"
 #include "Wire.h"
-#include "iostream"
 #include "CXMath.h"
-
 
 using namespace RedWire;
 
@@ -72,6 +72,8 @@ void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) selectedAdd = 1;
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) selectedAdd = 2;
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) selectedAdd = 3;
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) selectedAdd = 4;
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)) selectedAdd = 5;
 
 		//Click check
 		sf::Vector2f mouseOnWorld = renderWindow.mapPixelToCoords(sf::Mouse::getPosition(renderWindow));
@@ -90,6 +92,41 @@ void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
 
 					mousePressed = true;
 					grid->toggleSource(mouseOnGrid);
+
+					break;
+				}
+				case 4:
+				{
+					if (mousePressed) break;
+
+					mousePressed = true;
+
+					if (isCopying)
+					{
+						Int2 min = Int2(std::min(mouseOnGrid.x, firstCorner.x), std::min(mouseOnGrid.y, firstCorner.y));
+						Int2 max = Int2(std::max(mouseOnGrid.x, firstCorner.x), std::max(mouseOnGrid.y, firstCorner.y));
+
+						max += Int2(1, 1);
+
+						copyRegion = std::make_unique<Region>(max - min);
+						copyRegion->copyFrom(min, *grid);
+
+						isCopying = false;
+					}
+					else
+					{
+						firstCorner = mouseOnGrid;
+						isCopying = true;
+					}
+
+					break;
+				}
+				case 5:
+				{
+					if (mousePressed || !copyRegion) break;
+
+					mousePressed = true;
+					copyRegion->pasteTo(mouseOnGrid, *grid);
 
 					break;
 				}

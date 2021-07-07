@@ -138,6 +138,26 @@ void Grid::addJoin(const Int2& position)
 	join->refresh(*this, position);
 }
 
+void Grid::add(const Int2& position, const uint8_t& id)
+{
+	switch (id)
+	{
+		case 0: remove(position); return;
+		case 5: addGate(position); return;
+		case 6: addJoin(position); return;
+		case 1: addWire(position); return;
+		case 2: addWire(position); break;
+		case 3: addWire(position); break;
+		case 4: addWire(position); break;
+		default: return;
+	}
+
+	Wire* wire = dynamic_cast<Wire*>(get(position));
+	if (wire == nullptr) throw exception("Invalid");
+
+	wire->process(id);
+}
+
 void Grid::remove(const Int2& position)
 {
 	Cell* const previous = get(position);
@@ -153,6 +173,12 @@ void Grid::toggleSource(const Int2& position)
 {
 	Wire* wire = dynamic_cast<Wire*>(get(position));
 	if (wire != nullptr) wire->isSource = !wire->isSource;
+}
+
+void Grid::update()
+{
+	for (shared_ptr<Gate>& gate : gates) gate->update();
+	for (shared_ptr<Wire>& wire : wires) wire->update();
 }
 
 void Grid::removeWire(const Int2& position)
@@ -249,10 +275,4 @@ void Grid::scanPort(const Int2& position)
 
 	if (gate != nullptr) gate->refresh(*this, position);
 	if (join != nullptr) join->refresh(*this, position);
-}
-
-void Grid::update()
-{
-	for (shared_ptr<Gate>& gate : gates) gate->update();
-	for (shared_ptr<Wire>& wire : wires) wire->update();
 }

@@ -1,8 +1,9 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "Grid.h"
 #include "Type2.h"
+#include "Region.h"
+#include "Grid.h"
 
 /*
 * The main idea of GridView is that the Texture is a fixed size(which is like the scale on how many it should show on the screen)
@@ -25,8 +26,12 @@ namespace RedWire
 		float zoomMin, zoomMax;
 
 		float camMoveSpeed;
-		int selectedAdd{ 0 };
-		bool mousePressed{ false }; //Most of these parameters should get moved >:D
+		int selectedAdd{};
+		bool mousePressed{}; //Most of these parameters should get moved >:D
+
+		bool isCopying{}; //Temporary junk that will get disappear later
+		Int2 firstCorner{};
+		std::unique_ptr<Region> copyRegion;
 
 		std::shared_ptr<Grid> grid;
 

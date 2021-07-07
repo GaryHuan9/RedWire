@@ -13,6 +13,7 @@ namespace RedWire
 	struct Cell;
 	struct Wire;
 	struct Gate;
+	struct Region;
 
 	struct Grid : Area
 	{
@@ -24,6 +25,8 @@ namespace RedWire
 		void addWire(const Int2& position);
 		void addGate(const Int2& position);
 		void addJoin(const Int2& position);
+
+		void add(const Int2& position, const uint8_t& id);
 
 		void remove(const Int2& position);
 		void toggleSource(const Int2& position);

@@ -1,4 +1,5 @@
 #include "Wire.h"
+#include <stdint.h>
 #include <random>
 #include <limits>
 
@@ -23,9 +24,9 @@ Wire::Wire() : isSource(false), poweredLast(false), poweredNext(false)
 
 uint32_t Wire::getColor() const
 {
-	return debugColor;
+	//return debugColor;
 
-	if (isSource)     return 0xFFAA02FFu;
+	if (isSource) return 0xFFAA02FFu;
 	if (getPowered()) return 0xFF5502FFu;
 
 	return 0xFF0002FFu;
@@ -35,8 +36,8 @@ uint8_t Wire::getCellId() const
 {
 	uint8_t result = 0;
 
-	if (isSource)     result |= 1 << 0;
-	if (getPowered()) result |= 1 << 1;
+	if (isSource) result |= 1 << 0;
+	if (poweredLast) result |= 1 << 1;
 
 	return result + 1; //Should occupy 1-4 (4 variants)
 }
@@ -62,4 +63,12 @@ void Wire::combine(const Wire& wire)
 	isSource |= wire.isSource;
 	poweredLast |= wire.poweredLast;
 	poweredNext |= wire.poweredNext;
+}
+
+void Wire::process(const uint8_t& id)
+{
+	const uint8_t flag = id - 1;
+
+	isSource = (flag >> 0) & 1;
+	poweredLast = (flag >> 1) & 1;
 }

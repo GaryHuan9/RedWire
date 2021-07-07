@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdint.h>
 #include "Cell.h"
 
 namespace RedWire
@@ -19,6 +20,7 @@ namespace RedWire
 		void update();
 
 		void combine(const Wire& wire);
+		void process(const uint8_t& id);
 
 	private:
 
