@@ -4,8 +4,6 @@
 #include <iostream>
 #include <string>
 
-#include "CXMath.h"
-
 using namespace RedWire;
 using namespace sf;
 

@@ -1,4 +1,4 @@
-#include "Type2.h"
+#include "../Type2.h"
 #include "Area.h"
 #include "Cell.h"
 

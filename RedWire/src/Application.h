@@ -2,9 +2,9 @@
 
 #include <SFML/System.hpp>
 #include "Core/Grid.h"
-#include "Core/GridView.h"
-#include "Core/InputManager.h"
-#include "Core/TestUI.h"
+#include "Control/InputManager.h"
+#include "Interface/GridView.h"
+#include "Interface/TestUI.h"
 
 namespace RedWire
 {

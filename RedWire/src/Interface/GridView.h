@@ -2,8 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Type2.h"
-#include "Grid.h"
+#include "../Type2.h"
+#include "../Core/Grid.h"
 
 namespace RedWire
 {

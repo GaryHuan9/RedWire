@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
-#include "Type2.h"
+#include "../Type2.h"
 
 namespace RedWire
 {

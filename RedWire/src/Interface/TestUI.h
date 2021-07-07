@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
-#include "Grid.h"
+#include "../Core/Grid.h"
 
 namespace RedWire
 {

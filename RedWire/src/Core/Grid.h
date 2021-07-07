@@ -4,7 +4,7 @@
 #include <unordered_set>
 #include <vector>
 #include <memory>
-#include "Type2.h"
+#include "../Type2.h"
 #include "Area.h"
 #include "Join.h"
 

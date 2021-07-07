@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 #include <memory>
-#include "Type2.h"
+#include "../Type2.h"
 
 namespace RedWire
 {

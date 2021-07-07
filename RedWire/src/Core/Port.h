@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Type2.h"
+#include "../Type2.h"
 #include "Cell.h"
 
 namespace RedWire
