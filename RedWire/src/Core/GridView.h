@@ -1,60 +1,53 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+
 #include "Type2.h"
-#include "Region.h"
 #include "Grid.h"
 
-/*
-* The main idea of GridView is that the Texture is a fixed size(which is like the scale on how many it should show on the screen)
-* Then you could show only a part of the texture, this is going to control the set of the grid color :D
-*/
 namespace RedWire
 {
-	class GridView
+	struct Application;
+
+	/*
+	* Main idea of the grid view:
+	* 1. it only controls the display of the grid and the manipulation of it
+	* 2. it will have 3 methods that are extendable
+	*	a. Update
+	*	b. Resizing of borders
+	*	c. get world position from screen position
+	*/
+	struct GridView
 	{
+		GridView(Application& application);
+
+		void update();
+
+		/// <summary>
+		/// Assigns this GridView's current view.
+		/// </summary>
+		void setView(const Float2& min, const Float2& max);
+
+		/// <summary>
+		/// Converts a screen position to a world position
+		/// based on this GridView's current view.
+		/// </summary>
+		Float2 getPosition(const Float2& position) const;
+
 	private:
-		Int2 size;
-		sf::Sprite sprite;
+
+		Int2 cellMin;
+		Int2 cellMax;
+
+		Float2 viewMin;
+		Float2 viewMax;
+
+		sf::RectangleShape display;
 		sf::Texture texture;
-		sf::Image image;
-		sf::View cameraView;
-		Float2 topLeftCamPosition;
+		std::unique_ptr<sf::Uint8[]> bytes;
 
-		float cameraViewSize;
-		float zoomMagnitude;
-		float zoomMin, zoomMax;
-
-		float camMoveSpeed;
-		int selectedAdd{};
-		bool mousePressed{}; //Most of these parameters should get moved >:D
-
-		bool isCopying{}; //Temporary junk that will get disappear later
-		Int2 firstCorner{};
-		std::unique_ptr<Region> copyRegion;
-
-		std::shared_ptr<Grid> grid;
-
-	public:
-		static const Int2 DefaultSize;
-
-		//Change this later into Float2 or FloatRect
-		GridView(const Int2& size, const std::shared_ptr<Grid>& grid);
-
-		void onAppEventPoll(const sf::Event& appEvent, const sf::RenderWindow& renderWindow);
-
-		void update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime);
-
-		//getters
-		const sf::View& getCameraView() const;
-
-	private:
-
-		Int2 getTopLeftCellPositionInt() const;
-
-		void updateTexture();
-
-		void resize(const Int2& size);
+		Application& application;
 	};
 }
+
 

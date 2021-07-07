@@ -43,7 +43,7 @@ void InputManager::update(const Time& deltaTime)
 
 	//View movement
 	static const float movementSpeed = 1.5f;
-	GridViewNew& gridView = application.gridView;
+	GridView& gridView = application.gridView;
 
 	float speed = deltaTime.asSeconds() * movementSpeed;
 	viewCenter += getMovement() * speed * viewExtend;

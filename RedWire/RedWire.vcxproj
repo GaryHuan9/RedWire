@@ -153,12 +153,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Core\GridViewNew.cpp" />
+    <ClCompile Include="src\Core\GridView.cpp" />
     <ClCompile Include="src\Core\InputManager.cpp" />
     <ClCompile Include="src\Core\Area.cpp" />
     <ClCompile Include="src\Core\CXMath.cpp" />
     <ClCompile Include="src\Core\Gate.cpp" />
-    <ClCompile Include="src\Core\GridView.cpp" />
     <ClCompile Include="src\core\Grid.cpp" />
     <ClCompile Include="src\Core\Join.cpp" />
     <ClCompile Include="src\Core\Port.cpp" />
@@ -168,7 +167,7 @@
     <ClCompile Include="src\Core\TestUI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\GridViewNew.h" />
+    <ClInclude Include="src\Core\GridView.h" />
     <ClInclude Include="src\Core\InputManager.h" />
     <ClInclude Include="src\Core\Area.h" />
     <ClInclude Include="src\Core\CXMath.h" />
@@ -176,7 +175,6 @@
     <ClInclude Include="src\Core\Region.h" />
     <ClInclude Include="src\Core\Type2.h" />
     <ClInclude Include="src\Core\Gate.h" />
-    <ClInclude Include="src\Core\GridView.h" />
     <ClInclude Include="src\Core\Grid.h" />
     <ClInclude Include="src\Core\Cell.h" />
     <ClInclude Include="src\Core\Join.h" />

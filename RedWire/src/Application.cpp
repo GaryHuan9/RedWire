@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "Application.h"
 #include "Core/Grid.h"
-#include "Core/GridViewNew.h"
+#include "Core/GridView.h"
 #include "Core/InputManager.h"
 #include "Core/TestUI.h"
 

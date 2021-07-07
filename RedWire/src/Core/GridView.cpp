@@ -1,225 +1,102 @@
-#include <iostream>
 #include "GridView.h"
-#include "Region.h"
-#include "Wire.h"
+#include "../Application.h"
+
+#include <iostream>
+#include <string>
+
 #include "CXMath.h"
 
 using namespace RedWire;
+using namespace sf;
 
-const Int2 GridView::DefaultSize = Int2{ 35, 20 };
-
-GridView::GridView(const Int2& size, const std::shared_ptr<Grid>& grid) : size(size), grid(grid), topLeftCamPosition(.0f, .0f), camMoveSpeed(5.f),
-cameraViewSize(1.f), zoomMagnitude(1.f), zoomMin(.2f), zoomMax(20.f)
+GridView::GridView(Application& application) : application(application), display(), texture()
 {
-	resize(size);
 
-	//we only set the texture once since it stores a pointer instead
-	sprite.setTexture(texture);
-
-	cameraView.setSize(sf::Vector2f(static_cast<float>(size.x), static_cast<float>(size.y)));
-
-	updateTexture();
 }
 
-void GridView::onAppEventPoll(const sf::Event& appEvent, const sf::RenderWindow& renderWindow)
+Int2 convert(const Vector2u& value)
 {
-	//scroll check, will move this method to other places
-	if (appEvent.type == sf::Event::MouseWheelScrolled)
-	{
-		// == calculate zoom level ==
-		float zoomDelta = appEvent.mouseWheelScroll.delta * zoomMagnitude;
-
-		float lastViewSize = cameraViewSize;
-
-		cameraViewSize = CXUtils::CXMath::clamp(cameraViewSize - zoomDelta, zoomMin, zoomMax);
-
-		float zoomLevelDelta = cameraViewSize - lastViewSize;
-
-		// == calculate pixel zoom percentage (so the y axis of a pixel will not be squashed by the x resolution) ==
-
-		sf::Vector2u windowResolution(renderWindow.getSize());
-
-		//this is how shader's scale the size of a pixel (I think)
-		Float2 windowResolutionPixelScalePercentage((float)windowResolution.x / windowResolution.y, 1.f);
-
-		Float2 zoomDeltaFloat2(windowResolutionPixelScalePercentage * zoomLevelDelta);
-
-		// == do zooming ==
-
-		sf::Vector2f cameraViewSizeFloat = cameraView.getSize();
-
-		//we multiply by 2 is because we are going to add both left and right, make sense? :D, so each side that is incremented
-		Float2 newSizeFloat(cameraViewSizeFloat.x + zoomDeltaFloat2.x * 2.f, cameraViewSizeFloat.y + zoomDeltaFloat2.y * 2.f);
-
-		cameraView.setSize(newSizeFloat.x, newSizeFloat.y);
-
-		topLeftCamPosition -= zoomDeltaFloat2;
-
-		// == resize texture ==
-
-		Int2 newSizeInt((int)std::ceil(newSizeFloat.x), (int)std::ceil(newSizeFloat.y));
-
-		resize(newSizeInt);
-	}
+	return Int2((int32_t)value.x, (int32_t)value.y);
 }
 
-void GridView::update(sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
+//For some reason the view occationally jitter randomly while we move
+//However, the artifact can be avoided by going into fullscreen mode
+
+void GridView::update()
 {
-	if (renderWindow.hasFocus())
+	if (texture.getSize() == Vector2u(0, 0)) return;
+
+	Float2 windowSize = convert(application.getSize()).toType<float>();
+	Float2 textureSize = convert(texture.getSize()).toType<float>();
+
+	Float2 density = windowSize / (viewMax - viewMin);
+	Float2 offset = cellMin.toType<float>() - viewMin;
+
+	Float2 position = offset * density;
+	Float2 dimension = textureSize * density;
+
+	display.setPosition(Vector2f(position.x, position.y));
+	display.setSize(Vector2f(dimension.x, dimension.y));
+
+	uint32_t* colors = (uint32_t*)bytes.get();
+	Vector2u size = texture.getSize();
+
+	for (uint32_t y = 0; y < size.y; y++)
 	{
-		//Adding selection (TODO: We should probably move this to somewhere nice and add a UI)
-		/**/ if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) selectedAdd = 0;
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) selectedAdd = 1;
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) selectedAdd = 2;
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) selectedAdd = 3;
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) selectedAdd = 4;
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)) selectedAdd = 5;
-
-		//Click check
-		sf::Vector2f mouseOnWorld = renderWindow.mapPixelToCoords(sf::Mouse::getPosition(renderWindow));
-		Int2 mouseOnGrid = Int2((int)std::floorf(mouseOnWorld.x), (int)std::floorf(mouseOnWorld.y)) + getTopLeftCellPositionInt();
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+		for (uint32_t x = 0; x < size.x; x++)
 		{
-			switch (selectedAdd)
-			{
-				case 0: grid->addWire(mouseOnGrid); break;
-				case 1: grid->addGate(mouseOnGrid); break;
-				case 2: grid->addJoin(mouseOnGrid); break;
-				case 3:
-				{
-					if (mousePressed) break;
-
-					mousePressed = true;
-					grid->toggleSource(mouseOnGrid);
-
-					break;
-				}
-				case 4:
-				{
-					if (mousePressed) break;
-
-					mousePressed = true;
-
-					if (isCopying)
-					{
-						Int2 min = Int2(std::min(mouseOnGrid.x, firstCorner.x), std::min(mouseOnGrid.y, firstCorner.y));
-						Int2 max = Int2(std::max(mouseOnGrid.x, firstCorner.x), std::max(mouseOnGrid.y, firstCorner.y));
-
-						max += Int2(1, 1);
-
-						copyRegion = std::make_unique<Region>(max - min);
-						copyRegion->copyFrom(min, *grid);
-
-						isCopying = false;
-					}
-					else
-					{
-						firstCorner = mouseOnGrid;
-						isCopying = true;
-					}
-
-					break;
-				}
-				case 5:
-				{
-					if (mousePressed || !copyRegion) break;
-
-					mousePressed = true;
-					copyRegion->pasteTo(mouseOnGrid, *grid);
-
-					break;
-				}
-			}
-		}
-		else mousePressed = false;
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) grid->remove(mouseOnGrid);
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) grid->update();
-
-		//Move camera
-		const float deltaTimeAsSec = deltaTime.asSeconds();
-
-		Float2 movementDelta = Float2
-		(
-			sf::Keyboard::isKeyPressed(sf::Keyboard::A) * -1.f + sf::Keyboard::isKeyPressed(sf::Keyboard::D) * 1.f,
-			sf::Keyboard::isKeyPressed(sf::Keyboard::W) * -1.f + sf::Keyboard::isKeyPressed(sf::Keyboard::S) * 1.f
-		).normalize();
-
-		topLeftCamPosition += movementDelta * deltaTime.asSeconds() * camMoveSpeed;
-
-		Float2 resultOffset = Float2(CXUtils::CXMath::fract(topLeftCamPosition.x), CXUtils::CXMath::fract(topLeftCamPosition.y));
-
-		//just checking
-		//std::cout << "cam top left position: " << resultOffset.x << ", " << resultOffset.y << "\n";
-
-		Float2 center((float)size.x / 2.f, (float)size.y / 2.f);
-
-		Float2 resultCenter = center + resultOffset;
-
-		cameraView.setCenter(resultCenter.x, resultCenter.y);
-
-		//we don't set the render window's view
-		//renderWindow.setView(cameraView);
-	}
-
-	updateTexture();
-	renderWindow.draw(sprite);
-}
-
-const sf::View& RedWire::GridView::getCameraView() const
-{
-	return cameraView;
-}
-
-void GridView::updateTexture()
-{
-	//offset from top left, which is where the camera position will be
-	Int2 topLeftCellPosInt = getTopLeftCellPositionInt();
-
-	//updates the grid texture
-	for (unsigned int y = 0; y < size.y + 1u; y++)
-	{
-		for (unsigned int x = 0; x < size.x + 1u; x++)
-		{
-			const uint32_t color = grid->getColor(topLeftCellPosInt + Int2{ static_cast<int>(x), static_cast<int>(y) });
-
-			image.setPixel(x, y, sf::Color(color));
-
-			//comment above and uncomment below to see uv rainbow >:(
-			/*float percentageX = CXUtils::CXMath::fract((float)(topLeftCellPosInt.x + x) / size.x);
-			float percentageY = CXUtils::CXMath::fract((float)(topLeftCellPosInt.y + y) / size.y);*/
-
-			//image.setPixel(x, y, sf::Color((sf::Uint8)(percentageX * 255), (sf::Uint8)(percentageY * 255), (sf::Uint8)255));
+			uint32_t color = application.grid.getColor(cellMin + Int2(x, y));
+			colors[static_cast<size_t>(y) * size.x + x] = color;
 		}
 	}
 
-	texture.update(image);
+	texture.update(bytes.get());
+	application.draw(display);
 }
 
-void GridView::resize(const Int2& newSize)
+size_t getBytesLength(const Int2& size)
 {
-	//the real texture size
-	UInt2 newTextureSize(static_cast<unsigned int>(newSize.x + 1), static_cast<unsigned int>(newSize.y + 1));
+	return static_cast<size_t>(size.x) * size.y * 4;
+}
 
-	if (!texture.create(newTextureSize.x, newTextureSize.y))
+void GridView::setView(const Float2& min, const Float2& max)
+{
+	viewMin = min;
+	viewMax = max;
+
+	static const Float2 epsilon(0.01f, 0.01f);
+
+	Int2 cornerMin = (min - epsilon).getFloor().toType<int32_t>();
+	Int2 cornerMax = (max + epsilon).getCeil().toType<int32_t>();
+
+	Int2 oldSize = cellMax - cellMin;
+	Int2 newSize = cornerMax - cornerMin;
+
+	Int2 delta = oldSize - newSize;
+
+	if ((delta.x == 0 || delta.x == 1) && (delta.y == 0 || delta.y == 1))
 	{
-		std::cout << "gridTexture not created and resized to the target size: " << newSize.x << ", " << newSize.y << "\n";
-		throw std::exception();
+		cellMin = cornerMin;
+		cellMax = cornerMin + oldSize;
 	}
+	else
+	{
+		cellMin = cornerMin;
+		cellMax = cornerMax;
 
-	image = texture.copyToImage(); // reset the image also
+		//Resize texture
+		if (texture.create(newSize.x, newSize.y)) bytes = std::make_unique<Uint8[]>(getBytesLength(newSize));
+		else throw std::exception(("GridView failed to create texture: size " + newSize.toString()).c_str());
 
-	size = newSize;
-	//std::cout << "new size: " << size.x << ", " << size.y << '\n';
+		display.setTexture(&texture);
+		display.setTextureRect(IntRect(0, 0, newSize.x, newSize.y));
 
-	//because the stupid sprite doesn't know that the texture rect is changed, thus we need to tell it to update
-	sprite.setTextureRect(sf::IntRect(0, 0, newTextureSize.x, newTextureSize.y));
+		std::cout << "Resized" << oldSize.toString() << " " << newSize.toString() << std::endl;
+	}
 }
 
-Int2 GridView::getTopLeftCellPositionInt() const
+Float2 GridView::getPosition(const Float2& position) const
 {
-	auto value = topLeftCamPosition.getFloor();
-
-	return Int2(static_cast<size_t>(value.x), static_cast<size_t>(value.y));
+	Float2 windowSize = convert(application.getSize()).toType<float>();
+	return position / windowSize * (viewMax - viewMin) + viewMin;
 }

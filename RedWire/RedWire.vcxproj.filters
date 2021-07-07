@@ -21,9 +21,6 @@
     <ClCompile Include="src\core\Grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\GridView.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\Gate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,7 +48,7 @@
     <ClCompile Include="src\Core\InputManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\GridViewNew.cpp">
+    <ClCompile Include="src\Core\GridView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -63,9 +60,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Wire.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\GridView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Gate.h">
@@ -98,7 +92,7 @@
     <ClInclude Include="src\Core\InputManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\GridViewNew.h">
+    <ClInclude Include="src\Core\GridView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

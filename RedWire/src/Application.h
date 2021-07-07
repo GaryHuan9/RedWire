@@ -2,7 +2,7 @@
 
 #include <SFML/System.hpp>
 #include "Core/Grid.h"
-#include "Core/GridViewNew.h"
+#include "Core/GridView.h"
 #include "Core/InputManager.h"
 #include "Core/TestUI.h"
 
@@ -21,7 +21,7 @@ namespace RedWire
 		Grid grid;
 
 		InputManager inputManager;
-		GridViewNew gridView;
+		GridView gridView;
 		TestUI testUI;
 
 	private:
