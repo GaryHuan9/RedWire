@@ -1,18 +1,26 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 
+#include <SFML/Graphics.hpp>
+#include <memory>
 #include "Type2.h"
 
 namespace RedWire
 {
-	class InputManager
-	{
-	public:
-		InputManager();
-		void onEventPoll(const sf::Event& appEvent);
+	struct Application;
 
-		//getters
-		Float2 getMovementDeltaRaw() const;
+	struct InputManager
+	{
+		InputManager(Application& application);
+
+		void onEventPoll(const sf::Event& event);
+
+		void update(const sf::Time& deltaTime);
+
+	private:
+		Float2 viewCenter;
+		float  viewExtend;
+
+		Application& application;
 	};
 }
 

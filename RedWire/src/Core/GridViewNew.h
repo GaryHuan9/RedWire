@@ -4,47 +4,49 @@
 
 #include "Type2.h"
 #include "Grid.h"
-#include "InputManager.h"
 
 namespace RedWire
 {
+	struct Application;
+
 	/*
 	* Main idea of the grid view:
 	* 1. it only controls the display of the grid and the manipulation of it
-	* 2. it will have 3 methods that is extendable
+	* 2. it will have 3 methods that are extendable
 	*	a. Update
 	*	b. Resizing of borders
-	*	c. get mouse on cell position
+	*	c. get world position from screen position
 	*/
-	class GridViewNew
+	struct GridViewNew
 	{
+		GridViewNew(Application& application);
+
+		void update();
+
+		/// <summary>
+		/// Assigns this GridView's current view.
+		/// </summary>
+		void setView(const Float2& min, const Float2& max);
+
+		/// <summary>
+		/// Converts a screen position to a world position
+		/// based on this GridView's current view.
+		/// </summary>
+		Float2 getPosition(const Float2& position) const;
+
 	private:
+
+		Int2 cellMin;
+		Int2 cellMax;
+
+		Float2 viewMin;
+		Float2 viewMax;
+
+		sf::RectangleShape display;
 		sf::Texture texture;
-		sf::Image textureImage;
-		sf::Sprite displaySprite;
-		sf::Sprite previewSprite;
-		sf::View cameraView;
+		std::unique_ptr<sf::Uint8[]> bytes;
 
-		Float2 viewSize;
-		Float2 minPosition;
-
-		// == movement ==
-		float moveSpeed;
-
-		std::shared_ptr<Grid> grid;
-
-		Int2 getMinBorderInt() const;
-		UInt2 getDisplayedGridSize() const;
-		void recreateTexture(const UInt2& newSize);
-
-	public:
-		GridViewNew(const std::shared_ptr<Grid>& grid, const Float2& minBorder, const Float2& maxBorder);
-
-		void update(sf::RenderWindow& renderWindow, const InputManager& inputManager, const sf::Time& deltaTime);
-		void setCenter(const Float2& viewCenter);
-		Float2 getViewCenter() const;
-		void resetBorder(const Float2& _minBorder, const Float2& _maxBorder);
-		Int2 getMouseOnGrid(const sf::RenderWindow& renderWindow) const;
+		Application& application;
 	};
 }
 

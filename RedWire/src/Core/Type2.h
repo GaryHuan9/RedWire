@@ -181,8 +181,7 @@ namespace RedWire
 			return copy.normalize();
 		}
 
-		template<typename convertToType>
-		Type2<convertToType> toType() const
+		template<typename convertToType> Type2<convertToType> toType() const
 		{
 			return Type2<convertToType>(static_cast<convertToType>(x), static_cast<convertToType>(y));
 		}

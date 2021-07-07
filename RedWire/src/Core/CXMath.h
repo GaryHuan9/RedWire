@@ -58,7 +58,7 @@ namespace CXUtils
 		/// </summary>
 		static float stepTo(const float& value, const float& interval);
 
-		static float sign(const float& value);
+		static int sign(const float& value);
 
 		static float map(const float& value, const float& inMin, const float& inMax, const float& outMin, const float& outMax);
 		static int map(const int& value, const int& inMin, const int& inMax, const int& outMin, const int& outMax);

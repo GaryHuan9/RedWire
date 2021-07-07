@@ -16,11 +16,12 @@ namespace RedWire
 
 		sf::Text wireCountText;
 		sf::Text gateCountText;
+		sf::Text deltaTimeText;
 
 	public:
 		TestUI();
 
-		void update(const Grid& grid, sf::RenderWindow& renderWindow);
+		void update(const Grid& grid, sf::RenderWindow& renderWindow, const sf::Time& deltaTime);
 	};
 }
 

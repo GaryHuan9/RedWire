@@ -3,10 +3,15 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include "Application.h"
+#include "Core/Grid.h"
+#include "Core/GridViewNew.h"
+#include "Core/InputManager.h"
+#include "Core/TestUI.h"
 
 #include <iostream>
 
 using namespace RedWire;
+using namespace sf;
 
 int main()
 {
@@ -28,16 +33,8 @@ int main()
 	return 0;
 }
 
-// working grid view
-/*Application::Application() : RenderWindow(VideoMode::getDesktopMode(), "Red Wire", Style::Default, ContextSettings{ 0, 0, 2, 1, 1, ContextSettings::Attribute::Default, true }),
-clock(), grid(std::make_shared<Grid>()), gridView(GridView::DefaultSize, grid), testUI()
-{
-
-}*/
-
-//new grid view
 Application::Application() : RenderWindow(VideoMode::getDesktopMode(), "Red Wire", Style::Default, ContextSettings{ 0, 0, 2, 1, 1, ContextSettings::Attribute::Default, true }),
-clock(), grid(std::make_shared<Grid>()), inputManager(std::make_shared<InputManager>()), gridViewNew(grid, Float2(), Float2(30.f, 20.f)), testUI()
+grid(), inputManager(*this), gridView(*this), testUI(/* allow this -> *this */), clock()
 {
 
 }
@@ -45,6 +42,9 @@ clock(), grid(std::make_shared<Grid>()), inputManager(std::make_shared<InputMana
 void Application::start()
 {
 	setVerticalSyncEnabled(true);
+	grid.addWire(Int2(3, 4));
+	grid.addWire(Int2(3, 5));
+	grid.addWire(Int2(3, 6));
 }
 
 void Application::dispatchEvents()
@@ -53,9 +53,23 @@ void Application::dispatchEvents()
 
 	while (pollEvent(event))
 	{
-		if (event.type == Event::Closed) close();
-		inputManager->onEventPoll(event);
-		//gridView.onAppEventPoll(event, *this);
+		switch (event.type)
+		{
+			case Event::Closed:
+			{
+				close();
+				break;
+			}
+			case Event::Resized:
+			{
+				Vector2f size(event.size.width, event.size.height);
+				setView(View(size / 2.0f, size));
+
+				break;
+			}
+		}
+
+		inputManager.onEventPoll(event);
 	}
 }
 
@@ -63,15 +77,7 @@ void Application::update()
 {
 	const Time& deltaTime = clock.restart();
 
-	//I seperated this because it's easier to control and easier to understand
-	//setView(gridView.getCameraView());
-
-	//gridView.update(*this, deltaTime);
-
-	gridViewNew.update(*this, *inputManager, deltaTime);
-
-	//set the view back to what it should be
-	setView(getDefaultView());
-
-	testUI.update(*grid, *this);
+	inputManager.update(deltaTime);
+	gridView.update();
+	testUI.update(grid, *this, deltaTime); //Not gonna touch this but cant we send the grid when we init/construct testUI?
 }
