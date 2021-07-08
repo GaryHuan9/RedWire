@@ -13,5 +13,11 @@ namespace RedWire
 		void update(const Float2& position, const Int2& cell, const bool& down, const bool& changed) override;
 
 		bool activationPredicate() override;
+
+	private:
+		bool isInitialPositionSet;
+		bool isInitialDirectionSet;
+		Int2 initialGridPosition;
+		bool isHorizontal;
 	};
 }
