@@ -34,6 +34,8 @@ namespace RedWire
 		/// </summary>
 		Float2 getPosition(const Float2& position) const;
 
+		bool displayLines = true;
+
 	private:
 
 		Int2 cellMin;
@@ -45,6 +47,8 @@ namespace RedWire
 		sf::RectangleShape display;
 		sf::Texture texture;
 		std::unique_ptr<sf::Uint8[]> bytes;
+
+		sf::VertexArray lines;
 
 		Application& application;
 	};
