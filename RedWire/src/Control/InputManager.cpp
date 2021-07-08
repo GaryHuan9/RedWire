@@ -32,8 +32,17 @@ void InputManager::onEventPoll(const Event& event)
 			static const float minExtend = 6.0f;
 			static const float maxExtend = 84.0f;
 
+			float oldExtend = viewExtend;
+
 			viewExtend += event.mouseWheelScroll.delta * sensitivity;
 			viewExtend = std::clamp(viewExtend, minExtend, maxExtend);
+
+			//Zoom origin based on mouse/cursor
+			Float2 mouse = getMousePosition();
+			Float2 offset = mouse - viewCenter;
+
+			offset *= viewExtend / oldExtend;
+			viewCenter = mouse - offset;
 
 			break;
 		}
@@ -55,7 +64,6 @@ void InputManager::update(const Time& deltaTime)
 
 	//View movement
 	static const float movementSpeed = 1.5f;
-	GridView& gridView = application.gridView;
 
 	float speed = deltaTime.asSeconds() * movementSpeed;
 	viewCenter += getMovement() * speed * viewExtend;
@@ -69,7 +77,7 @@ void InputManager::update(const Time& deltaTime)
 	float logSize = std::exp((logWidth + logHeight) / 2.0f);
 	Float2 extend = size.toType<float>() / logSize * viewExtend;
 
-	gridView.setView(viewCenter - extend, viewCenter + extend);
+	application.gridView.setView(viewCenter - extend, viewCenter + extend);
 
 	//Tools
 	for (size_t i = 0; i < tools.size(); i++)
@@ -78,14 +86,17 @@ void InputManager::update(const Time& deltaTime)
 		if (tool->activationPredicate()) currentTool = i;
 	}
 
-	Vector2i mousePoint = Mouse::getPosition(application);
-	Float2 mousePosition = Float2((float)mousePoint.x, (float)mousePoint.y);
-
-	Float2 position = gridView.getPosition(mousePosition);
+	Float2 position = getMousePosition();
 	Int2 cell = position.getFloor().toType<int32_t>();
-
 	bool down = Mouse::isButtonPressed(Mouse::Button::Left);
 
 	tools.at(currentTool)->update(position, cell, down, down != leftMousePressed);
 	leftMousePressed = down;
+}
+
+Float2 InputManager::getMousePosition()
+{
+	Vector2i mouse = Mouse::getPosition(application);
+	Float2 mousePosition = Float2((float)mouse.x, (float)mouse.y);
+	return application.gridView.getPosition(mousePosition);
 }

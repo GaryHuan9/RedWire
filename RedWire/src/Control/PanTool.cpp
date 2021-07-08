@@ -13,6 +13,8 @@ void PanTool::update(const Float2& position, const Int2& cell, const bool& down,
 {
 	//View panning
 	//Wire toggling
+
+	if (down && changed) grid.toggleSource(cell);
 }
 
 bool PanTool::activationPredicate()

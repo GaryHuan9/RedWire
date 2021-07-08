@@ -11,7 +11,7 @@ RemoveTool::RemoveTool(InputManager& manager) : Tool(manager)
 
 void RemoveTool::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
-
+	if (down) grid.remove(cell);
 }
 
 bool RemoveTool::activationPredicate()

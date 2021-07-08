@@ -25,6 +25,8 @@ namespace RedWire
 
 	private:
 
+		Float2 getMousePosition(); //Returns the world position of the mouse 
+
 		std::array<std::unique_ptr<Tool>, 5> tools;
 
 		size_t currentTool{ 0 };
