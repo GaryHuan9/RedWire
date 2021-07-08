@@ -34,7 +34,7 @@ namespace RedWire
 	public:
 		TestUI(Application& application);
 
-		void update(const sf::Time& deltaTime);
+		void update();
 	};
 }
 

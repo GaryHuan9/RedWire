@@ -34,7 +34,7 @@ TestUI::TestUI(Application& application) : application(application), currentInte
 
 }
 
-void TestUI::update(const sf::Time& deltaTime)
+void TestUI::update()
 {
 	// == calculate FPS ==
 
@@ -48,7 +48,7 @@ void TestUI::update(const sf::Time& deltaTime)
 
 	frameCount++;
 	
-	currentInterval += deltaTime.asSeconds();
+	currentInterval += application.getDeltaTime().asSeconds();
 
 	// == draw text ==
 	wireCountText.setString(std::string("Wire count: ") + std::to_string(application.grid.getWiresCount()));

@@ -58,14 +58,14 @@ Float2 getMovement()
 	).normalize();
 }
 
-void InputManager::update(const Time& deltaTime)
+void InputManager::update()
 {
 	if (!application.hasFocus()) return;
 
 	//View movement
 	static const float movementSpeed = 1.5f;
 
-	float speed = deltaTime.asSeconds() * movementSpeed;
+	float speed = application.getDeltaTime().asSeconds() * movementSpeed;
 	viewCenter += getMovement() * speed * viewExtend;
 
 	Vector2u windowSize = application.getSize();

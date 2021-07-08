@@ -16,7 +16,7 @@ namespace RedWire
 
 		void onEventPoll(const sf::Event& event);
 
-		void update(const sf::Time& deltaTime);
+		void update();
 
 		Application& application;
 

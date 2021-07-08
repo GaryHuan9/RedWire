@@ -78,7 +78,7 @@ void Application::update()
 	totalTime = clock.getElapsedTime();
 	deltaTime = totalTime - lastTime;
 
-	inputManager.update(deltaTime);
+	inputManager.update();
 	gridView.update();
-	testUI.update(deltaTime); //yes >:)
+	testUI.update(); //yes >:)
 }
