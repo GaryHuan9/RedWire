@@ -27,7 +27,7 @@ Cell* const Area::get(const Int2& position) const
 uint32_t Area::getColor(const Int2& position) const
 {
 	Cell* const cell = get(position);
-	if (cell == nullptr) return 0x000002FFu;
+	if (cell == nullptr) return 0xFF020000u;
 	return cell->getColor();
 }
 

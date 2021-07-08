@@ -2,7 +2,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include <array>
 #include "../Type2.h"
+#include "Tool.h"
 
 namespace RedWire
 {
@@ -16,11 +18,17 @@ namespace RedWire
 
 		void update(const sf::Time& deltaTime);
 
-	private:
+		Application& application;
+
 		Float2 viewCenter;
 		float  viewExtend;
 
-		Application& application;
+	private:
+
+		std::array<std::unique_ptr<Tool>, 5> tools;
+
+		size_t currentTool{ 0 };
+		bool leftMousePressed{};
 	};
 }
 

@@ -12,7 +12,7 @@ Gate::Gate() : grid(), sourcePosition(), targetPosition(), controlPosition()
 
 uint32_t Gate::getColor() const
 {
-	return getEnabled() ? 0x0002FFFFu : 0x000233FFu;
+	return getEnabled() ? 0xFFFF0200u : 0xFF330200u;
 }
 
 uint8_t Gate::getCellId() const

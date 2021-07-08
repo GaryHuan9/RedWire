@@ -153,6 +153,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Control\GateAdder.cpp" />
+    <ClCompile Include="src\Control\JoinAdder.cpp" />
+    <ClCompile Include="src\Control\PanTool.cpp" />
+    <ClCompile Include="src\Control\RemoveTool.cpp" />
+    <ClCompile Include="src\Control\Tool.cpp" />
+    <ClCompile Include="src\Control\WireAdder.cpp" />
     <ClCompile Include="src\Interface\GridView.cpp" />
     <ClCompile Include="src\Control\InputManager.cpp" />
     <ClCompile Include="src\Core\Area.cpp" />
@@ -167,6 +173,12 @@
     <ClCompile Include="src\Interface\TestUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Control\GateAdder.h" />
+    <ClInclude Include="src\Control\JoinAdder.h" />
+    <ClInclude Include="src\Control\PanTool.h" />
+    <ClInclude Include="src\Control\RemoveTool.h" />
+    <ClInclude Include="src\Control\Tool.h" />
+    <ClInclude Include="src\Control\WireAdder.h" />
     <ClInclude Include="src\Interface\GridView.h" />
     <ClInclude Include="src\Control\InputManager.h" />
     <ClInclude Include="src\Core\Area.h" />

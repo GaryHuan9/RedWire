@@ -62,7 +62,7 @@ void Application::dispatchEvents()
 			}
 			case Event::Resized:
 			{
-				Vector2f size(event.size.width, event.size.height);
+				Vector2f size((float)event.size.width, (float)event.size.height);
 				setView(View(size / 2.0f, size));
 
 				break;
