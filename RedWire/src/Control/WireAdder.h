@@ -15,9 +15,9 @@ namespace RedWire
 		bool activationPredicate() override;
 
 	private:
-		bool positionSet;
-		bool directionSet;
+		bool positionSet = false;
+		bool directionSet = false;
+		bool horizontal = false;
 		Int2 startCell;
-		bool horizontal;
 	};
 }
