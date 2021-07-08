@@ -42,9 +42,7 @@ grid(), inputManager(*this), gridView(*this), testUI(*this), clock()
 void Application::start()
 {
 	setVerticalSyncEnabled(true);
-	grid.addWire(Int2(3, 4));
-	grid.addWire(Int2(3, 5));
-	grid.addWire(Int2(3, 6));
+	clock.restart();
 }
 
 void Application::dispatchEvents()
@@ -75,7 +73,10 @@ void Application::dispatchEvents()
 
 void Application::update()
 {
-	const Time& deltaTime = clock.restart();
+	Time lastTime = totalTime;
+
+	totalTime = clock.getElapsedTime();
+	deltaTime = totalTime - lastTime;
 
 	inputManager.update(deltaTime);
 	gridView.update();

@@ -24,6 +24,8 @@ namespace RedWire
 		Cell* const get(const Int2& position) const;
 		uint32_t getColor(const Int2& position) const;
 
+		void writeTo(const std::string& path) const;
+
 	protected:
 
 		std::shared_ptr<Cell> getPtr(const Int2& position) const;

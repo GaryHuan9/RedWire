@@ -12,6 +12,9 @@ namespace RedWire
 	{
 		Application();
 
+		inline const sf::Time& getDeltaTime() { return deltaTime; }
+		inline const sf::Time& getTotalTime() { return totalTime; }
+
 		void start();
 
 		void dispatchEvents();
@@ -26,5 +29,8 @@ namespace RedWire
 
 	private:
 		sf::Clock clock;
+
+		sf::Time deltaTime;
+		sf::Time totalTime;
 	};
 }

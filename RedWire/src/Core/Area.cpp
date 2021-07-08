@@ -4,6 +4,7 @@
 
 #include <unordered_map>
 #include <memory>
+#include <fstream>
 
 using namespace RedWire;
 using namespace std;
@@ -29,6 +30,16 @@ uint32_t Area::getColor(const Int2& position) const
 	Cell* const cell = get(position);
 	if (cell == nullptr) return 0xFF020000u;
 	return cell->getColor();
+}
+
+void Area::writeTo(const std::string& path) const
+{
+	std::ifstream stream(path);
+
+	if (stream.fail()) throw std::exception(("Failed to load " + path).c_str());
+
+	//stream.get()
+
 }
 
 Int2 getTilePosition(const Int2& position)

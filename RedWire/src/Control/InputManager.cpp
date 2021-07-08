@@ -34,7 +34,7 @@ void InputManager::onEventPoll(const Event& event)
 
 			float oldExtend = viewExtend;
 
-			viewExtend += event.mouseWheelScroll.delta * sensitivity;
+			viewExtend -= event.mouseWheelScroll.delta * sensitivity;
 			viewExtend = std::clamp(viewExtend, minExtend, maxExtend);
 
 			//Zoom origin based on mouse/cursor
