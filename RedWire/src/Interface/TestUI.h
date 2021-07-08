@@ -6,11 +6,14 @@
 
 namespace RedWire
 {
+	struct Application;
+
 	class TestUI
 	{
 	private:
 		static const std::string DEFAULT_FONT_FILE_PATH;     //= "Assets/Fonts/JetBrainsMono/JetBrainsMono-Bold.ttf";
-		static const unsigned int DEFAULT_UI_CHARACTER_SIZE; //= 24u;
+		static const uint32_t DEFAULT_UI_CHARACTER_SIZE; //= 24u;
+		static const float FPS_UPDATE_INTERVAL;				 // 1.f;
 
 		sf::Font defaultFont;
 
@@ -18,10 +21,20 @@ namespace RedWire
 		sf::Text gateCountText;
 		sf::Text deltaTimeText;
 
-	public:
-		TestUI();
+		// == FPS ==
+		uint32_t frameCount;
+		float currentInterval;
+		float lastAverageFPS;
 
-		void update(const Grid& grid, sf::RenderWindow& renderWindow, const sf::Time& deltaTime);
+		Application& application;
+
+	private:
+		void setDefault(sf::Text& text);
+
+	public:
+		TestUI(Application& application);
+
+		void update(const sf::Time& deltaTime);
 	};
 }
 

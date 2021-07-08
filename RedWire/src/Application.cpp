@@ -34,7 +34,7 @@ int main()
 }
 
 Application::Application() : RenderWindow(VideoMode::getDesktopMode(), "Red Wire", Style::Default, ContextSettings{ 0, 0, 2, 1, 1, ContextSettings::Attribute::Default, true }),
-grid(), inputManager(*this), gridView(*this), testUI(/* allow this -> *this */), clock()
+grid(), inputManager(*this), gridView(*this), testUI(*this), clock()
 {
 
 }
@@ -79,5 +79,5 @@ void Application::update()
 
 	inputManager.update(deltaTime);
 	gridView.update();
-	testUI.update(grid, *this, deltaTime); //Not gonna touch this but cant we send the grid when we init/construct testUI?
+	testUI.update(deltaTime); //yes >:)
 }

@@ -1,12 +1,22 @@
 #include "TestUI.h"
 #include <iostream>
 
+#include "../Application.h"
+
 using namespace RedWire;
 
 const std::string TestUI::DEFAULT_FONT_FILE_PATH = "Assets/Fonts/JetBrainsMono/JetBrainsMono-Bold.ttf";
 const unsigned int TestUI::DEFAULT_UI_CHARACTER_SIZE = 24u;
+const float TestUI::FPS_UPDATE_INTERVAL = 1.f;
 
-RedWire::TestUI::TestUI()
+void TestUI::setDefault(sf::Text& text)
+{
+	text.setFont(defaultFont);
+	text.setCharacterSize(DEFAULT_UI_CHARACTER_SIZE);
+	text.setFillColor(sf::Color::White);
+}
+
+TestUI::TestUI(Application& application) : application(application), currentInterval(0.f), frameCount(0u), lastAverageFPS(0.f)
 {
 	if (!defaultFont.loadFromFile(DEFAULT_FONT_FILE_PATH))
 	{
@@ -15,29 +25,37 @@ RedWire::TestUI::TestUI()
 	}
 	//else loaded
 
-	wireCountText.setFont(defaultFont);
-	gateCountText.setFont(defaultFont);
-	deltaTimeText.setFont(defaultFont);
-
-	wireCountText.setCharacterSize(DEFAULT_UI_CHARACTER_SIZE);
-	gateCountText.setCharacterSize(DEFAULT_UI_CHARACTER_SIZE);
-	deltaTimeText.setCharacterSize(DEFAULT_UI_CHARACTER_SIZE);
-
-	wireCountText.setFillColor(sf::Color::White);
-	gateCountText.setFillColor(sf::Color::White);
-	deltaTimeText.setFillColor(sf::Color::White);
+	setDefault(wireCountText);
+	setDefault(gateCountText);
+	setDefault(deltaTimeText);
 
 	gateCountText.move(0.f, (float)DEFAULT_UI_CHARACTER_SIZE);
 	deltaTimeText.move(0.f, (float)DEFAULT_UI_CHARACTER_SIZE * 2.0f);
+
 }
 
-void TestUI::update(const Grid& grid, sf::RenderWindow& renderWindow, const sf::Time& deltaTime)
+void TestUI::update(const sf::Time& deltaTime)
 {
-	wireCountText.setString(std::string("Wire count: ") + std::to_string(grid.getWiresCount()));
-	gateCountText.setString(std::string("Gate count: ") + std::to_string(grid.getGatesCount()));
-	deltaTimeText.setString(std::string("FPS: ") + std::to_string(1.0f / deltaTime.asSeconds()));
+	// == calculate FPS ==
 
-	renderWindow.draw(wireCountText);
-	renderWindow.draw(gateCountText);
-	renderWindow.draw(deltaTimeText);
+	if (currentInterval >= FPS_UPDATE_INTERVAL)
+	{
+		lastAverageFPS = (float)frameCount / currentInterval;
+
+		frameCount = 0u;
+		currentInterval = 0.f;
+	}
+
+	frameCount++;
+	
+	currentInterval += deltaTime.asSeconds();
+
+	// == draw text ==
+	wireCountText.setString(std::string("Wire count: ") + std::to_string(application.grid.getWiresCount()));
+	gateCountText.setString(std::string("Gate count: ") + std::to_string(application.grid.getGatesCount()));
+	deltaTimeText.setString(std::string("FPS: ") + std::to_string(lastAverageFPS));
+
+	application.draw(wireCountText);
+	application.draw(gateCountText);
+	application.draw(deltaTimeText);
 }

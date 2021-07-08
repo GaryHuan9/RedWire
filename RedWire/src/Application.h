@@ -25,7 +25,6 @@ namespace RedWire
 		TestUI testUI;
 
 	private:
-
 		sf::Clock clock;
 	};
 }
