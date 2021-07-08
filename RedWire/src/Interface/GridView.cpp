@@ -38,7 +38,7 @@ void GridView::update()
 	{
 		for (uint32_t x = 0u; x < size.x; x++)
 		{
-			uint32_t color = application.grid.getColor(cellMin + Int2(x, y));
+			uint32_t color = application.grid->getColor(cellMin + Int2(x, y));
 			colors[static_cast<size_t>(y) * size.x + x] = color;
 		}
 	}

@@ -7,6 +7,10 @@
 namespace RedWire
 {
 	struct Cell;
+	struct Grid;
+
+	struct ofstream;
+	struct ifstream;
 
 	struct Area
 	{
@@ -17,7 +21,15 @@ namespace RedWire
 		Cell* const get(const Int2& position) const;
 		uint32_t getColor(const Int2& position) const;
 
-		void writeTo(const std::string& path) const;
+		/// <summary>
+		/// Writes this area and view information to stream.
+		/// </summary>
+		void writeTo(std::ofstream& stream, const Float2& viewCenter, const float& viewExtend) const;
+
+		/// <summary>
+		/// Reads a grid and view information from stream.
+		/// </summary>
+		static std::unique_ptr<Grid> readFrom(std::ifstream& stream, Float2& viewCenter, float& viewExtend);
 
 		struct Tile
 		{

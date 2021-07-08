@@ -5,6 +5,7 @@
 #include "Control/InputManager.h"
 #include "Interface/GridView.h"
 #include "Interface/TestUI.h"
+#include <memory>
 
 namespace RedWire
 {
@@ -21,7 +22,7 @@ namespace RedWire
 
 		void update();
 
-		Grid grid;
+		std::unique_ptr<Grid> grid;
 
 		InputManager inputManager;
 		GridView gridView;

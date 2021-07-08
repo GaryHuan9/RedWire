@@ -9,6 +9,7 @@
 #include "Core/Grid.h"
 
 #include <iostream>
+#include <memory>
 
 using namespace RedWire;
 using namespace sf;
@@ -32,7 +33,7 @@ int main()
 }
 
 Application::Application() : RenderWindow(VideoMode::getDesktopMode(), "Red Wire", Style::Default, ContextSettings{ 0, 0, 2, 1, 1, ContextSettings::Attribute::Default, true }),
-grid(), inputManager(*this), gridView(*this), testUI(*this), clock()
+grid(std::make_unique<Grid>()), inputManager(*this), gridView(*this), testUI(*this), clock()
 {
 
 }

@@ -11,7 +11,7 @@ JoinAdder::JoinAdder(InputManager& manager) : Tool(manager)
 
 void JoinAdder::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
-	if (down && changed) grid.addJoin(cell);
+	if (down && changed) grid->addJoin(cell);
 }
 
 bool JoinAdder::activationPredicate()

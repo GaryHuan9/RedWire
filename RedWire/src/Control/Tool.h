@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Type2.h"
+#include <memory>
 
 namespace RedWire
 {
@@ -28,6 +29,6 @@ namespace RedWire
 	protected:
 
 		InputManager& manager;
-		Grid& grid;
+		std::unique_ptr<Grid>& grid;
 	};
 }

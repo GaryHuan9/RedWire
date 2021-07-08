@@ -69,7 +69,7 @@
     <ClCompile Include="src\Control\RemoveTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Control\AreaSaver.cpp">
+    <ClCompile Include="src\Control\AreaSerializer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -134,7 +134,7 @@
     <ClInclude Include="src\Control\RemoveTool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Control\AreaSaver.h">
+    <ClInclude Include="src\Control\AreaSerializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

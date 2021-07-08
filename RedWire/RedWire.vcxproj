@@ -153,7 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Control\AreaSaver.cpp" />
+    <ClCompile Include="src\Control\AreaSerializer.cpp" />
     <ClCompile Include="src\Control\GateAdder.cpp" />
     <ClCompile Include="src\Control\JoinAdder.cpp" />
     <ClCompile Include="src\Control\PanTool.cpp" />
@@ -174,7 +174,7 @@
     <ClCompile Include="src\Interface\TestUI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Control\AreaSaver.h" />
+    <ClInclude Include="src\Control\AreaSerializer.h" />
     <ClInclude Include="src\Control\GateAdder.h" />
     <ClInclude Include="src\Control\JoinAdder.h" />
     <ClInclude Include="src\Control\PanTool.h" />

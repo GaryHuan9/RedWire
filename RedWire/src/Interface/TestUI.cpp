@@ -52,9 +52,9 @@ void TestUI::update()
 	currentInterval += application.getDeltaTime().asSeconds();
 
 	// == draw text ==
-	tileCountText.setString(std::string("Tile count: ") + std::to_string(application.grid.getTileCount()));
-	wireCountText.setString(std::string("Wire count: ") + std::to_string(application.grid.getWireCount()));
-	gateCountText.setString(std::string("Gate count: ") + std::to_string(application.grid.getGateCount()));
+	tileCountText.setString(std::string("Tile count: ") + std::to_string(application.grid->getTileCount()));
+	wireCountText.setString(std::string("Wire count: ") + std::to_string(application.grid->getWireCount()));
+	gateCountText.setString(std::string("Gate count: ") + std::to_string(application.grid->getGateCount()));
 	deltaTimeText.setString(std::string("FPS: ") + std::to_string(lastAverageFPS));
 
 	application.draw(tileCountText);

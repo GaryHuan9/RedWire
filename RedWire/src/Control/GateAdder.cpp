@@ -11,7 +11,7 @@ GateAdder::GateAdder(InputManager& manager) : Tool(manager)
 
 void GateAdder::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
-	if (down && changed) grid.addGate(cell);
+	if (down && changed) grid->addGate(cell);
 }
 
 bool GateAdder::activationPredicate()

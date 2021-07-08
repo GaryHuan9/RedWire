@@ -24,13 +24,11 @@ void WireAdder::update(const Float2& position, const Int2& cell, const bool& dow
 			positionSet = true;
 
 			//incase you wanna click set, instead of drag set
-			grid.addWire(cell);
+			grid->addWire(cell);
 		}
 
 		//if not moved
 		if (startCell == cell) return;
-		//else
-
 
 		if (!directionSet)
 		{
@@ -45,16 +43,14 @@ void WireAdder::update(const Float2& position, const Int2& cell, const bool& dow
 			int min = std::min(startCell.x, cell.x);
 			int max = std::max(startCell.x, cell.x);
 
-			for (int x = min; x <= max; x++)
-				grid.addWire(Int2(x, startCell.y));
+			for (int x = min; x <= max; x++) grid->addWire(Int2(x, startCell.y));
 		}
 		else
 		{
 			int min = std::min(startCell.y, cell.y);
 			int max = std::max(startCell.y, cell.y);
 
-			for (int y = min; y <= max; y++)
-				grid.addWire(Int2(startCell.x, y));
+			for (int y = min; y <= max; y++) grid->addWire(Int2(startCell.x, y));
 		}
 	}
 }

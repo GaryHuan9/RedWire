@@ -8,12 +8,15 @@ namespace RedWire
 {
 	//NOTE: This is a temporary tool to test Area serialization!
 
-	struct AreaSaver : Tool
+	struct AreaSerializer : Tool
 	{
-		AreaSaver(InputManager& manager);
+		AreaSerializer(InputManager& manager);
 
 		void update(const Float2& position, const Int2& cell, const bool& down, const bool& changed) override;
 
 		bool activationPredicate() override;
+
+	private:
+		Int2 startCell;
 	};
 }

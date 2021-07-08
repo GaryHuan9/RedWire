@@ -1,7 +1,7 @@
 #include "../Type2.h"
 #include "Area.h"
 #include "Cell.h"
-#include "Gate.h"
+#include "Grid.h"
 
 #include <unordered_map>
 #include <functional>
@@ -10,7 +10,6 @@
 #include <memory>
 #include <limits>
 #include <vector>
-#include <iostream>
 
 using namespace RedWire;
 using namespace std;
@@ -38,19 +37,31 @@ uint32_t Area::getColor(const Int2& position) const
 	return cell->getColor();
 }
 
-template<class T> void write(ofstream& stream, const T& value)
+template<class T> void write(std::ofstream& stream, const T& value)
 {
 	stream.write((const char*)&value, sizeof(T));
+}
+
+template<class T> T read(std::ifstream& stream)
+{
+	union
+	{
+		T value;
+		char bytes[sizeof(T)];
+	} fuse{};
+
+	stream.read(fuse.bytes, sizeof(T));
+	return fuse.value;
 }
 
 /// <summary>
 /// Variable length encode a lane id and lane length pair.
 /// </summary>
-void write(ofstream& stream, const uint8_t& id, const uint32_t& count)
+void write(std::ofstream& stream, const uint8_t& id, const uint32_t& length)
 {
 	uint8_t first = id & 0b1111u;
-	uint32_t remain = count >> 3;
-	first |= (uint8_t)(count << 4);
+	uint32_t remain = length >> 3;
+	first |= (uint8_t)(length << 4);
 
 	static const uint32_t Mask = 0b0111'1111u;
 
@@ -69,22 +80,46 @@ void write(ofstream& stream, const uint8_t& id, const uint32_t& count)
 	else write(stream, (uint8_t)(first & Mask));
 }
 
-void Area::writeTo(const std::string& path) const
+/// <summary>
+/// Variable length decode a lane id and lane length pair.
+/// </summary>
+void read(std::ifstream& stream, uint8_t& id, uint32_t& length)
 {
-	std::ofstream stream(path, std::ifstream::trunc | std::ifstream::binary);
-	if (stream.fail()) throw std::exception(("Failed to load " + path).c_str());
+	uint8_t first = read<uint8_t>(stream);
 
+	id = (uint8_t)(first & 0b1111u);
+	length = (uint32_t)(first >> 4);
+
+	static const uint32_t Mask = 0b0111'1111u;
+
+	if (first > Mask)
+	{
+		length &= 0b0111u;
+
+		for (uint32_t i = 3;; i += 7)
+		{
+			uint8_t part = read<uint8_t>(stream);
+			length |= (uint32_t)(part & Mask) << i;
+
+			if ((part & ~Mask) == 0) break;
+		}
+	}
+}
+
+void Area::writeTo(std::ofstream& stream, const Float2& viewCenter, const float& viewExtend) const
+{
 	write<uint32_t>(stream, 0); //Write version
 
 	Int2 min;
 	Int2 max;
 
 	findBorder(min, max);
+	write(stream, max - min);
 
 	for (int32_t y = min.y; y < max.y; y++)
 	{
 		uint8_t laneId{ 0u };
-		uint32_t count{ 0u };
+		uint32_t length{ 0u };
 
 		for (int32_t x = min.x; x < max.x; x++)
 		{
@@ -93,18 +128,48 @@ void Area::writeTo(const std::string& path) const
 
 			if (laneId == id)
 			{
-				++count;
+				++length;
 				continue;
 			}
 
-			if (count > 0) write(stream, laneId, count);
+			if (length > 0) write(stream, laneId, length);
 
 			laneId = id;
-			count = 1;
+			length = 1;
 		}
 
-		if (count > 0) write(stream, laneId, count);
+		write(stream, laneId, length);
 	}
+
+	write(stream, viewCenter - to_type2(float, min));
+	write(stream, viewExtend);
+}
+
+unique_ptr<Grid> Area::readFrom(std::ifstream& stream, Float2& viewCenter, float& viewExtend)
+{
+	auto grid = make_unique<Grid>();
+
+	uint32_t version = read<uint32_t>(stream);
+	Int2 size = read<Int2>(stream);
+
+	for (int32_t y = 0; y < size.y; y++)
+	{
+		uint8_t laneId{ 0u };
+		uint32_t length{ 0u };
+
+		for (int32_t x = 0; x < size.x; x++)
+		{
+			if (length == 0) read(stream, laneId, length);
+			if (laneId != 0) grid->add(Int2(x, y), laneId);
+
+			--length;
+		}
+	}
+
+	viewCenter = read<Float2>(stream);
+	viewExtend = read<float>(stream);
+
+	return grid;
 }
 
 Int2 Area::getTilePosition(const Int2& position)
