@@ -134,6 +134,16 @@ namespace RedWire
 
 #pragma region Utility Methods
 
+		static Type2<T> min(const Type2<T>& a, const Type2<T>& b)
+		{
+			return Type2<T>(std::min(a.x, b.x), std::min(a.y, b.y));
+		}
+
+		static Type2<T> max(const Type2<T>& a, const Type2<T>& b)
+		{
+			return Type2<T>(std::max(a.x, b.x), std::max(a.y, b.y));
+		}
+
 		Type2<T>& floor()
 		{
 			x = std::floor(x);
@@ -160,6 +170,16 @@ namespace RedWire
 		{
 			Type2<T> copy(*this);
 			return copy.ceil();
+		}
+
+		Type2<T> min(const Type2<T>& other) const
+		{
+			return Type2<T>::min(*this, other);
+		}
+
+		Type2<T> max(const Type2<T>& other) const
+		{
+			return Type2<T>::max(*this, other);
 		}
 
 		T getSqrMagnitude() const

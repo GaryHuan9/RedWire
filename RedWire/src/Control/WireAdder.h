@@ -17,7 +17,7 @@ namespace RedWire
 	private:
 		bool positionSet;
 		bool directionSet;
-		Int2 cellPosition;
+		Int2 startCell;
 		bool horizontal;
 	};
 }

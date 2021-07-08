@@ -6,7 +6,7 @@
 
 using namespace RedWire;
 
-WireAdder::WireAdder(InputManager& manager) : Tool(manager), positionSet(false), directionSet(false), cellPosition(0u, 0u), horizontal(false)
+WireAdder::WireAdder(InputManager& manager) : Tool(manager), positionSet(false), directionSet(false), startCell(0u, 0u), horizontal(false)
 {}
 
 void WireAdder::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
@@ -20,26 +20,42 @@ void WireAdder::update(const Float2& position, const Int2& cell, const bool& dow
 	{
 		if (!positionSet)
 		{
-			cellPosition = cell;
+			startCell = cell;
 			positionSet = true;
+
+			//incase you wanna click set, instead of drag set
+			grid.addWire(cell);
 		}
+
+		//if not moved
+		if (startCell == cell) return;
+		//else
+
 
 		if (!directionSet)
 		{
-			//if not moved
-			if (cellPosition == cell) return;
-
-			//else
-
 			directionSet = true;
 
-			Int2 difference = cell - cellPosition;
-			horizontal = difference.x != 0;
+			Int2 direction = cell - startCell;
+			horizontal = direction.x != 0;
 		}
 
-		Int2 targetCell(horizontal ? cell.x : cellPosition.x, horizontal ? cellPosition.y : cell.y);
+		if (horizontal)
+		{
+			int min = std::min(startCell.x, cell.x);
+			int max = std::max(startCell.x, cell.x);
 
-		grid.addWire(targetCell);
+			for (int x = min; x <= max; x++)
+				grid.addWire(Int2(x, startCell.y));
+		}
+		else
+		{
+			int min = std::min(startCell.y, cell.y);
+			int max = std::max(startCell.y, cell.y);
+
+			for (int y = min; y <= max; y++)
+				grid.addWire(Int2(startCell.x, y));
+		}
 	}
 }
 
