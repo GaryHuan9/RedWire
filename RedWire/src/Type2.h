@@ -6,9 +6,16 @@
 
 namespace RedWire
 {
+	//beware of macros, this is unsafe to code with
+#define to_type2(type, from) Type2<type>(static_cast<type>(from.x), static_cast<type>(from.y)) 
+
 	template<typename T> struct Type2
 	{
 		Type2(const T& x = (T)0, const T& y = (T)0) : x(x), y(y) {}
+
+		//I made conversion explicit because I like more this way :D, you can make it implicit by removing the explicit keyword
+		template<typename fromType>
+		explicit Type2(const Type2<fromType>& from) : x(static_cast<T>(from.x)), y(static_cast<T>(from.y)) {}
 
 		T x, y;
 

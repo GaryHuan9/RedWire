@@ -12,23 +12,18 @@ GridView::GridView(Application& application) : application(application), display
 
 }
 
-Int2 convert(const Vector2u& value)
-{
-	return Int2((int32_t)value.x, (int32_t)value.y);
-}
-
 //For some reason the view occationally jitter randomly while we move
 //However, the artifact can be avoided by going into fullscreen mode
 
 void GridView::update()
 {
 	if (texture.getSize() == Vector2u(0, 0)) return;
-
-	Float2 windowSize = convert(application.getSize()).toType<float>();
-	Float2 textureSize = convert(texture.getSize()).toType<float>();
+	
+	Float2 windowSize = to_type2(float, application.getSize());// .toType<float>();
+	Float2 textureSize = to_type2(float, texture.getSize());
 
 	Float2 density = windowSize / (viewMax - viewMin);
-	Float2 offset = cellMin.toType<float>() - viewMin;
+	Float2 offset = (Float2)cellMin - viewMin;
 
 	Float2 position = offset * density;
 	Float2 dimension = textureSize * density;
@@ -95,6 +90,6 @@ void GridView::setView(const Float2& min, const Float2& max)
 
 Float2 GridView::getPosition(const Float2& position) const
 {
-	Float2 windowSize = convert(application.getSize()).toType<float>();
+	Float2 windowSize = to_type2(float, application.getSize());
 	return position / windowSize * (viewMax - viewMin) + viewMin;
 }
