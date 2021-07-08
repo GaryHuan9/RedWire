@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <string>
 #include <memory>
 #include <math.h>
 #include <array>
@@ -94,9 +95,14 @@ void InputManager::update()
 
 	tools.at(currentTool)->update(position, cell, down, down != leftMousePressed);
 	leftMousePressed = down;
+}
 
-	//Update
-	if (Keyboard::isKeyPressed(Keyboard::Space)) application.grid->update();
+std::string InputManager::getCurrentToolLabel()
+{
+	std::string name = typeid(*tools.at(currentTool)).name();
+
+	size_t index = name.find_last_of(':');
+	return name.substr(index + 1);
 }
 
 Float2 InputManager::getMousePosition()

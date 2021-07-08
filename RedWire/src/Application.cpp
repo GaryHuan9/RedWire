@@ -77,7 +77,9 @@ void Application::update()
 	totalTime = clock.getElapsedTime();
 	deltaTime = totalTime - lastTime;
 
+	/*if (Keyboard::isKeyPressed(Keyboard::Space))*/ grid->update();
+
 	inputManager.update();
 	gridView.update();
-	testUI.update(); //yes >:)
+	testUI.update();
 }

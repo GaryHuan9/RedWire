@@ -21,6 +21,7 @@ namespace RedWire
 		sf::Text wireCountText;
 		sf::Text gateCountText;
 		sf::Text deltaTimeText;
+		sf::Text toolLabelText;
 
 		// == FPS ==
 		uint32_t frameCount;

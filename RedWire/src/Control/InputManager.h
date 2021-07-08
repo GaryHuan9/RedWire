@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include <string>
 #include <array>
 #include "../Type2.h"
 #include "Tool.h"
@@ -17,6 +18,8 @@ namespace RedWire
 		void onEventPoll(const sf::Event& event);
 
 		void update();
+
+		std::string getCurrentToolLabel();
 
 		Application& application;
 
