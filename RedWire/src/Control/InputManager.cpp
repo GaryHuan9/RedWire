@@ -9,6 +9,7 @@
 #include "WireAdder.h"
 #include "GateAdder.h"
 #include "JoinAdder.h"
+#include "AreaSaver.h"
 
 using namespace RedWire;
 using namespace sf;
@@ -20,6 +21,7 @@ InputManager::InputManager(Application& application) : application(application),
 	tools[2] = std::make_unique<WireAdder>(*this);
 	tools[3] = std::make_unique<GateAdder>(*this);
 	tools[4] = std::make_unique<JoinAdder>(*this);
+	tools[5] = std::make_unique<AreaSaver>(*this);
 }
 
 void InputManager::onEventPoll(const Event& event)

@@ -7,7 +7,7 @@
 using namespace RedWire;
 using namespace sf;
 
-GridView::GridView(Application& application) : application(application), display(), texture(), lines(sf::PrimitiveType::Lines)
+GridView::GridView(Application& application) : application(application), display(), texture(), lines(PrimitiveType::Lines)
 {
 
 }
@@ -44,29 +44,26 @@ void GridView::update()
 	}
 
 	texture.update(bytes.get());
-
 	application.draw(display);
 
 	if (!displayLines) return;
 
-	//don't worry this doesn't deallocate memory
-	//move your cursor onto the clear function to see what it says :D
-	lines.clear();
+	lines.clear(); //This doesn't deallocate memory
 
-	static const sf::Color lineColor = sf::Color(85, 85, 85, 30);
+	static const Color lineColor = Color(85, 85, 85, 30);
 
 	//Horizontal lines
 	for (uint32_t y = 0u; y < size.y; y++)
 	{
-		lines.append(sf::Vertex(sf::Vector2f(position.x, position.y + y * density.y), lineColor));
-		lines.append(sf::Vertex(sf::Vector2f(position.x + dimension.x, position.y + y * density.y), lineColor));
+		lines.append(Vertex(Vector2f(position.x, position.y + y * density.y), lineColor));
+		lines.append(Vertex(Vector2f(position.x + dimension.x, position.y + y * density.y), lineColor));
 	}
 
 	//Vertical lines
 	for (uint32_t x = 0u; x < size.x; x++)
 	{
-		lines.append(sf::Vertex(sf::Vector2f(position.x + x * density.x, position.y), lineColor));
-		lines.append(sf::Vertex(sf::Vector2f(position.x + x * density.x, position.y + dimension.y), lineColor));
+		lines.append(Vertex(Vector2f(position.x + x * density.x, position.y), lineColor));
+		lines.append(Vertex(Vector2f(position.x + x * density.x, position.y + dimension.y), lineColor));
 	}
 
 	application.draw(lines);
@@ -96,7 +93,8 @@ void GridView::setView(const Float2& min, const Float2& max)
 	{
 		cellMin = cornerMin;
 		cellMax = cornerMin + oldSize;
-	} else
+	}
+	else
 	{
 		cellMin = cornerMin;
 		cellMax = cornerMax;
@@ -107,8 +105,6 @@ void GridView::setView(const Float2& min, const Float2& max)
 
 		display.setTexture(&texture);
 		display.setTextureRect(IntRect(0, 0, newSize.x, newSize.y));
-
-		std::cout << "Resized" << oldSize.toString() << " " << newSize.toString() << std::endl;
 	}
 }
 

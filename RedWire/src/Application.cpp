@@ -19,8 +19,6 @@ int main()
 
 	application.start();
 
-	sf::Clock deltaClock;
-
 	while (application.isOpen())
 	{
 		application.dispatchEvents();

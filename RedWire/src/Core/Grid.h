@@ -19,8 +19,8 @@ namespace RedWire
 	{
 		Grid();
 
-		inline size_t getWiresCount() const { return wires.size(); }
-		inline size_t getGatesCount() const { return gates.size(); }
+		inline size_t getWireCount() const { return wires.size(); }
+		inline size_t getGateCount() const { return gates.size(); }
 
 		void addWire(const Int2& position);
 		void addGate(const Int2& position);

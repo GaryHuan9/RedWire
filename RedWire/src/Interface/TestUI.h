@@ -17,6 +17,7 @@ namespace RedWire
 
 		sf::Font defaultFont;
 
+		sf::Text tileCountText;
 		sf::Text wireCountText;
 		sf::Text gateCountText;
 		sf::Text deltaTimeText;

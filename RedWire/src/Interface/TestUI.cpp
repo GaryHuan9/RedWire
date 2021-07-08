@@ -25,13 +25,14 @@ TestUI::TestUI(Application& application) : application(application), currentInte
 	}
 	//else loaded
 
+	setDefault(tileCountText);
 	setDefault(wireCountText);
 	setDefault(gateCountText);
 	setDefault(deltaTimeText);
 
-	gateCountText.move(0.f, (float)DEFAULT_UI_CHARACTER_SIZE);
-	deltaTimeText.move(0.f, (float)DEFAULT_UI_CHARACTER_SIZE * 2.0f);
-
+	wireCountText.move(0.f, (float)DEFAULT_UI_CHARACTER_SIZE * 1.0f);
+	gateCountText.move(0.f, (float)DEFAULT_UI_CHARACTER_SIZE * 2.0f);
+	deltaTimeText.move(0.f, (float)DEFAULT_UI_CHARACTER_SIZE * 3.0f);
 }
 
 void TestUI::update()
@@ -47,14 +48,16 @@ void TestUI::update()
 	}
 
 	frameCount++;
-	
+
 	currentInterval += application.getDeltaTime().asSeconds();
 
 	// == draw text ==
-	wireCountText.setString(std::string("Wire count: ") + std::to_string(application.grid.getWiresCount()));
-	gateCountText.setString(std::string("Gate count: ") + std::to_string(application.grid.getGatesCount()));
+	tileCountText.setString(std::string("Tile count: ") + std::to_string(application.grid.getTileCount()));
+	wireCountText.setString(std::string("Wire count: ") + std::to_string(application.grid.getWireCount()));
+	gateCountText.setString(std::string("Gate count: ") + std::to_string(application.grid.getGateCount()));
 	deltaTimeText.setString(std::string("FPS: ") + std::to_string(lastAverageFPS));
 
+	application.draw(tileCountText);
 	application.draw(wireCountText);
 	application.draw(gateCountText);
 	application.draw(deltaTimeText);

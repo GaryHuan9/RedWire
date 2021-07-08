@@ -11,7 +11,9 @@ namespace RedWire
 
 	template<typename T> struct Type2
 	{
-		Type2(const T& x = (T)0, const T& y = (T)0) : x(x), y(y) {}
+		Type2(const T& value = (T)0) : Type2(value, value) {}
+
+		Type2(const T& x, const T& y) : x(x), y(y) {}
 
 		//I made conversion explicit because I like more this way :D, you can make it implicit by removing the explicit keyword
 		template<typename fromType>
