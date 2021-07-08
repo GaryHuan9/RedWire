@@ -6,7 +6,7 @@
 
 using namespace RedWire;
 
-WireAdder::WireAdder(InputManager& manager) : Tool(manager), positionSet(false), directionSet(false), initialCellPosition(0u, 0u), horizontal(false)
+WireAdder::WireAdder(InputManager& manager) : Tool(manager), positionSet(false), directionSet(false), cellPosition(0u, 0u), horizontal(false)
 {}
 
 void WireAdder::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
@@ -20,24 +20,24 @@ void WireAdder::update(const Float2& position, const Int2& cell, const bool& dow
 	{
 		if (!positionSet)
 		{
-			initialCellPosition = cell;
+			cellPosition = cell;
 			positionSet = true;
 		}
 
 		if (!directionSet)
 		{
 			//if not moved
-			if (initialCellPosition == cell) return;
+			if (cellPosition == cell) return;
 
 			//else
 
 			directionSet = true;
 
-			Int2 difference = cell - initialCellPosition;
+			Int2 difference = cell - cellPosition;
 			horizontal = difference.x != 0;
 		}
 
-		Int2 targetCell(horizontal ? cell.x : initialCellPosition.x, horizontal ? initialCellPosition.y : cell.y);
+		Int2 targetCell(horizontal ? cell.x : cellPosition.x, horizontal ? cellPosition.y : cell.y);
 
 		grid.addWire(targetCell);
 	}

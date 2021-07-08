@@ -15,9 +15,9 @@ namespace RedWire
 		bool activationPredicate() override;
 
 	private:
-		bool isInitialPositionSet;
-		bool isInitialDirectionSet;
-		Int2 initialGridPosition;
-		bool isHorizontal;
+		bool positionSet;
+		bool directionSet;
+		Int2 cellPosition;
+		bool horizontal;
 	};
 }
