@@ -6,7 +6,7 @@
 
 using namespace RedWire;
 
-WireAdder::WireAdder(InputManager& manager) : Tool(manager), positionSet(false), directionSet(false), startCell(0u, 0u), horizontal(false)
+WireAdder::WireAdder(InputManager& manager) : Tool(manager)
 {}
 
 void WireAdder::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
