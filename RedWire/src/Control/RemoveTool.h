@@ -13,5 +13,9 @@ namespace RedWire
 		void update(const Float2& position, const Int2& cell, const bool& down, const bool& changed) override;
 
 		bool activationPredicate() override;
+
+	private:
+		bool startCellSet = false;
+		Int2 startCell;
 	};
 }
