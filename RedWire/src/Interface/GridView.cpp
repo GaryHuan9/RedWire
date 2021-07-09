@@ -7,7 +7,7 @@
 using namespace RedWire;
 using namespace sf;
 
-GridView::GridView(Application& application) : application(application), display(), texture(), lines(PrimitiveType::Lines)
+GridView::GridView(Application& application) : application(application), display(), texture(), lines(PrimitiveType::Triangles)
 {
 
 }
@@ -46,7 +46,7 @@ void GridView::update()
 	texture.update(bytes.get());
 	application.draw(display);
 
-	if (!displayLines) return;
+	if (!thickness) return;
 
 	lines.clear(); //This doesn't deallocate memory
 
@@ -55,15 +55,51 @@ void GridView::update()
 	//Horizontal lines
 	for (uint32_t y = 0u; y < size.y; y++)
 	{
-		lines.append(Vertex(Vector2f(position.x, position.y + y * density.y), lineColor));
-		lines.append(Vertex(Vector2f(position.x + dimension.x, position.y + y * density.y), lineColor));
+		float targetThickness = thickness * density.y;
+
+		float endX = position.x + dimension.x;
+		float centerY = position.y + y * density.y;
+
+		float topY = centerY - targetThickness * .5f;
+		float bottomY = centerY + targetThickness * .5f;
+
+		sf::Vertex topLeft(Vector2f(position.x, topY), lineColor);
+		sf::Vertex topRight(Vector2f(endX, topY), lineColor);
+		sf::Vertex bottomLeft(Vector2f(position.x, bottomY), lineColor);
+		sf::Vertex bottomRight(Vector2f(endX, bottomY), lineColor);
+
+		lines.append(bottomRight);
+		lines.append(bottomLeft);
+		lines.append(topLeft);
+
+		lines.append(bottomRight);
+		lines.append(topLeft);
+		lines.append(topRight);
 	}
 
 	//Vertical lines
 	for (uint32_t x = 0u; x < size.x; x++)
 	{
-		lines.append(Vertex(Vector2f(position.x + x * density.x, position.y), lineColor));
-		lines.append(Vertex(Vector2f(position.x + x * density.x, position.y + dimension.y), lineColor));
+		float targetThickness = thickness * density.x;
+
+		float endY = position.y + dimension.y;
+		float centerX = position.x + x * density.x;
+
+		float rightX = centerX - targetThickness * .5f;
+		float leftX = centerX + targetThickness * .5f;
+
+		sf::Vertex topLeft(Vector2f(leftX, position.y), lineColor);
+		sf::Vertex topRight(Vector2f(rightX, position.y), lineColor);
+		sf::Vertex bottomLeft(Vector2f(leftX, endY), lineColor);
+		sf::Vertex bottomRight(Vector2f(rightX, endY), lineColor);
+
+		lines.append(bottomRight);
+		lines.append(bottomLeft);
+		lines.append(topLeft);
+
+		lines.append(bottomRight);
+		lines.append(topLeft);
+		lines.append(topRight);
 	}
 
 	application.draw(lines);

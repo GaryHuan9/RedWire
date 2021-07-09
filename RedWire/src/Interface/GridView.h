@@ -34,7 +34,9 @@ namespace RedWire
 		/// </summary>
 		Float2 getPosition(const Float2& position) const;
 
-		bool displayLines = true;
+		//bool displayLines = true;
+
+		float thickness = .1f;
 
 	private:
 
