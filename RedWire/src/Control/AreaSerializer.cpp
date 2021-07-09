@@ -6,6 +6,7 @@
 
 #include <fstream>
 #include <math.h>
+#include <iostream>
 
 using namespace RedWire;
 

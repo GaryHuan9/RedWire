@@ -9,8 +9,8 @@ namespace RedWire
 	struct Cell;
 	struct Grid;
 
-	struct ofstream;
-	struct ifstream;
+	struct ostream;
+	struct istream;
 
 	struct Area
 	{
@@ -24,12 +24,12 @@ namespace RedWire
 		/// <summary>
 		/// Writes this area and view information to stream.
 		/// </summary>
-		void writeTo(std::ofstream& stream, const Float2& viewCenter, const float& viewExtend) const;
+		void writeTo(std::ostream& stream, const Float2& viewCenter, const float& viewExtend) const;
 
 		/// <summary>
 		/// Reads a grid and view information from stream.
 		/// </summary>
-		static std::unique_ptr<Grid> readFrom(std::ifstream& stream, Float2& viewCenter, float& viewExtend);
+		static std::unique_ptr<Grid> readFrom(std::istream& stream, Float2& viewCenter, float& viewExtend);
 
 		struct Tile
 		{

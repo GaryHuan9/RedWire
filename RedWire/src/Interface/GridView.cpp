@@ -34,29 +34,6 @@ void GridView::update()
 	uint32_t* colors = (uint32_t*)bytes.get();
 	Vector2u size = texture.getSize();
 
-	if (displayLines) //I think drawing grid lines under the wires look better
-	{
-		lines.clear(); //This doesn't deallocate memory
-
-		static const Color lineColor = Color(85, 85, 85, 30);
-
-		//Horizontal lines
-		for (uint32_t y = 0u; y < size.y; y++)
-		{
-			lines.append(Vertex(Vector2f(position.x, position.y + y * density.y), lineColor));
-			lines.append(Vertex(Vector2f(position.x + dimension.x, position.y + y * density.y), lineColor));
-		}
-
-		//Vertical lines
-		for (uint32_t x = 0u; x < size.x; x++)
-		{
-			lines.append(Vertex(Vector2f(position.x + x * density.x, position.y), lineColor));
-			lines.append(Vertex(Vector2f(position.x + x * density.x, position.y + dimension.y), lineColor));
-		}
-
-		application.draw(lines);
-	}
-
 	for (uint32_t y = 0u; y < size.y; y++)
 	{
 		for (uint32_t x = 0u; x < size.x; x++)
@@ -68,6 +45,28 @@ void GridView::update()
 
 	texture.update(bytes.get());
 	application.draw(display);
+
+	if (!displayLines) return;
+
+	lines.clear(); //This doesn't deallocate memory
+
+	static const Color lineColor = Color(85, 85, 85, 30);
+
+	//Horizontal lines
+	for (uint32_t y = 0u; y < size.y; y++)
+	{
+		lines.append(Vertex(Vector2f(position.x, position.y + y * density.y), lineColor));
+		lines.append(Vertex(Vector2f(position.x + dimension.x, position.y + y * density.y), lineColor));
+	}
+
+	//Vertical lines
+	for (uint32_t x = 0u; x < size.x; x++)
+	{
+		lines.append(Vertex(Vector2f(position.x + x * density.x, position.y), lineColor));
+		lines.append(Vertex(Vector2f(position.x + x * density.x, position.y + dimension.y), lineColor));
+	}
+
+	application.draw(lines);
 }
 
 size_t getBytesLength(const Int2& size)

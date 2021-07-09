@@ -128,7 +128,7 @@ namespace RedWire
 
 		bool operator!= (const Type2<T>& other) const
 		{
-			return x != other.x && y != other.y;
+			return x != other.x || y != other.y;
 		}
 
 #pragma endregion

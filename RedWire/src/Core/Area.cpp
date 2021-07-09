@@ -37,12 +37,12 @@ uint32_t Area::getColor(const Int2& position) const
 	return cell->getColor();
 }
 
-template<class T> void write(std::ofstream& stream, const T& value)
+template<class T> void write(std::ostream& stream, const T& value)
 {
 	stream.write((const char*)&value, sizeof(T));
 }
 
-template<class T> T read(std::ifstream& stream)
+template<class T> T read(std::istream& stream)
 {
 	union
 	{
@@ -57,7 +57,7 @@ template<class T> T read(std::ifstream& stream)
 /// <summary>
 /// Variable length encode a lane id and lane length pair.
 /// </summary>
-void write(std::ofstream& stream, const uint8_t& id, const uint32_t& length)
+void write(std::ostream& stream, const uint8_t& id, const uint32_t& length)
 {
 	uint8_t first = id & 0b1111u;
 	uint32_t remain = length >> 3;
@@ -83,7 +83,7 @@ void write(std::ofstream& stream, const uint8_t& id, const uint32_t& length)
 /// <summary>
 /// Variable length decode a lane id and lane length pair.
 /// </summary>
-void read(std::ifstream& stream, uint8_t& id, uint32_t& length)
+void read(std::istream& stream, uint8_t& id, uint32_t& length)
 {
 	uint8_t first = read<uint8_t>(stream);
 
@@ -106,7 +106,7 @@ void read(std::ifstream& stream, uint8_t& id, uint32_t& length)
 	}
 }
 
-void Area::writeTo(std::ofstream& stream, const Float2& viewCenter, const float& viewExtend) const
+void Area::writeTo(std::ostream& stream, const Float2& viewCenter, const float& viewExtend) const
 {
 	write<uint32_t>(stream, 0); //Write version
 
@@ -145,7 +145,7 @@ void Area::writeTo(std::ofstream& stream, const Float2& viewCenter, const float&
 	write(stream, viewExtend);
 }
 
-unique_ptr<Grid> Area::readFrom(std::ifstream& stream, Float2& viewCenter, float& viewExtend)
+unique_ptr<Grid> Area::readFrom(std::istream& stream, Float2& viewCenter, float& viewExtend)
 {
 	auto grid = make_unique<Grid>();
 
