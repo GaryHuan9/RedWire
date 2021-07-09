@@ -21,9 +21,9 @@ namespace RedWire
 		Cell* const get(const Int2& position) const;
 		uint32_t getColor(const Int2& position) const;
 
-		/// <summary>
-		/// Writes this area and view information to stream.
-		/// </summary>
+		void writeTo(std::ostream& stream, const Int2& min, const Int2& max) const;
+		static void readFrom(std::istream& stream, Grid& grid, const Int2& min);
+
 		void writeTo(std::ostream& stream, const Float2& viewCenter, const float& viewExtend) const;
 
 		/// <summary>

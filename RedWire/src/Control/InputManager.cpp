@@ -10,6 +10,7 @@
 #include "WireAdder.h"
 #include "GateAdder.h"
 #include "JoinAdder.h"
+#include "Clipboard.h"
 #include "AreaSerializer.h"
 
 using namespace RedWire;
@@ -22,7 +23,8 @@ InputManager::InputManager(Application& application) : application(application),
 	tools[2] = std::make_unique<WireAdder>(*this);
 	tools[3] = std::make_unique<GateAdder>(*this);
 	tools[4] = std::make_unique<JoinAdder>(*this);
-	tools[5] = std::make_unique<AreaSerializer>(*this);
+	tools[5] = std::make_unique<Clipboard>(*this);
+	tools[6] = std::make_unique<AreaSerializer>(*this);
 }
 
 void InputManager::onEventPoll(const Event& event)

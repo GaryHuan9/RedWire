@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Control\AreaSerializer.cpp" />
+    <ClCompile Include="src\Control\Clipboard.cpp" />
     <ClCompile Include="src\Control\GateAdder.cpp" />
     <ClCompile Include="src\Control\JoinAdder.cpp" />
     <ClCompile Include="src\Control\PanTool.cpp" />
@@ -168,13 +169,13 @@
     <ClCompile Include="src\core\Grid.cpp" />
     <ClCompile Include="src\Core\Join.cpp" />
     <ClCompile Include="src\Core\Port.cpp" />
-    <ClCompile Include="src\Core\Region.cpp" />
     <ClCompile Include="src\Core\Wire.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Interface\TestUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Control\AreaSerializer.h" />
+    <ClInclude Include="src\Control\Clipboard.h" />
     <ClInclude Include="src\Control\GateAdder.h" />
     <ClInclude Include="src\Control\JoinAdder.h" />
     <ClInclude Include="src\Control\PanTool.h" />
@@ -186,7 +187,6 @@
     <ClInclude Include="src\Core\Area.h" />
     <ClInclude Include="src\CXMath.h" />
     <ClInclude Include="src\Core\Port.h" />
-    <ClInclude Include="src\Core\Region.h" />
     <ClInclude Include="src\Type2.h" />
     <ClInclude Include="src\Core\Gate.h" />
     <ClInclude Include="src\Core\Grid.h" />

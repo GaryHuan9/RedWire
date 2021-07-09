@@ -106,22 +106,17 @@ void read(std::istream& stream, uint8_t& id, uint32_t& length)
 	}
 }
 
-void Area::writeTo(std::ostream& stream, const Float2& viewCenter, const float& viewExtend) const
+void Area::writeTo(std::ostream& stream, const Int2& min, const Int2& max) const //Max is inclusive
 {
 	write<uint32_t>(stream, 0); //Write version
+	write(stream, max - min + Int2(1)); //Write size
 
-	Int2 min;
-	Int2 max;
-
-	findBorder(min, max);
-	write(stream, max - min);
-
-	for (int32_t y = min.y; y < max.y; y++)
+	for (int32_t y = min.y; y <= max.y; y++)
 	{
 		uint8_t laneId{ 0u };
 		uint32_t length{ 0u };
 
-		for (int32_t x = min.x; x < max.x; x++)
+		for (int32_t x = min.x; x <= max.x; x++)
 		{
 			Cell* const cell = get(Int2(x, y));
 			uint8_t id = cell == nullptr ? 0u : cell->getCellId();
@@ -140,17 +135,12 @@ void Area::writeTo(std::ostream& stream, const Float2& viewCenter, const float& 
 
 		write(stream, laneId, length);
 	}
-
-	write(stream, viewCenter - to_type2(float, min));
-	write(stream, viewExtend);
 }
 
-unique_ptr<Grid> Area::readFrom(std::istream& stream, Float2& viewCenter, float& viewExtend)
+void Area::readFrom(std::istream& stream, Grid& grid, const Int2& min)
 {
-	auto grid = make_unique<Grid>();
-
-	uint32_t version = read<uint32_t>(stream);
-	Int2 size = read<Int2>(stream);
+	auto version = read<uint32_t>(stream);
+	auto size = read<Int2>(stream);
 
 	for (int32_t y = 0; y < size.y; y++)
 	{
@@ -159,12 +149,32 @@ unique_ptr<Grid> Area::readFrom(std::istream& stream, Float2& viewCenter, float&
 
 		for (int32_t x = 0; x < size.x; x++)
 		{
+			Int2 position = min + Int2(x, y);
+
 			if (length == 0) read(stream, laneId, length);
-			if (laneId != 0) grid->add(Int2(x, y), laneId);
+			if (laneId != 0) grid.add(position, laneId);
 
 			--length;
 		}
 	}
+}
+
+void Area::writeTo(std::ostream& stream, const Float2& viewCenter, const float& viewExtend) const
+{
+	Int2 min;
+	Int2 max;
+
+	findBorder(min, max);
+	writeTo(stream, min, max);
+
+	write(stream, viewCenter - to_type2(float, min));
+	write(stream, viewExtend);
+}
+
+unique_ptr<Grid> Area::readFrom(std::istream& stream, Float2& viewCenter, float& viewExtend)
+{
+	auto grid = make_unique<Grid>();
+	readFrom(stream, *grid, Int2());
 
 	viewCenter = read<Float2>(stream);
 	viewExtend = read<float>(stream);
@@ -305,6 +315,4 @@ void Area::findBorder(Int2& min, Int2& max) const
 
 		break;
 	}
-
-	max += Int2(1); //Max is exclusive
 }
