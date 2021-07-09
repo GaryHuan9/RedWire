@@ -46,7 +46,7 @@ void GridView::update()
 	texture.update(bytes.get());
 	application.draw(display);
 
-	if (!lineThickness) return;
+	if (!thickness) return;
 
 	linesNew.clear(); // This also doesn't deallocate memory(in theory) as of what this says: https://www.cplusplus.com/reference/vector/vector/resize/
 
@@ -55,18 +55,22 @@ void GridView::update()
 	//Horizontal lines
 	for (uint32_t y = 0u; y < size.y; y++)
 	{
-		sf::RectangleShape shape(sf::Vector2f(dimension.x, lineThickness));
+		float newThickness = thickness * density.y;
+
+		sf::RectangleShape shape(sf::Vector2f(dimension.x, newThickness));
 		shape.setFillColor(lineColor);
-		shape.setPosition(Vector2f(position.x, position.y + y * density.y));
+		shape.setPosition(Vector2f(position.x, position.y + y * density.y - newThickness * .5f));
 		linesNew.push_back(shape);
 	}
 
 	//Vertical lines
 	for (uint32_t x = 0u; x < size.x; x++)
 	{
-		sf::RectangleShape shape(sf::Vector2f(lineThickness, dimension.y));
+		float newThickness = thickness * density.x;
+
+		sf::RectangleShape shape(sf::Vector2f(newThickness, dimension.y));
 		shape.setFillColor(lineColor);
-		shape.setPosition(Vector2f(position.x + x * density.x, position.y));
+		shape.setPosition(Vector2f(position.x + x * density.x - newThickness * .5f, position.y));
 		linesNew.push_back(shape);
 	}
 
@@ -74,8 +78,6 @@ void GridView::update()
 	{
 		application.draw(linesNew[i]);
 	}
-
-
 }
 
 size_t getBytesLength(const Int2& size)
