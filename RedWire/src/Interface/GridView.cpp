@@ -7,7 +7,7 @@
 using namespace RedWire;
 using namespace sf;
 
-GridView::GridView(Application& application) : application(application), display(), texture(), lines(PrimitiveType::Lines)
+GridView::GridView(Application& application) : application(application), display(), texture(), linesNew()/*lines(PrimitiveType::Lines)*/
 {
 
 }
@@ -46,27 +46,36 @@ void GridView::update()
 	texture.update(bytes.get());
 	application.draw(display);
 
-	if (!displayLines) return;
+	if (!lineThickness) return;
 
-	lines.clear(); //This doesn't deallocate memory
+	linesNew.clear(); // This also doesn't deallocate memory(in theory) as of what this says: https://www.cplusplus.com/reference/vector/vector/resize/
 
-	static const Color lineColor = Color(85, 85, 85, 30);
+	static const Color lineColor = Color(80, 80, 80, 30);
 
 	//Horizontal lines
 	for (uint32_t y = 0u; y < size.y; y++)
 	{
-		lines.append(Vertex(Vector2f(position.x, position.y + y * density.y), lineColor));
-		lines.append(Vertex(Vector2f(position.x + dimension.x, position.y + y * density.y), lineColor));
+		sf::RectangleShape shape(sf::Vector2f(dimension.x, lineThickness));
+		shape.setFillColor(lineColor);
+		shape.setPosition(Vector2f(position.x, position.y + y * density.y));
+		linesNew.push_back(shape);
 	}
 
 	//Vertical lines
 	for (uint32_t x = 0u; x < size.x; x++)
 	{
-		lines.append(Vertex(Vector2f(position.x + x * density.x, position.y), lineColor));
-		lines.append(Vertex(Vector2f(position.x + x * density.x, position.y + dimension.y), lineColor));
+		sf::RectangleShape shape(sf::Vector2f(lineThickness, dimension.y));
+		shape.setFillColor(lineColor);
+		shape.setPosition(Vector2f(position.x + x * density.x, position.y));
+		linesNew.push_back(shape);
 	}
 
-	application.draw(lines);
+	for (uint32_t i = 0; i < linesNew.size(); i++)
+	{
+		application.draw(linesNew[i]);
+	}
+
+
 }
 
 size_t getBytesLength(const Int2& size)
