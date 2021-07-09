@@ -15,7 +15,7 @@ Join::Join()
 
 uint32_t Join::getColor() const
 {
-	return getEnabled() ? 0xFF02FF00u : 0xFF023300u;
+	return getEnabled() ? 0xFF10BB00u : 0xFF042200u;
 }
 
 uint8_t Join::getCellId() const

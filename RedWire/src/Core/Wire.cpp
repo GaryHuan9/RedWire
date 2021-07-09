@@ -26,10 +26,10 @@ uint32_t Wire::getColor() const
 {
 	//return debugColor;
 
-	if (isSource) return 0xFF02AAFFu;
-	if (getPowered()) return 0xFF0255FFu;
+	if (isSource) return 0xFF0A55EEu;
+	if (getPowered()) return 0xFF0B02FDu;
 
-	return 0xFF0200FFu;
+	return 0xFF020010u;
 }
 
 uint8_t Wire::getCellId() const
