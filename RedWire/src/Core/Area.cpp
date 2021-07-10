@@ -33,7 +33,7 @@ Cell* const Area::get(const Int2& position) const
 uint32_t Area::getColor(const Int2& position) const
 {
 	Cell* const cell = get(position);
-	if (cell == nullptr) return 0xFF020000u;
+	if (cell == nullptr) return 0u;
 	return cell->getColor();
 }
 

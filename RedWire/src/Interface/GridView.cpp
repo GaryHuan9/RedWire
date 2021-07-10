@@ -7,13 +7,20 @@
 using namespace RedWire;
 using namespace sf;
 
-GridView::GridView(Application& application) : application(application), display(), texture(), lines(PrimitiveType::Triangles)
+GridView::GridView(Application& application) : application(application), background(), display(), texture(), lines(PrimitiveType::Triangles)
 {
-
+	background.setFillColor(Color(0x000002FFu));
+	background.setPosition(Vector2f(0.0f, 0.0f));
 }
 
 //For some reason the view occationally jitter randomly while we move
 //However, the artifact can be avoided by going into fullscreen mode
+
+int32_t repeat(const int32_t& value, const int32_t& length)
+{
+	int result = value % length;
+	return result < 0 ? result + length : result;
+}
 
 void GridView::update()
 {
@@ -28,11 +35,83 @@ void GridView::update()
 	Float2 position = offset * density;
 	Float2 dimension = textureSize * density;
 
-	display.setPosition(Vector2f(position.x, position.y));
-	display.setSize(Vector2f(dimension.x, dimension.y));
+	background.setSize(Vector2f(windowSize.x, windowSize.y));
+	application.draw(background);
 
 	uint32_t* colors = (uint32_t*)bytes.get();
 	Vector2u size = texture.getSize();
+
+	if (lineThickness > 0.0f)
+	{
+		lines.clear(); //This doesn't deallocate memory
+
+		static const uint32_t interval = 8;
+		static const Color lineColor = Color(42, 42, 45, 16);
+
+		//Not a super good solution for alpha blending
+		//But at least it works for a two levels
+
+		Float2 alpha = density / lineThickness;
+		alpha = Float2(1.0f).min(alpha / 28.0f);
+
+		//Horizontal lines
+		for (int32_t y = cellMin.y; y < cellMax.y; y++)
+		{
+			bool isBold = repeat(y, interval) == 0;
+			float endX = position.x + dimension.x;
+
+			float centerY = position.y + (y - cellMin.y) * density.y;
+
+			float topY = centerY - lineThickness;
+			float bottomY = centerY + lineThickness;
+
+			Color color = lineColor;
+			if (!isBold) color.a *= alpha.y;
+
+			sf::Vertex topLeft(Vector2f(position.x, topY), color);
+			sf::Vertex topRight(Vector2f(endX, topY), color);
+			sf::Vertex bottomLeft(Vector2f(position.x, bottomY), color);
+			sf::Vertex bottomRight(Vector2f(endX, bottomY), color);
+
+			lines.append(bottomRight);
+			lines.append(bottomLeft);
+			lines.append(topLeft);
+
+			lines.append(bottomRight);
+			lines.append(topLeft);
+			lines.append(topRight);
+		}
+
+		//Vertical lines
+		for (int32_t x = cellMin.x; x < cellMax.x; x++)
+		{
+			bool isBold = repeat(x, interval) == 0;
+			float endY = position.y + dimension.y;
+
+			float centerX = position.x + (x - cellMin.x) * density.x;
+
+			float rightX = centerX - lineThickness;
+			float leftX = centerX + lineThickness;
+
+			Color color = lineColor;
+			if (!isBold) color.a *= alpha.x;
+
+			sf::Vertex topLeft(Vector2f(leftX, position.y), color);
+			sf::Vertex topRight(Vector2f(rightX, position.y), color);
+			sf::Vertex bottomLeft(Vector2f(leftX, endY), color);
+			sf::Vertex bottomRight(Vector2f(rightX, endY), color);
+
+			lines.append(bottomRight);
+			lines.append(bottomLeft);
+			lines.append(topLeft);
+
+			lines.append(bottomRight);
+			lines.append(topLeft);
+			lines.append(topRight);
+		}
+
+		application.draw(lines);
+	}
 
 	for (uint32_t y = 0u; y < size.y; y++)
 	{
@@ -43,66 +122,11 @@ void GridView::update()
 		}
 	}
 
+	display.setPosition(Vector2f(position.x, position.y));
+	display.setSize(Vector2f(dimension.x, dimension.y));
+
 	texture.update(bytes.get());
 	application.draw(display);
-
-	if (!thickness) return;
-
-	lines.clear(); //This doesn't deallocate memory
-
-	static const Color lineColor = Color(85, 85, 85, 30);
-
-	//Horizontal lines
-	for (uint32_t y = 0u; y < size.y; y++)
-	{
-		float targetThickness = thickness * density.y;
-
-		float endX = position.x + dimension.x;
-		float centerY = position.y + y * density.y;
-
-		float topY = centerY - targetThickness * .5f;
-		float bottomY = centerY + targetThickness * .5f;
-
-		sf::Vertex topLeft(Vector2f(position.x, topY), lineColor);
-		sf::Vertex topRight(Vector2f(endX, topY), lineColor);
-		sf::Vertex bottomLeft(Vector2f(position.x, bottomY), lineColor);
-		sf::Vertex bottomRight(Vector2f(endX, bottomY), lineColor);
-
-		lines.append(bottomRight);
-		lines.append(bottomLeft);
-		lines.append(topLeft);
-
-		lines.append(bottomRight);
-		lines.append(topLeft);
-		lines.append(topRight);
-	}
-
-	//Vertical lines
-	for (uint32_t x = 0u; x < size.x; x++)
-	{
-		float targetThickness = thickness * density.x;
-
-		float endY = position.y + dimension.y;
-		float centerX = position.x + x * density.x;
-
-		float rightX = centerX - targetThickness * .5f;
-		float leftX = centerX + targetThickness * .5f;
-
-		sf::Vertex topLeft(Vector2f(leftX, position.y), lineColor);
-		sf::Vertex topRight(Vector2f(rightX, position.y), lineColor);
-		sf::Vertex bottomLeft(Vector2f(leftX, endY), lineColor);
-		sf::Vertex bottomRight(Vector2f(rightX, endY), lineColor);
-
-		lines.append(bottomRight);
-		lines.append(bottomLeft);
-		lines.append(topLeft);
-
-		lines.append(bottomRight);
-		lines.append(topLeft);
-		lines.append(topRight);
-	}
-
-	application.draw(lines);
 }
 
 size_t getBytesLength(const Int2& size)

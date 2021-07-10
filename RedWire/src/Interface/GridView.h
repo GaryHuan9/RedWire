@@ -34,9 +34,7 @@ namespace RedWire
 		/// </summary>
 		Float2 getPosition(const Float2& position) const;
 
-		//bool displayLines = true;
-
-		float thickness = .1f;
+		float lineThickness = 1.8f;
 
 	private:
 
@@ -46,10 +44,12 @@ namespace RedWire
 		Float2 viewMin;
 		Float2 viewMax;
 
+		sf::RectangleShape background;
 		sf::RectangleShape display;
-		sf::Texture texture;
+
 		std::unique_ptr<sf::Uint8[]> bytes;
 
+		sf::Texture texture;
 		sf::VertexArray lines;
 
 		Application& application;
