@@ -11,6 +11,9 @@
 #include <iostream>
 #include <memory>
 
+#include <imgui.h>
+#include <imgui-SFML.h>
+
 using namespace RedWire;
 using namespace sf;
 
@@ -29,6 +32,8 @@ int main()
 		application.display();
 	}
 
+	ImGui::SFML::Shutdown();
+
 	return 0;
 }
 
@@ -41,6 +46,7 @@ grid(std::make_unique<Grid>()), inputManager(*this), gridView(*this), testUI(*th
 void Application::start()
 {
 	setVerticalSyncEnabled(true);
+	ImGui::SFML::Init(*this);
 	clock.restart();
 }
 
@@ -66,6 +72,7 @@ void Application::dispatchEvents()
 			}
 		}
 
+		ImGui::SFML::ProcessEvent(event);
 		inputManager.onEventPoll(event);
 	}
 }
@@ -82,4 +89,33 @@ void Application::update()
 	inputManager.update();
 	gridView.update();
 	testUI.update();
+
+	ImGui::SFML::Update(*this, deltaTime);
+
+	ImGui::Begin("Sample window"); // begin window
+
+	float color[3] = { 0.f, 0.f, 0.f };
+
+	// Background color edit
+	if (ImGui::ColorEdit3("Background color", color))
+	{
+
+	}
+
+	char windowTitle[255] = "ImGui + SFML = <3";
+
+	// Window title text edit
+	ImGui::InputText("Window title", windowTitle, 255);
+
+	if (ImGui::Button("Update window title"))
+	{
+		// this code gets if user clicks on the button
+		// yes, you could have written if(ImGui::InputText(...))
+		// but I do this to show how buttons work :)
+		//.setTitle(windowTitle);
+	}
+	ImGui::End(); // end window
+
+	//window.clear(bgColor); // fill background with color
+	ImGui::SFML::Render(*this);
 }
