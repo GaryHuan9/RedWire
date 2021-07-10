@@ -66,12 +66,12 @@ void GridView::update()
 			float bottomY = centerY + lineThickness;
 
 			Color color = lineColor;
-			if (!isBold) color.a *= alpha.y;
+			if (!isBold) color.a = (Uint8)(color.a * alpha.y);
 
-			sf::Vertex topLeft(Vector2f(position.x, topY), color);
-			sf::Vertex topRight(Vector2f(endX, topY), color);
-			sf::Vertex bottomLeft(Vector2f(position.x, bottomY), color);
-			sf::Vertex bottomRight(Vector2f(endX, bottomY), color);
+			Vertex topLeft(Vector2f(position.x, topY), color);
+			Vertex topRight(Vector2f(endX, topY), color);
+			Vertex bottomLeft(Vector2f(position.x, bottomY), color);
+			Vertex bottomRight(Vector2f(endX, bottomY), color);
 
 			lines.append(bottomRight);
 			lines.append(bottomLeft);
@@ -94,12 +94,12 @@ void GridView::update()
 			float leftX = centerX + lineThickness;
 
 			Color color = lineColor;
-			if (!isBold) color.a *= alpha.x;
+			if (!isBold) color.a = (Uint8)(color.a * alpha.x);
 
-			sf::Vertex topLeft(Vector2f(leftX, position.y), color);
-			sf::Vertex topRight(Vector2f(rightX, position.y), color);
-			sf::Vertex bottomLeft(Vector2f(leftX, endY), color);
-			sf::Vertex bottomRight(Vector2f(rightX, endY), color);
+			Vertex topLeft(Vector2f(leftX, position.y), color);
+			Vertex topRight(Vector2f(rightX, position.y), color);
+			Vertex bottomLeft(Vector2f(leftX, endY), color);
+			Vertex bottomRight(Vector2f(rightX, endY), color);
 
 			lines.append(bottomRight);
 			lines.append(bottomLeft);
