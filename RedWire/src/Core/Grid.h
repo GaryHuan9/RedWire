@@ -13,7 +13,6 @@ namespace RedWire
 	struct Cell;
 	struct Wire;
 	struct Gate;
-	struct Region;
 
 	struct Grid : Area
 	{
@@ -58,7 +57,7 @@ namespace RedWire
 		void removeGate(const Int2& position);
 		void removeJoin(const Int2& position);
 
-		template<class Type> static void removeFrom(std::vector<std::shared_ptr<Type>>& vector, Type* target);
+		template<typename Type> static void removeFrom(std::vector<std::shared_ptr<Type>>& vector, Type* target);
 
 		std::vector<std::shared_ptr<Wire>> wires;
 		std::vector<std::shared_ptr<Gate>> gates;

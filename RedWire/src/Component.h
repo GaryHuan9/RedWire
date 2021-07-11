@@ -1,12 +1,17 @@
 #pragma once
 
+namespace sf
+{
+	class Event;
+}
+
 namespace RedWire
 {
 	struct Application;
 
-	struct UserInterface
+	struct Component
 	{
-		UserInterface(Application& application);
+		Component(Application& application);
 
 		Application& application;
 

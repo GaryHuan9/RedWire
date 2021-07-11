@@ -37,12 +37,12 @@ uint32_t Area::getColor(const Int2& position) const
 	return cell->getColor();
 }
 
-template<class T> void write(std::ostream& stream, const T& value)
+template<typename T> void write(std::ostream& stream, const T& value)
 {
 	stream.write((const char*)&value, sizeof(T));
 }
 
-template<class T> T read(std::istream& stream)
+template<typename T> T read(std::istream& stream)
 {
 	union
 	{

@@ -1,15 +1,23 @@
 #pragma once
 
+#include <memory>
+#include <array>
+
+#include "Section.h"
+#include "../Component.h"
+
 namespace RedWire
 {
 	struct Application;
 
-	struct Toolbox
+	struct Toolbox : Component
 	{
 		Toolbox(Application& application);
 
-		void update();
+		virtual void update() override;
 
-		Application& application;
+	private:
+
+		std::array<std::unique_ptr<Section>, 4> sections;
 	};
 }

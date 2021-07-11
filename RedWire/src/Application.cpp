@@ -2,10 +2,10 @@
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
-#include "Application.h"
 #include "Control/InputManager.h"
 #include "Interface/GridView.h"
-#include "Interface/TestUI.h"
+#include "Interface/Toolbox.h"
+#include "Application.h"
 #include "Core/Grid.h"
 
 #include <iostream>
@@ -41,9 +41,11 @@ int main()
 }
 
 Application::Application() : RenderWindow(VideoMode::getDesktopMode(), "Red Wire", Style::Default, ContextSettings{ 0, 0, 2, 1, 1, ContextSettings::Attribute::Default, true }),
-grid(std::make_unique<Grid>()), inputManager(*this), gridView(*this), testUI(*this), clock()
+grid(std::make_unique<Grid>()), components(), clock()
 {
-
+	components[typeid(InputManager)] = std::make_unique<InputManager>(*this);
+	components[typeid(GridView)] = std::make_unique<GridView>(*this);
+	components[typeid(Toolbox)] = std::make_unique<Toolbox>(*this);
 }
 
 void Application::start()
@@ -92,7 +94,7 @@ void Application::dispatchEvents()
 		if (event.key.code != Keyboard::Unknown && hasFocus())
 		{
 			ImGui::SFML::ProcessEvent(event);
-			inputManager.onEventPoll(event);
+			find<InputManager>().onEventPoll(event);
 		}
 	}
 }
@@ -104,19 +106,11 @@ void Application::update()
 	totalTime = clock.getElapsedTime();
 	deltaTime = totalTime - lastTime;
 
-	/*if (Keyboard::isKeyPressed(Keyboard::Space))*/ grid->update();
-
 	ImGui::SFML::Update(*this, deltaTime);
 
-	inputManager.update();
-	gridView.update();
-	testUI.update();
+	/*if (Keyboard::isKeyPressed(Keyboard::Space))*/ grid->update();
+	for (auto& component : components) component.second->update();
 
-	ImGui::ShowDemoWindow();
-
-	ImGui::Begin("Hi");
-
-	ImGui::End();
-
+	//ImGui::ShowDemoWindow();
 	ImGui::SFML::Render(*this);
 }

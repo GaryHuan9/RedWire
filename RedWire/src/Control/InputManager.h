@@ -4,14 +4,15 @@
 #include <memory>
 #include <string>
 #include <array>
-#include "../Type2.h"
 #include "Tool.h"
+#include "../Component.h"
+#include "../Type2.h"
 
 namespace RedWire
 {
 	struct Application;
 
-	struct InputManager
+	struct InputManager : Component
 	{
 		InputManager(Application& application);
 
@@ -20,11 +21,9 @@ namespace RedWire
 		static bool isPressed(const sf::Keyboard::Key& key);
 		static bool isPressed(const sf::Mouse::Button& button);
 
-		void update();
+		virtual void update() override;
 
 		std::string getCurrentToolLabel();
-
-		Application& application;
 
 		Float2 viewCenter;
 		float  viewExtend;

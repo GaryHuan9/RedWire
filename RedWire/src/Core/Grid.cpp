@@ -14,7 +14,7 @@ Grid::Grid() : wires(), gates()
 
 }
 
-template<class Type> void Grid::removeFrom(vector<shared_ptr<Type>>& vector, Type* target)
+template<typename Type> void Grid::removeFrom(vector<shared_ptr<Type>>& vector, Type* target)
 {
 	auto&& current = vector.begin();
 	const auto&& end = vector.end();

@@ -167,6 +167,8 @@
     <ClCompile Include="src\Control\RemoveTool.cpp" />
     <ClCompile Include="src\Control\Tool.cpp" />
     <ClCompile Include="src\Control\WireAdder.cpp" />
+    <ClCompile Include="src\Interface\CurrentTool.cpp" />
+    <ClCompile Include="src\Interface\General.cpp" />
     <ClCompile Include="src\Interface\GridView.cpp" />
     <ClCompile Include="src\Control\InputManager.cpp" />
     <ClCompile Include="src\Core\Area.cpp" />
@@ -177,8 +179,12 @@
     <ClCompile Include="src\Core\Port.cpp" />
     <ClCompile Include="src\Core\Wire.cpp" />
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\Interface\Information.cpp" />
+    <ClCompile Include="src\Interface\Section.cpp" />
+    <ClCompile Include="src\Interface\Serialization.cpp" />
     <ClCompile Include="src\Interface\TestUI.cpp" />
     <ClCompile Include="src\Interface\Toolbox.cpp" />
+    <ClCompile Include="src\Component.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Control\AreaSerializer.h" />
@@ -189,12 +195,17 @@
     <ClInclude Include="src\Control\RemoveTool.h" />
     <ClInclude Include="src\Control\Tool.h" />
     <ClInclude Include="src\Control\WireAdder.h" />
+    <ClInclude Include="src\Interface\CurrentTool.h" />
+    <ClInclude Include="src\Interface\General.h" />
     <ClInclude Include="src\Interface\GridView.h" />
     <ClInclude Include="src\Control\InputManager.h" />
     <ClInclude Include="src\Core\Area.h" />
     <ClInclude Include="src\CXMath.h" />
     <ClInclude Include="src\Core\Port.h" />
-    <ClInclude Include="src\Interface\UserInterface.h" />
+    <ClInclude Include="src\Component.h" />
+    <ClInclude Include="src\Interface\Information.h" />
+    <ClInclude Include="src\Interface\Section.h" />
+    <ClInclude Include="src\Interface\Serialization.h" />
     <ClInclude Include="src\Interface\Toolbox.h" />
     <ClInclude Include="src\Type2.h" />
     <ClInclude Include="src\Core\Gate.h" />

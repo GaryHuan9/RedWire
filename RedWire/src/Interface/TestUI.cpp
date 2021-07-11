@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "../Application.h"
+#include "../Control/InputManager.h"
 
 using namespace RedWire;
 
@@ -58,7 +59,7 @@ void TestUI::update()
 	wireCountText.setString(std::string("Wire Count: ") + std::to_string(application.grid->getWireCount()));
 	gateCountText.setString(std::string("Gate Count: ") + std::to_string(application.grid->getGateCount()));
 	deltaTimeText.setString(std::string("FPS: ") + std::to_string(lastAverageFPS));
-	toolLabelText.setString(std::string("Current Tool: ") + application.inputManager.getCurrentToolLabel());
+	toolLabelText.setString(std::string("Current Tool: ") + application.find<InputManager>().getCurrentToolLabel());
 
 	application.draw(tileCountText);
 	application.draw(wireCountText);

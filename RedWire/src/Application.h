@@ -1,14 +1,18 @@
 #pragma once
 
 #include <SFML/System.hpp>
-#include "Core/Grid.h"
-#include "Control/InputManager.h"
-#include "Interface/GridView.h"
-#include "Interface/TestUI.h"
+#include <SFML/Graphics.hpp>
+#include <unordered_map>
+#include <typeindex>
 #include <memory>
+
+#include "Component.h"
 
 namespace RedWire
 {
+	struct Grid;
+	struct Tool;
+
 	struct Application : sf::RenderWindow
 	{
 		Application();
@@ -22,11 +26,9 @@ namespace RedWire
 
 		void update();
 
+		template<typename Type> Type& find();
 		std::unique_ptr<Grid> grid;
-
-		InputManager inputManager;
-		GridView gridView;
-		TestUI testUI;
+		std::unordered_map<std::type_index, std::unique_ptr<Component>> components;
 
 	private:
 		sf::Clock clock;
@@ -34,4 +36,9 @@ namespace RedWire
 		sf::Time deltaTime;
 		sf::Time totalTime;
 	};
+
+	template<typename Type> inline Type& Application::find()
+	{
+		return dynamic_cast<Type&>(*components[typeid(Type)]);
+	}
 }

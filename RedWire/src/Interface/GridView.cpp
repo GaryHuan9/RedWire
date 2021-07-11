@@ -1,5 +1,7 @@
 #include "GridView.h"
+#include "../Core/Grid.h"
 #include "../Application.h"
+#include "../Component.h"
 
 #include <iostream>
 #include <string>
@@ -7,7 +9,7 @@
 using namespace RedWire;
 using namespace sf;
 
-GridView::GridView(Application& application) : application(application), background(), display(), texture(), lines(PrimitiveType::Triangles)
+GridView::GridView(Application& application) : Component(application), background(), display(), texture(), lines(PrimitiveType::Triangles)
 {
 	background.setFillColor(Color(0x000002FFu));
 	background.setPosition(Vector2f(0.0f, 0.0f));

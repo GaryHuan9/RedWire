@@ -1,9 +1,8 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-
+#include "../Component.h"
 #include "../Type2.h"
-#include "../Core/Grid.h"
 
 namespace RedWire
 {
@@ -17,11 +16,11 @@ namespace RedWire
 	*	b. Resizing of borders
 	*	c. get world position from screen position
 	*/
-	struct GridView
+	struct GridView : Component
 	{
 		GridView(Application& application);
 
-		void update();
+		virtual void update() override;
 
 		/// <summary>
 		/// Assigns this GridView's current view.
@@ -51,8 +50,6 @@ namespace RedWire
 
 		sf::Texture texture;
 		sf::VertexArray lines;
-
-		Application& application;
 	};
 }
 

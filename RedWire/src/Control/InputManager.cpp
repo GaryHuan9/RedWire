@@ -4,6 +4,8 @@
 #include <math.h>
 #include <array>
 #include "../Application.h"
+#include "../Component.h"
+#include "../Interface/GridView.h"
 #include "InputManager.h"
 #include "PanTool.h"
 #include "RemoveTool.h"
@@ -12,12 +14,13 @@
 #include "JoinAdder.h"
 #include "Clipboard.h"
 #include "AreaSerializer.h"
+
 #include "imgui.h"
 
 using namespace RedWire;
 using namespace sf;
 
-InputManager::InputManager(Application& application) : application(application), viewCenter(), viewExtend(20.0f), tools()
+InputManager::InputManager(Application& application) : Component(application), viewCenter(), viewExtend(20.0f), tools()
 {
 	tools[0] = std::make_unique<PanTool>(*this);
 	tools[1] = std::make_unique<RemoveTool>(*this);
@@ -105,7 +108,7 @@ void InputManager::update()
 	float logSize = std::exp((logWidth + logHeight) / 2.0f);
 	Float2 extend = size.toType<float>() / logSize * viewExtend;
 
-	application.gridView.setView(viewCenter - extend, viewCenter + extend);
+	application.find<GridView>().setView(viewCenter - extend, viewCenter + extend);
 
 	//Tools
 	for (size_t i = 0; i < tools.size(); i++)
@@ -134,5 +137,5 @@ Float2 InputManager::getMousePosition()
 {
 	Vector2i mouse = Mouse::getPosition(application);
 	Float2 mousePosition = Float2((float)mouse.x, (float)mouse.y);
-	return application.gridView.getPosition(mousePosition);
+	return application.find<GridView>().getPosition(mousePosition);
 }
