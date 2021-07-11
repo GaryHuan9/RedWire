@@ -5,6 +5,7 @@
 #include "Port.h"
 #include "Gate.h"
 #include "Join.h"
+#include "Note.h"
 
 using namespace RedWire;
 using namespace std;
@@ -138,6 +139,19 @@ void Grid::addJoin(const Int2& position)
 	join->refresh(*this, position);
 }
 
+void Grid::addNote(const Int2& position)
+{
+	Cell* previous = get(position);
+
+	if (dynamic_cast<Note*>(previous) != nullptr) return;
+	if (previous != nullptr) remove(position);
+
+	shared_ptr<Note> note = make_shared<Note>();
+
+	set(position, note);
+	//note->refresh(*this, position);
+}
+
 void Grid::add(const Int2& position, const uint8_t& id)
 {
 	switch (id)
@@ -145,6 +159,7 @@ void Grid::add(const Int2& position, const uint8_t& id)
 		case 0: remove(position); return;
 		case 5: addGate(position); return;
 		case 6: addJoin(position); return;
+		case 7: addNote(position); return;
 		case 1: addWire(position); return;
 		case 2: addWire(position); break;
 		case 3: addWire(position); break;
@@ -167,6 +182,7 @@ void Grid::remove(const Int2& position)
 	/**/ if (dynamic_cast<Wire*>(previous) != nullptr) removeWire(position);
 	else if (dynamic_cast<Gate*>(previous) != nullptr) removeGate(position);
 	else if (dynamic_cast<Join*>(previous) != nullptr) removeJoin(position);
+	else if (dynamic_cast<Note*>(previous) != nullptr) removeNote(position);
 }
 
 void Grid::toggleSource(const Int2& position)
@@ -210,6 +226,11 @@ void Grid::removeJoin(const Int2& position)
 {
 	set(position, nullptr);
 	splitNeighbors(position);
+}
+
+void Grid::removeNote(const Int2& position)
+{
+	set(position, nullptr);
 }
 
 /// <summary>

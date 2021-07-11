@@ -25,6 +25,7 @@ namespace RedWire
 		void addWire(const Int2& position);
 		void addGate(const Int2& position);
 		void addJoin(const Int2& position);
+		void addNote(const Int2& position);
 
 		void add(const Int2& position, const uint8_t& id);
 
@@ -57,6 +58,7 @@ namespace RedWire
 		void removeWire(const Int2& position);
 		void removeGate(const Int2& position);
 		void removeJoin(const Int2& position);
+		void removeNote(const Int2& position);
 
 		template<class Type> static void removeFrom(std::vector<std::shared_ptr<Type>>& vector, Type* target);
 

@@ -33,7 +33,7 @@ namespace RedWire
 
 		Float2 getMousePosition(); //Returns the world position of the mouse 
 
-		std::array<std::unique_ptr<Tool>, 7> tools;
+		std::array<std::unique_ptr<Tool>, 8> tools;
 
 		size_t currentTool{ 0 };
 		bool leftMousePressed{};
