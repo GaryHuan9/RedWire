@@ -57,5 +57,5 @@ void WireAdder::update(const Float2& position, const Int2& cell, const bool& dow
 
 bool WireAdder::activationPredicate()
 {
-	return sf::Keyboard::isKeyPressed(sf::Keyboard::E);
+	return InputManager::isPressed(sf::Keyboard::E);
 }

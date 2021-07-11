@@ -17,7 +17,7 @@ void Clipboard::update(const Float2& position, const Int2& cell, const bool& dow
 {
 	if (!changed) return;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+	if (InputManager::isPressed(sf::Keyboard::C))
 	{
 		if (down) startCell = cell;
 		else
@@ -30,7 +30,7 @@ void Clipboard::update(const Float2& position, const Int2& cell, const bool& dow
 			grid->writeTo(*stream, min, max);
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::V))
+	else if (InputManager::isPressed(sf::Keyboard::V))
 	{
 		if (down && hasCopied)
 		{
@@ -42,5 +42,5 @@ void Clipboard::update(const Float2& position, const Int2& cell, const bool& dow
 
 bool Clipboard::activationPredicate()
 {
-	return sf::Keyboard::isKeyPressed(sf::Keyboard::Num3);
+	return InputManager::isPressed(sf::Keyboard::Num3);
 }

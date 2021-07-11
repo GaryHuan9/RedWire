@@ -16,5 +16,5 @@ void JoinAdder::update(const Float2& position, const Int2& cell, const bool& dow
 
 bool JoinAdder::activationPredicate()
 {
-	return sf::Keyboard::isKeyPressed(sf::Keyboard::Num2);
+	return InputManager::isPressed(sf::Keyboard::Num2);
 }

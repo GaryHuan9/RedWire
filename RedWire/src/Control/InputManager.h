@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include <memory>
 #include <string>
 #include <array>
@@ -16,6 +16,9 @@ namespace RedWire
 		InputManager(Application& application);
 
 		void onEventPoll(const sf::Event& event);
+
+		static bool isPressed(const sf::Keyboard::Key& key);
+		static bool isPressed(const sf::Mouse::Button& button);
 
 		void update();
 

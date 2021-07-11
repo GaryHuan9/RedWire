@@ -33,5 +33,5 @@ void PanTool::update(const Float2& position, const Int2& cell, const bool& down,
 
 bool PanTool::activationPredicate()
 {
-	return sf::Mouse::isButtonPressed(sf::Mouse::Right);
+	return InputManager::isPressed(sf::Mouse::Right);
 }

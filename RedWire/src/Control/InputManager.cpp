@@ -12,6 +12,7 @@
 #include "JoinAdder.h"
 #include "Clipboard.h"
 #include "AreaSerializer.h"
+#include "imgui.h"
 
 using namespace RedWire;
 using namespace sf;
@@ -27,8 +28,20 @@ InputManager::InputManager(Application& application) : application(application),
 	tools[6] = std::make_unique<AreaSerializer>(*this);
 }
 
+bool imGuiStoleInput()
+{
+	ImGuiIO& io = ImGui::GetIO();
+
+	if (io.WantCaptureMouse) return true;
+	if (io.WantCaptureKeyboard) return true;
+
+	return false;
+}
+
 void InputManager::onEventPoll(const Event& event)
 {
+	if (imGuiStoleInput()) return;
+
 	switch (event.type)
 	{
 		case Event::MouseWheelScrolled:
@@ -54,19 +67,29 @@ void InputManager::onEventPoll(const Event& event)
 	}
 }
 
+bool InputManager::isPressed(const Keyboard::Key& key)
+{
+	if (imGuiStoleInput()) return false;
+	return Keyboard::isKeyPressed(key);
+}
+
+bool InputManager::isPressed(const Mouse::Button& button)
+{
+	if (imGuiStoleInput()) return false;
+	return Mouse::isButtonPressed(button);
+}
+
 Float2 getMovement()
 {
 	return Float2
 	(
-		Keyboard::isKeyPressed(Keyboard::A) * -1.f + Keyboard::isKeyPressed(Keyboard::D) * 1.f,
-		Keyboard::isKeyPressed(Keyboard::W) * -1.f + Keyboard::isKeyPressed(Keyboard::S) * 1.f
+		InputManager::isPressed(Keyboard::A) * -1.f + InputManager::isPressed(Keyboard::D) * 1.f,
+		InputManager::isPressed(Keyboard::W) * -1.f + InputManager::isPressed(Keyboard::S) * 1.f
 	).normalize();
 }
 
 void InputManager::update()
 {
-	if (!application.hasFocus()) return;
-
 	//View movement
 	static const float movementSpeed = 1.5f;
 
@@ -93,7 +116,7 @@ void InputManager::update()
 
 	Float2 position = getMousePosition();
 	Int2 cell = position.getFloor().toType<int32_t>();
-	bool down = Mouse::isButtonPressed(Mouse::Button::Left);
+	bool down = isPressed(Mouse::Button::Left);
 
 	tools.at(currentTool)->update(position, cell, down, down != leftMousePressed);
 	leftMousePressed = down;

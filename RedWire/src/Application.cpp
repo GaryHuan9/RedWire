@@ -11,8 +11,8 @@
 #include <iostream>
 #include <memory>
 
-#include <imgui.h>
-#include <imgui-SFML.h>
+#include "imgui.h"
+#include "imgui-SFML.h"
 
 using namespace RedWire;
 using namespace sf;
@@ -27,9 +27,12 @@ int main()
 	{
 		application.dispatchEvents();
 
-		application.clear();
-		application.update();
-		application.display();
+		if (application.hasFocus())
+		{
+			application.clear();
+			application.update();
+			application.display();
+		}
 	}
 
 	ImGui::SFML::Shutdown();
@@ -46,8 +49,22 @@ grid(std::make_unique<Grid>()), inputManager(*this), gridView(*this), testUI(*th
 void Application::start()
 {
 	setVerticalSyncEnabled(true);
-	ImGui::SFML::Init(*this);
+	ImGui::SFML::Init(*this, false);
+
 	clock.restart();
+
+	auto& io = ImGui::GetIO();
+	auto& style = ImGui::GetStyle();
+
+	io.IniFilename = nullptr;
+	io.Fonts->AddFontFromFileTTF("Assets/Fonts/JetBrainsMono/JetBrainsMono-Bold.ttf", 18.0f);
+	io.ConfigFlags |= ImGuiConfigFlags_IsSRGB | ImGuiConfigFlags_NavEnableKeyboard;
+
+	style.FrameBorderSize = 1;
+	style.TabRounding = 0.0f;
+	style.ScrollbarRounding = 0.0f;
+
+	ImGui::SFML::UpdateFontTexture();
 }
 
 void Application::dispatchEvents()
@@ -72,8 +89,11 @@ void Application::dispatchEvents()
 			}
 		}
 
-		ImGui::SFML::ProcessEvent(event);
-		inputManager.onEventPoll(event);
+		if (event.key.code != Keyboard::Unknown && hasFocus())
+		{
+			ImGui::SFML::ProcessEvent(event);
+			inputManager.onEventPoll(event);
+		}
 	}
 }
 
@@ -86,36 +106,17 @@ void Application::update()
 
 	/*if (Keyboard::isKeyPressed(Keyboard::Space))*/ grid->update();
 
+	ImGui::SFML::Update(*this, deltaTime);
+
 	inputManager.update();
 	gridView.update();
 	testUI.update();
 
-	ImGui::SFML::Update(*this, deltaTime);
+	ImGui::ShowDemoWindow();
 
-	ImGui::Begin("Sample window"); // begin window
+	ImGui::Begin("Hi");
 
-	float color[3] = { 0.f, 0.f, 0.f };
+	ImGui::End();
 
-	// Background color edit
-	if (ImGui::ColorEdit3("Background color", color))
-	{
-
-	}
-
-	char windowTitle[255] = "ImGui + SFML = <3";
-
-	// Window title text edit
-	ImGui::InputText("Window title", windowTitle, 255);
-
-	if (ImGui::Button("Update window title"))
-	{
-		// this code gets if user clicks on the button
-		// yes, you could have written if(ImGui::InputText(...))
-		// but I do this to show how buttons work :)
-		//.setTitle(windowTitle);
-	}
-	ImGui::End(); // end window
-
-	//window.clear(bgColor); // fill background with color
 	ImGui::SFML::Render(*this);
 }

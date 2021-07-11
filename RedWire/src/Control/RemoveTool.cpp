@@ -43,5 +43,5 @@ void RemoveTool::update(const Float2& position, const Int2& cell, const bool& do
 
 bool RemoveTool::activationPredicate()
 {
-	return sf::Keyboard::isKeyPressed(sf::Keyboard::Q);
+	return InputManager::isPressed(sf::Keyboard::Q);
 }

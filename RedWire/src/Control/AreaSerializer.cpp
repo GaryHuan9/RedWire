@@ -43,5 +43,5 @@ void AreaSerializer::update(const Float2& position, const Int2& cell, const bool
 
 bool AreaSerializer::activationPredicate()
 {
-	return sf::Keyboard::isKeyPressed(sf::Keyboard::X);
+	return InputManager::isPressed(sf::Keyboard::X);
 }
