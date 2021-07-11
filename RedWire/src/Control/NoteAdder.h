@@ -1,16 +1,18 @@
 #pragma once
 
-#include "Tool.h"
+#include "LineTool.h"
 
 namespace RedWire
 {
-	struct NoteAdder : Tool
+	struct NoteAdder : LineTool
 	{
 		NoteAdder(InputManager& manager);
 
-		virtual void update(const Float2& position, const Int2& cell, const bool& down, const bool& changed) override;
+		void update(const Float2& position, const Int2& cell, const bool& down, const bool& changed) override;
 
-		virtual bool activationPredicate() override;
+		bool activationPredicate() override;
+
+		void SetLineCell(const Int2& cell) override;
 	};
 }
 
