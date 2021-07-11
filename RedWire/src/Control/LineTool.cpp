@@ -6,10 +6,10 @@ LineTool::LineTool(InputManager& manager) : Tool(manager) {}
 
 void LineTool::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
-	DoLineDraw(down, cell);
+	doLineDraw(down, cell);
 }
 
-void LineTool::DoLineDraw(const bool& down, const Int2& cell)
+void LineTool::doLineDraw(const bool& down, const Int2& cell)
 {
 	if (!down)
 	{
@@ -24,7 +24,7 @@ void LineTool::DoLineDraw(const bool& down, const Int2& cell)
 		startCell = cell;
 		positionSet = true;
 		//incase you wanna click set, instead of drag set
-		SetLineCell(cell);
+		setLineCell(cell);
 		return;
 	}
 
@@ -44,13 +44,13 @@ void LineTool::DoLineDraw(const bool& down, const Int2& cell)
 		int min = std::min(startCell.x, cell.x);
 		int max = std::max(startCell.x, cell.x);
 
-		for (int x = min; x <= max; x++) SetLineCell(Int2(x, startCell.y));
+		for (int x = min; x <= max; x++) setLineCell(Int2(x, startCell.y));
 	}
 	else
 	{
 		int min = std::min(startCell.y, cell.y);
 		int max = std::max(startCell.y, cell.y);
 
-		for (int y = min; y <= max; y++) SetLineCell(Int2(startCell.x, y));
+		for (int y = min; y <= max; y++) setLineCell(Int2(startCell.x, y));
 	}
 }

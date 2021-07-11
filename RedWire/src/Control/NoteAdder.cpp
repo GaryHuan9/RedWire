@@ -17,7 +17,7 @@ void NoteAdder::update(const Float2& position, const Int2& cell, const bool& dow
 		return;
 	}
 
-	DoLineDraw(down, cell);
+	doLineDraw(down, cell);
 }
 
 bool NoteAdder::activationPredicate()
@@ -25,7 +25,7 @@ bool NoteAdder::activationPredicate()
 	return InputManager::isPressed(sf::Keyboard::Num4);
 }
 
-void NoteAdder::SetLineCell(const Int2& cell)
+void NoteAdder::setLineCell(const Int2& cell)
 {
 	grid->addNote(cell);
 }

@@ -9,12 +9,13 @@ namespace RedWire
 		LineTool(InputManager& manager);
 
 	protected:
-		void DoLineDraw(const bool& down, const Int2& cell);
+		void doLineDraw(const bool& down, const Int2& cell);
 
 		virtual void update(const Float2& position, const Int2& cell, const bool& down, const bool& changed) override;
 
-		virtual void SetLineCell(const Int2& cell) = 0;
+		virtual void setLineCell(const Int2& cell) = 0;
 
+	private:
 		bool positionSet = false;
 		bool directionSet = false;
 		bool horizontal = false;

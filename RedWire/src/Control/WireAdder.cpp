@@ -16,7 +16,7 @@ bool WireAdder::activationPredicate()
 	return InputManager::isPressed(sf::Keyboard::E);
 }
 
-void WireAdder::SetLineCell(const Int2& cell)
+void WireAdder::setLineCell(const Int2& cell)
 {
 	grid->addWire(cell);
 }
