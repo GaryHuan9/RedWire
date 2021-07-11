@@ -9,7 +9,7 @@
 using namespace RedWire;
 using namespace sf;
 
-GridView::GridView(Application& application) : Component(application), background(), display(), texture(), lines(PrimitiveType::Triangles)
+GridView::GridView(Application& application) : Component(application), lines(PrimitiveType::Triangles)
 {
 	background.setFillColor(Color(0x000002FFu));
 	background.setPosition(Vector2f(0.0f, 0.0f));
@@ -26,10 +26,10 @@ int32_t repeat(const int32_t& value, const int32_t& length)
 
 void GridView::update()
 {
-	if (texture.getSize() == Vector2u(0, 0)) return;
+	if (displayTexture.getSize() == Vector2u(0, 0)) return;
 
 	Float2 windowSize = to_type2(float, application.getSize());
-	Float2 textureSize = to_type2(float, texture.getSize());
+	Float2 textureSize = to_type2(float, displayTexture.getSize());
 
 	Float2 density = windowSize / (viewMax - viewMin);
 	Float2 offset = (Float2)cellMin - viewMin;
@@ -40,8 +40,8 @@ void GridView::update()
 	background.setSize(Vector2f(windowSize.x, windowSize.y));
 	application.draw(background);
 
-	uint32_t* colors = (uint32_t*)bytes.get();
-	Vector2u size = texture.getSize();
+	uint32_t* colors = (uint32_t*)displayBytes.get();
+	Vector2u size = displayTexture.getSize();
 
 	if (lineThickness > 0.0f)
 	{
@@ -127,8 +127,17 @@ void GridView::update()
 	display.setPosition(Vector2f(position.x, position.y));
 	display.setSize(Vector2f(dimension.x, dimension.y));
 
-	texture.update(bytes.get());
+	position += (previewMin - cellMin).toType<float>() * density;
+	dimension = to_type2(float, previewSize) * density;
+
+	preview.setPosition(Vector2f(position.x, position.y));
+	preview.setSize(Vector2f(dimension.x, dimension.y));
+
+	displayTexture.update(displayBytes.get());
+	previewTexture.update(previewBytes.get());
+
 	application.draw(display);
+	application.draw(preview);
 }
 
 size_t getBytesLength(const Int2& size)
@@ -162,10 +171,10 @@ void GridView::setView(const Float2& min, const Float2& max)
 		cellMax = cornerMax;
 
 		//Resize texture
-		if (texture.create(newSize.x, newSize.y)) bytes = std::make_unique<Uint8[]>(getBytesLength(newSize));
-		else throw std::exception(("GridView failed to create texture: size " + newSize.toString()).c_str());
+		if (displayTexture.create(newSize.x, newSize.y)) displayBytes = std::make_unique<Uint8[]>(getBytesLength(newSize));
+		else throw std::exception(("GridView failed to create display texture: size " + newSize.toString()).c_str());
 
-		display.setTexture(&texture);
+		display.setTexture(&displayTexture);
 		display.setTextureRect(IntRect(0, 0, newSize.x, newSize.y));
 	}
 }
@@ -174,4 +183,40 @@ Float2 GridView::getPosition(const Float2& position) const
 {
 	Float2 windowSize = to_type2(float, application.getSize());
 	return position / windowSize * (viewMax - viewMin) + viewMin;
+}
+
+void GridView::setPreviewMin(const Int2& min)
+{
+	previewMin = min;
+}
+
+void GridView::setPreviewSize(const Int2& size)
+{
+	previewSize = size;
+
+	Int2 textureSize = to_type2(int32_t, previewTexture.getSize());
+	if (textureSize == size || Int2(0) == size) return;
+
+	//Resize texture
+	if (previewTexture.create(size.x, size.y)) previewBytes = std::make_unique<Uint8[]>(getBytesLength(size));
+	else throw std::exception(("GridView failed to create preview texture: size " + size.toString()).c_str());
+
+	preview.setTexture(&previewTexture);
+	preview.setTextureRect(IntRect(0, 0, size.x, size.y));
+}
+
+void GridView::setPreviewColor(const Int2& position, const uint32_t& color)
+{
+	size_t index = static_cast<size_t>(position.y) * previewSize.x + position.x;
+
+	union
+	{
+		uint32_t value;
+		char bytes[4];
+	} fuse{ color };
+
+	previewBytes[index * 4 + 0] = fuse.bytes[0];
+	previewBytes[index * 4 + 1] = fuse.bytes[1];
+	previewBytes[index * 4 + 2] = fuse.bytes[2];
+	previewBytes[index * 4 + 3] = previewAlpha;
 }

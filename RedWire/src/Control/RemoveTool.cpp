@@ -1,6 +1,8 @@
 #include "RemoveTool.h"
 #include "Tool.h"
 #include "InputManager.h"
+#include "../Application.h"
+#include "../Interface/GridView.h"
 #include "../Type2.h"
 #include "../Core/Grid.h"
 
@@ -14,29 +16,41 @@ RemoveTool::RemoveTool(InputManager& manager) : Tool(manager)
 
 void RemoveTool::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
+	Int2 old = lastCell;
 	lastCell = cell;
-	if (!changed) return;
 
-	if (down)
+	if (changed && down)
 	{
-		started = true;
-		startCell = cell;
-	}
-	else
-	{
-		Int2 min = startCell.min(cell);
-		Int2 max = startCell.max(cell);
-
-		for (int y = min.y; y <= max.y; y++)
+		if (started)
 		{
-			for (int x = min.x; x <= max.x; x++)
+			Int2 min = startCell.min(cell);
+			Int2 max = startCell.max(cell);
+
+			for (int y = min.y; y <= max.y; y++)
 			{
-				grid->remove(Int2(x, y));
+				for (int x = min.x; x <= max.x; x++)
+				{
+					grid->remove(Int2(x, y));
+				}
 			}
+
+			started = false;
+		}
+		else
+		{
+			started = true;
+			startCell = cell;
 		}
 
-		started = false;
+		updatePreview();
 	}
+	else if (lastCell != old) updatePreview();
+}
+
+void RemoveTool::onDisable()
+{
+	started = false;
+	updatePreview();
 }
 
 bool RemoveTool::activationPredicate()
@@ -55,5 +69,30 @@ void RemoveTool::showUI()
 
 	Int2 delta = max - min + Int2(1);
 
-	ImGui::Text("%u x %u", delta.x, delta.y);
+	ImGui::Text("Removing %u x %u", delta.x, delta.y);
+}
+
+void RemoveTool::updatePreview()
+{
+	GridView& view = manager.application.find<GridView>();
+
+	if (started)
+	{
+		Int2 min = startCell.min(lastCell);
+		Int2 max = startCell.max(lastCell);
+
+		Int2 size = max - min + Int2(1);
+
+		view.setPreviewMin(min);
+		view.setPreviewSize(size);
+
+		for (int y = 0; y < size.y; y++)
+		{
+			for (int x = 0; x < size.x; x++)
+			{
+				view.setPreviewColor(Int2(x, y), 0xFF222223u);
+			}
+		}
+	}
+	else view.setPreviewSize(Int2(0));
 }

@@ -22,6 +22,11 @@ namespace RedWire
 		virtual void update(const Float2& position, const Int2& cell, const bool& down, const bool& changed) = 0;
 
 		/// <summary>
+		/// Invoked when the tool is being disabled after the last update.
+		/// </summary>
+		virtual void onDisable();
+
+		/// <summary>
 		/// Returns whether this tool should be activated/selected.
 		/// </summary>
 		virtual bool activationPredicate() = 0;

@@ -113,15 +113,24 @@ void InputManager::update()
 	application.find<GridView>().setView(viewCenter - extend, viewCenter + extend);
 
 	//Tools
-	for (size_t i = 0; i < tools.size(); i++)
-	{
-		std::unique_ptr<Tool>& tool = tools[i];
-		if (tool->activationPredicate()) currentTool = i;
-	}
-
 	Float2 position = getMousePosition();
 	Int2 cell = position.getFloor().toType<int32_t>();
 	bool down = isPressed(Mouse::Button::Left);
+
+	for (size_t i = 0; i < tools.size(); i++)
+	{
+		auto& tool = tools[i];
+
+		bool activate = tool->activationPredicate();
+		if (!activate || currentTool == i) continue;
+
+		//Sends one last update before switching tools
+		auto& disabling = *getCurrentTool();
+
+		disabling.update(position, cell, false, leftMousePressed);
+		disabling.onDisable();
+		currentTool = i;
+	}
 
 	getCurrentTool()->update(position, cell, down, down != leftMousePressed);
 	leftMousePressed = down;

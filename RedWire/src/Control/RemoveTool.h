@@ -12,11 +12,16 @@ namespace RedWire
 
 		void update(const Float2& position, const Int2& cell, const bool& down, const bool& changed) override;
 
+		void onDisable() override;
+
 		bool activationPredicate() override;
 
 		virtual void showUI() override;
 
 	private:
+
+		void updatePreview();
+
 		bool started{};
 
 		Int2 lastCell;

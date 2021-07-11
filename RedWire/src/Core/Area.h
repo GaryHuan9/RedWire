@@ -25,10 +25,6 @@ namespace RedWire
 		static void readFrom(std::istream& stream, Grid& grid, const Int2& min);
 
 		void writeTo(std::ostream& stream, const Float2& viewCenter, const float& viewExtend) const;
-
-		/// <summary>
-		/// Reads a grid and view information from stream.
-		/// </summary>
 		static std::unique_ptr<Grid> readFrom(std::istream& stream, Float2& viewCenter, float& viewExtend);
 
 		struct Tile

@@ -9,6 +9,9 @@ using namespace RedWire;
 Tool::Tool(InputManager& manager) : manager(manager), grid(manager.application.grid)
 {}
 
+void Tool::onDisable()
+{}
+
 void Tool::showUI()
 {}
 
