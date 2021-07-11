@@ -123,16 +123,13 @@ void InputManager::update()
 	Int2 cell = position.getFloor().toType<int32_t>();
 	bool down = isPressed(Mouse::Button::Left);
 
-	tools.at(currentTool)->update(position, cell, down, down != leftMousePressed);
+	getCurrentTool()->update(position, cell, down, down != leftMousePressed);
 	leftMousePressed = down;
 }
 
-std::string InputManager::getCurrentToolLabel()
+Tool* InputManager::getCurrentTool()
 {
-	std::string name = typeid(*tools.at(currentTool)).name();
-
-	size_t index = name.find_last_of(':');
-	return name.substr(index + 1);
+	return tools.at(currentTool).get();
 }
 
 Float2 InputManager::getMousePosition()

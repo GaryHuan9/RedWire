@@ -5,6 +5,7 @@
 #include "../Core/Grid.h"
 
 #include <iostream>
+#include "imgui.h"
 
 using namespace RedWire;
 
@@ -13,21 +14,16 @@ RemoveTool::RemoveTool(InputManager& manager) : Tool(manager)
 
 void RemoveTool::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
+	lastCell = cell;
 	if (!changed) return;
 
 	if (down)
 	{
-		if (!startCellSet)
-		{
-			startCell = cell;
-			startCellSet = true;
-			return;
-		}
+		started = true;
+		startCell = cell;
 	}
 	else
 	{
-		startCellSet = false;
-
 		Int2 min = startCell.min(cell);
 		Int2 max = startCell.max(cell);
 
@@ -38,10 +34,26 @@ void RemoveTool::update(const Float2& position, const Int2& cell, const bool& do
 				grid->remove(Int2(x, y));
 			}
 		}
+
+		started = false;
 	}
 }
 
 bool RemoveTool::activationPredicate()
 {
 	return InputManager::isPressed(sf::Keyboard::Q);
+}
+
+void RemoveTool::showUI()
+{
+	if (!started) return;
+
+	Int2 min = startCell.min(lastCell);
+	Int2 max = startCell.max(lastCell);
+
+	if (min == max) return;
+
+	Int2 delta = max - min + Int2(1);
+
+	ImGui::Text("%u x %u", delta.x, delta.y);
 }

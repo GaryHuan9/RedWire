@@ -1,10 +1,12 @@
+#include "InputManager.h"
 #include "WireAdder.h"
 #include "Tool.h"
-#include "InputManager.h"
+#include "LineTool.h"
 #include "../Type2.h"
 #include "../Core/Grid.h"
 
 #include <iostream>
+#include "imgui.h"
 
 using namespace RedWire;
 
@@ -19,4 +21,11 @@ bool WireAdder::activationPredicate()
 void WireAdder::setLineCell(const Int2& cell)
 {
 	grid->addWire(cell);
+	grid->setSource(cell, addSource);
+}
+
+void WireAdder::showUI()
+{
+	ImGui::Checkbox("Source", &addSource);
+	LineTool::showUI();
 }

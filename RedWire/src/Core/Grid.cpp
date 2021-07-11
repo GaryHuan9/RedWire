@@ -149,7 +149,18 @@ void Grid::addNote(const Int2& position)
 	shared_ptr<Note> note = make_shared<Note>();
 
 	set(position, note);
-	//note->refresh(*this, position);
+}
+
+void Grid::remove(const Int2& position)
+{
+	Cell* const previous = get(position);
+
+	//We must use else if because previous might become corruped/undefined when we remove something
+
+	/**/ if (dynamic_cast<Wire*>(previous) != nullptr) removeWire(position);
+	else if (dynamic_cast<Gate*>(previous) != nullptr) removeGate(position);
+	else if (dynamic_cast<Join*>(previous) != nullptr) removeJoin(position);
+	else if (dynamic_cast<Note*>(previous) != nullptr) removeNote(position);
 }
 
 void Grid::add(const Int2& position, const uint8_t& id)
@@ -173,22 +184,16 @@ void Grid::add(const Int2& position, const uint8_t& id)
 	wire->process(id);
 }
 
-void Grid::remove(const Int2& position)
-{
-	Cell* const previous = get(position);
-
-	//We must use else if because previous might become corruped/undefined when we remove something
-
-	/**/ if (dynamic_cast<Wire*>(previous) != nullptr) removeWire(position);
-	else if (dynamic_cast<Gate*>(previous) != nullptr) removeGate(position);
-	else if (dynamic_cast<Join*>(previous) != nullptr) removeJoin(position);
-	else if (dynamic_cast<Note*>(previous) != nullptr) removeNote(position);
-}
-
-void Grid::toggleSource(const Int2& position)
+void Grid::setSource(const Int2& position, const bool& isSource)
 {
 	Wire* wire = dynamic_cast<Wire*>(get(position));
-	if (wire != nullptr) wire->isSource = !wire->isSource;
+	if (wire != nullptr) wire->isSource = isSource;
+}
+
+bool Grid::getSource(const Int2& position)
+{
+	Wire* wire = dynamic_cast<Wire*>(get(position));
+	return wire != nullptr && wire->isSource;
 }
 
 void Grid::update()

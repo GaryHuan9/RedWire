@@ -14,8 +14,12 @@ namespace RedWire
 
 		bool activationPredicate() override;
 
+		virtual void showUI() override;
+
 	private:
-		bool startCellSet = false;
+		bool started{};
+
+		Int2 lastCell;
 		Int2 startCell;
 	};
 }

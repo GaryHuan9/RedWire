@@ -13,6 +13,12 @@ namespace RedWire
 		bool activationPredicate() override;
 
 		void setLineCell(const Int2& cell) override;
+
+		virtual void showUI() override;
+
+	private:
+		bool drawLines{};
+		bool pressed{};
 	};
 }
 

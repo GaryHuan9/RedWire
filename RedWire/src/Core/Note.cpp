@@ -2,12 +2,12 @@
 
 using namespace RedWire;
 
-uint32_t RedWire::Note::getColor() const
+uint32_t Note::getColor() const
 {
 	return 0xFF100C0Cu;
 }
 
-uint8_t RedWire::Note::getCellId() const
+uint8_t Note::getCellId() const
 {
 	return 7u;
 }

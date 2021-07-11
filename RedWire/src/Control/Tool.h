@@ -26,6 +26,13 @@ namespace RedWire
 		/// </summary>
 		virtual bool activationPredicate() = 0;
 
+		/// <summary>
+		/// Draws/shows the ImGui UI for this tool.
+		/// </summary>
+		virtual void showUI();
+
+		const char*& getName();
+
 	protected:
 
 		InputManager& manager;

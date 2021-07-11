@@ -23,18 +23,17 @@ namespace RedWire
 
 		virtual void update() override;
 
-		std::string getCurrentToolLabel();
+		Tool* getCurrentTool();
 
 		Float2 viewCenter;
 		float  viewExtend;
 
+		std::array<std::unique_ptr<Tool>, 8> tools;
+		size_t currentTool{ 0 };
+
 	private:
 
 		Float2 getMousePosition(); //Returns the world position of the mouse 
-
-		std::array<std::unique_ptr<Tool>, 8> tools;
-
-		size_t currentTool{ 0 };
 		bool leftMousePressed{};
 	};
 }

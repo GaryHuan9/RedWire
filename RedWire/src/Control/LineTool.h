@@ -8,6 +8,8 @@ namespace RedWire
 	{
 		LineTool(InputManager& manager);
 
+		virtual void showUI() override;
+
 	protected:
 		void doLineDraw(const bool& down, const Int2& cell);
 
@@ -19,7 +21,9 @@ namespace RedWire
 		bool positionSet = false;
 		bool directionSet = false;
 		bool horizontal = false;
+
 		Int2 startCell;
+		Int2 lineMinMax;
 	};
 }
 

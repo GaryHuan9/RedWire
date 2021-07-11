@@ -1,23 +1,22 @@
 #include "NoteAdder.h"
-
 #include "InputManager.h"
 #include "../Core/Grid.h"
+#include "imgui.h"
 
 using namespace RedWire;
 
-RedWire::NoteAdder::NoteAdder(InputManager& manager) : LineTool(manager) {}
+NoteAdder::NoteAdder(InputManager& manager) : LineTool(manager) {}
 
 void NoteAdder::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
-	if (!InputManager::isPressed(sf::Keyboard::LShift))
+	if (pressed != InputManager::isPressed(sf::Keyboard::LShift))
 	{
-		if (down)
-			grid->addNote(cell);
-
-		return;
+		pressed = !pressed;
+		drawLines = !drawLines;
 	}
 
-	doLineDraw(down, cell);
+	if (drawLines) doLineDraw(down, cell);
+	else if (down) grid->addNote(cell);
 }
 
 bool NoteAdder::activationPredicate()
@@ -28,4 +27,10 @@ bool NoteAdder::activationPredicate()
 void NoteAdder::setLineCell(const Int2& cell)
 {
 	grid->addNote(cell);
+}
+
+void NoteAdder::showUI()
+{
+	ImGui::Checkbox("Draw Lines", &drawLines);
+	LineTool::showUI();
 }

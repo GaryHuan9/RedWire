@@ -22,7 +22,7 @@ void PanTool::update(const Float2& position, const Int2& cell, const bool& down,
 		if (down) pressedTime = time;
 		else if (time - pressedTime < maxDelay)
 		{
-			grid->toggleSource(cell);
+			grid->setSource(cell, !grid->getSource(cell));
 		}
 
 		//Calculate panning
