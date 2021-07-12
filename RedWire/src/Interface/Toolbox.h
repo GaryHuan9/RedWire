@@ -16,8 +16,11 @@ namespace RedWire
 
 		virtual void update() override;
 
+		inline void resetWindow() { resetWindowOrientation = true; }
+
 	private:
 
+		bool resetWindowOrientation{ true };
 		std::array<std::unique_ptr<Section>, 4> sections;
 	};
 }

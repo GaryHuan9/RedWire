@@ -124,20 +124,19 @@ void Clipboard::updatePreview()
 			{
 				stream->seekg(0);
 				previewGrid = Area::readFrom(*stream);
-
-				view.setPreviewSize(copiedSize);
-
-				for (int y = 0; y < copiedSize.y; y++)
-				{
-					for (int x = 0; x < copiedSize.x; x++)
-					{
-						const Int2 position(x, y);
-						view.setPreviewColor(position, previewGrid->getColor(position));
-					}
-				}
 			}
 
 			view.setPreviewMin(lastCell);
+			view.setPreviewSize(copiedSize);
+
+			for (int y = 0; y < copiedSize.y; y++)
+			{
+				for (int x = 0; x < copiedSize.x; x++)
+				{
+					const Int2 position(x, y);
+					view.setPreviewColor(position, previewGrid->getColor(position));
+				}
+			}
 		}
 		else view.setPreviewSize(Int2(0));
 	}

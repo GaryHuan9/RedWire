@@ -32,8 +32,13 @@ void Toolbox::update()
 
 	const ImVec2 corner(origin.x + size.x - margin, origin.y + margin);
 
-	ImGui::SetNextWindowPos(ImVec2(corner.x - size.x * percent.x, corner.y), ImGuiCond_Appearing);
-	ImGui::SetNextWindowSize(ImVec2(size.x * percent.x, size.y * percent.x), ImGuiCond_Appearing);
+	if (resetWindowOrientation)
+	{
+		ImGui::SetNextWindowPos(ImVec2(corner.x - size.x * percent.x, corner.y));
+		ImGui::SetNextWindowSize(ImVec2(size.x * percent.x, size.y * percent.x));
+
+		resetWindowOrientation = false;
+	}
 
 	if (!ImGui::Begin("Toolbox"))
 	{
@@ -43,7 +48,9 @@ void Toolbox::update()
 
 	for (auto& section : sections)
 	{
+		ImGui::PushID(&section);
 		section->show();
+		ImGui::PopID();
 	}
 
 	ImGui::End();

@@ -19,6 +19,8 @@ namespace RedWire
 		Cell* const get(const Int2& position) const;
 		uint32_t getColor(const Int2& position) const;
 
+		void findBorder(Int2& min, Int2& max) const;
+
 		void writeTo(std::ostream& stream, const Int2& min, const Int2& max) const;
 		void writeTo(std::ostream& stream, const Float2& viewCenter, const float& viewExtend) const;
 
@@ -49,8 +51,6 @@ namespace RedWire
 		void set(const Int2& position, const std::shared_ptr<Cell> cell);
 
 	private:
-
-		void findBorder(Int2& min, Int2& max) const;
 
 		std::unordered_map<Int2, Tile> tiles;
 	};
