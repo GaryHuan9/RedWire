@@ -33,6 +33,6 @@ namespace RedWire
 		int mode{}; //0 is copy, 1 is paste
 
 		std::unique_ptr<Grid> previewGrid;
-		std::unique_ptr<std::stringstream> stream; //Because this stream could poptentially be very larger, we put it on the heap
+		std::unique_ptr<std::stringstream> stream; //Because this stream could potentially be very larger, we put it on the heap
 	};
 }
