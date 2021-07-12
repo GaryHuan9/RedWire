@@ -15,7 +15,7 @@ namespace RedWire
 
 		virtual void update(const Float2& position, const Int2& cell, const bool& down, const bool& changed) override;
 
-		virtual void setLineCell(const Int2& cell) = 0;
+		virtual void setCell(const Int2& cell) = 0;
 
 	private:
 		bool positionSet = false;

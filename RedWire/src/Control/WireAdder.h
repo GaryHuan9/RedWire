@@ -12,7 +12,7 @@ namespace RedWire
 
 		bool activationPredicate() override;
 
-		void setLineCell(const Int2& cell) override;
+		void setCell(const Int2& cell) override;
 
 		virtual void showUI() override;
 

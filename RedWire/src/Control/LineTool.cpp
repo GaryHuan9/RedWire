@@ -35,7 +35,7 @@ void LineTool::doLineDraw(const bool& down, const Int2& cell)
 	{
 		startCell = cell;
 		positionSet = true;
-		setLineCell(cell); //In case you wanna click set, instead of drag set
+		setCell(cell); //In case you wanna click set, instead of drag set
 		return;
 	}
 
@@ -60,7 +60,7 @@ void LineTool::doLineDraw(const bool& down, const Int2& cell)
 		lineMinMax = Int2(min, max);
 		if (oldMinMax == lineMinMax) return;
 
-		for (int x = min; x <= max; x++) setLineCell(Int2(x, startCell.y));
+		for (int x = min; x <= max; x++) setCell(Int2(x, startCell.y));
 	}
 	else
 	{
@@ -71,6 +71,6 @@ void LineTool::doLineDraw(const bool& down, const Int2& cell)
 		lineMinMax = Int2(min, max);
 		if (oldMinMax == lineMinMax) return;
 
-		for (int y = min; y <= max; y++) setLineCell(Int2(startCell.x, y));
+		for (int y = min; y <= max; y++) setCell(Int2(startCell.x, y));
 	}
 }
