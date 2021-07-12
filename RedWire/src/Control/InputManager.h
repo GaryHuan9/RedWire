@@ -32,10 +32,13 @@ namespace RedWire
 		std::array<std::unique_ptr<Tool>, 8> tools;
 
 	private:
-		size_t currentTool{ 0 };
+		Float2 getMousePosition(); //Returns the world position of the mouse
 
-		Float2 getMousePosition(); //Returns the world position of the mouse 
-		bool leftMousePressed{};
+		bool leftMouse{};
+		bool middleMouse{};
+
+		size_t currentTool{ 0 };
+		Float2 pressedPosition;
 	};
 }
 

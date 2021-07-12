@@ -7,7 +7,7 @@
 #include "../Component.h"
 #include "../Interface/GridView.h"
 #include "InputManager.h"
-#include "PanTool.h"
+#include "HandTool.h"
 #include "RemoveTool.h"
 #include "WireAdder.h"
 #include "GateAdder.h"
@@ -23,7 +23,7 @@ using namespace sf;
 
 InputManager::InputManager(Application& application) : Component(application), viewCenter(), viewExtend(20.0f), tools()
 {
-	tools[0] = std::make_unique<PanTool>(*this);
+	tools[0] = std::make_unique<HandTool>(*this);
 	tools[1] = std::make_unique<RemoveTool>(*this);
 	tools[2] = std::make_unique<WireAdder>(*this);
 	tools[3] = std::make_unique<GateAdder>(*this);
@@ -95,8 +95,38 @@ Float2 getMovement()
 
 void InputManager::update()
 {
-	//View movement
+	//Tools
+	Float2 position = getMousePosition();
+	Int2 cell = position.getFloor().toType<int32_t>();
+
+	bool left = isPressed(Mouse::Button::Left);
+	bool middle = isPressed(Mouse::Button::Middle);
+
+	for (size_t i = 0; i < tools.size(); i++)
+	{
+		auto& tool = tools[i];
+
+		bool activate = tool->activationPredicate();
+		if (!activate || currentTool == i) continue;
+
+		setCurrentTool(i);
+	}
+
+	getCurrentTool()->update(position, cell, left, left != leftMouse);
+
+	//Mouse view movement
+	if (middle)
+	{
+		if (!middleMouse) pressedPosition = position;
+		else viewCenter += pressedPosition - position;
+	}
+
+	leftMouse = left;
+	middleMouse = middle;
+
+	//Keyboard view movement
 	static const float movementSpeed = 1.5f;
+	auto& view = application.find<GridView>();
 
 	float speed = application.getDeltaTime().asSeconds() * movementSpeed;
 	viewCenter += getMovement() * speed * viewExtend;
@@ -110,25 +140,7 @@ void InputManager::update()
 	float logSize = std::exp((logWidth + logHeight) / 2.0f);
 	Float2 extend = size.toType<float>() / logSize * viewExtend;
 
-	application.find<GridView>().setView(viewCenter - extend, viewCenter + extend);
-
-	//Tools
-	Float2 position = getMousePosition();
-	Int2 cell = position.getFloor().toType<int32_t>();
-	bool down = isPressed(Mouse::Button::Left);
-
-	for (size_t i = 0; i < tools.size(); i++)
-	{
-		auto& tool = tools[i];
-
-		bool activate = tool->activationPredicate();
-		if (!activate || currentTool == i) continue;
-
-		setCurrentTool(i);
-	}
-
-	getCurrentTool()->update(position, cell, down, down != leftMousePressed);
-	leftMousePressed = down;
+	view.setView(viewCenter - extend, viewCenter + extend);
 }
 
 void InputManager::setCurrentTool(size_t tool)

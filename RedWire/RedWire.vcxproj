@@ -166,7 +166,7 @@
     <ClCompile Include="src\Control\Clipboard.cpp" />
     <ClCompile Include="src\Control\GateAdder.cpp" />
     <ClCompile Include="src\Control\JoinAdder.cpp" />
-    <ClCompile Include="src\Control\PanTool.cpp" />
+    <ClCompile Include="src\Control\HandTool.cpp" />
     <ClCompile Include="src\Control\RemoveTool.cpp" />
     <ClCompile Include="src\Control\Tool.cpp" />
     <ClCompile Include="src\Control\WireAdder.cpp" />
@@ -196,7 +196,7 @@
     <ClInclude Include="src\Control\Clipboard.h" />
     <ClInclude Include="src\Control\GateAdder.h" />
     <ClInclude Include="src\Control\JoinAdder.h" />
-    <ClInclude Include="src\Control\PanTool.h" />
+    <ClInclude Include="src\Control\HandTool.h" />
     <ClInclude Include="src\Control\RemoveTool.h" />
     <ClInclude Include="src\Control\Tool.h" />
     <ClInclude Include="src\Control\WireAdder.h" />

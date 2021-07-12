@@ -7,9 +7,9 @@
 
 namespace RedWire
 {
-	struct PanTool : Tool
+	struct HandTool : Tool
 	{
-		PanTool(InputManager& manager);
+		HandTool(InputManager& manager);
 
 		void update(const Float2& position, const Int2& cell, const bool& down, const bool& changed) override;
 
@@ -17,6 +17,5 @@ namespace RedWire
 
 	private:
 		sf::Time pressedTime;
-		Float2 pressPosition;
 	};
 }

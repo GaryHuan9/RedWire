@@ -57,7 +57,7 @@
     <ClCompile Include="src\Control\JoinAdder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Control\PanTool.cpp">
+    <ClCompile Include="src\Control\HandTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Control\RemoveTool.cpp">
@@ -167,7 +167,7 @@
     <ClInclude Include="src\Control\JoinAdder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Control\PanTool.h">
+    <ClInclude Include="src\Control\HandTool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Control\RemoveTool.h">
