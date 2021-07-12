@@ -185,7 +185,6 @@
     <ClCompile Include="src\Interface\Information.cpp" />
     <ClCompile Include="src\Interface\Section.cpp" />
     <ClCompile Include="src\Interface\Serialization.cpp" />
-    <ClCompile Include="src\Interface\TestUI.cpp" />
     <ClCompile Include="src\Interface\Toolbox.cpp" />
     <ClCompile Include="src\Component.cpp" />
   </ItemGroup>
@@ -220,7 +219,6 @@
     <ClInclude Include="src\Core\Join.h" />
     <ClInclude Include="src\Core\Wire.h" />
     <ClInclude Include="src\Application.h" />
-    <ClInclude Include="src\Interface\TestUI.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\JetBrainsMono\JetBrainsMono-Bold.ttf" />
