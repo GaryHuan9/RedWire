@@ -54,28 +54,36 @@ void Serialization::show()
 	{
 		if (mode == 0) // load
 		{
-			std::ifstream stream(filePath.data(), std::ifstream::binary);
-
-			if (stream.fail()) message = "failed to open path!";
+			if (filePath[0] == '\0') message = "Loading nothing is unacceptable!";
 			else
 			{
-				auto& manager = toolbox.application.find<InputManager>();
+				std::ifstream stream(filePath.data(), std::ifstream::binary);
 
-				toolbox.application.grid = Area::readFrom(stream, manager.viewCenter, manager.viewExtend);
-				message = "Successfully loaded save file!";
+				if (stream.fail()) message = "failed to open path!";
+				else
+				{
+					auto& manager = toolbox.application.find<InputManager>();
+
+					toolbox.application.grid = Area::readFrom(stream, manager.viewCenter, manager.viewExtend);
+					message = "Successfully loaded save file!";
+				}
 			}
 		}
 		else if (mode == 1) // save
 		{
-			std::ofstream stream(filePath.data(), std::ofstream::trunc | std::ofstream::binary);
-
-			if (stream.fail()) message = "failed to open path!";
+			if (filePath[0] == '\0') message = "Loading nothing is unacceptable!";
 			else
 			{
-				auto& manager = toolbox.application.find<InputManager>();
+				std::ofstream stream(filePath.data(), std::ofstream::trunc | std::ofstream::binary);
 
-				toolbox.application.grid->writeTo(stream, manager.viewCenter, manager.viewExtend);
-				message = "Successfully saved file!";
+				if (stream.fail()) message = "failed to open path!";
+				else
+				{
+					auto& manager = toolbox.application.find<InputManager>();
+
+					toolbox.application.grid->writeTo(stream, manager.viewCenter, manager.viewExtend);
+					message = "Successfully saved file!";
+				}
 			}
 		}
 		else
