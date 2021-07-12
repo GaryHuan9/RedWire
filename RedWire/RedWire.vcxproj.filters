@@ -60,9 +60,6 @@
     <ClCompile Include="src\Control\RemoveTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Control\AreaSerializer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Control\Clipboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -165,9 +162,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Control\RemoveTool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Control\AreaSerializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Control\Clipboard.h">

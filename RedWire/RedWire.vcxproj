@@ -162,7 +162,6 @@
     <ClCompile Include="src\Control\LineTool.cpp" />
     <ClCompile Include="src\Control\NoteAdder.cpp" />
     <ClCompile Include="src\Core\Note.cpp" />
-    <ClCompile Include="src\Control\AreaSerializer.cpp" />
     <ClCompile Include="src\Control\Clipboard.cpp" />
     <ClCompile Include="src\Control\PortAdder.cpp" />
     <ClCompile Include="src\Control\PowerTool.cpp" />
@@ -191,7 +190,6 @@
     <ClInclude Include="src\Control\LineTool.h" />
     <ClInclude Include="src\Control\NoteAdder.h" />
     <ClInclude Include="src\Core\Note.h" />
-    <ClInclude Include="src\Control\AreaSerializer.h" />
     <ClInclude Include="src\Control\Clipboard.h" />
     <ClInclude Include="src\Control\PortAdder.h" />
     <ClInclude Include="src\Control\PowerTool.h" />

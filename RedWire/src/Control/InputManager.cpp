@@ -13,7 +13,6 @@
 #include "PortAdder.h"
 #include "NoteAdder.h"
 #include "Clipboard.h"
-#include "AreaSerializer.h"
 
 #include "imgui.h"
 
@@ -27,8 +26,7 @@ InputManager::InputManager(Application& application) : Component(application), v
 	tools[2] = std::make_unique<WireAdder>(*this);
 	tools[3] = std::make_unique<PortAdder>(*this);
 	tools[4] = std::make_unique<Clipboard>(*this);
-	tools[5] = std::make_unique<AreaSerializer>(*this);
-	tools[6] = std::make_unique<NoteAdder>(*this);
+	tools[5] = std::make_unique<NoteAdder>(*this);
 }
 
 bool imGuiStoleInput()
