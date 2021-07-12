@@ -11,4 +11,6 @@ Serialization::Serialization(Toolbox& toolbox) : Section(toolbox)
 void Serialization::show()
 {
 	if (!ImGui::CollapsingHeader("Serialization")) return;
+
+
 }

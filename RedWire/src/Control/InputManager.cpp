@@ -124,19 +124,23 @@ void InputManager::update()
 		bool activate = tool->activationPredicate();
 		if (!activate || currentTool == i) continue;
 
-		//Sends one last update before switching tools
-		auto& disabling = *getCurrentTool();
-
-		disabling.update(position, cell, false, leftMousePressed);
-		disabling.onDisable();
-		currentTool = i;
+		setCurrentTool(i);
 	}
 
 	getCurrentTool()->update(position, cell, down, down != leftMousePressed);
 	leftMousePressed = down;
 }
 
-Tool* InputManager::getCurrentTool()
+void InputManager::setCurrentTool(size_t tool)
+{
+	if (currentTool == tool) return;
+	auto& disabling = *getCurrentTool();
+
+	disabling.onDisable();
+	currentTool = tool;
+}
+
+Tool* InputManager::getCurrentTool() const
 {
 	return tools.at(currentTool).get();
 }

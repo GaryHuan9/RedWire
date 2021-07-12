@@ -12,8 +12,6 @@ using namespace RedWire;
 CurrentTool::CurrentTool(Toolbox& toolbox) : Section(toolbox)
 {}
 
-
-
 void CurrentTool::show()
 {
 	if (!ImGui::CollapsingHeader("Tools", ImGuiTreeNodeFlags_DefaultOpen)) return;
@@ -26,9 +24,9 @@ void CurrentTool::show()
 		for (size_t i = 0; i < manager.tools.size(); i++)
 		{
 			std::unique_ptr<Tool>& tool = manager.tools[i];
-			const bool selected = i == manager.currentTool;
+			const bool selected = &currentTool == tool.get();
 
-			if (ImGui::Selectable(tool->getName(), selected)) manager.currentTool = i;
+			if (ImGui::Selectable(tool->getName(), selected)) manager.setCurrentTool(i);
 
 			if (selected) ImGui::SetItemDefaultFocus();
 		}
