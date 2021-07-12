@@ -7,9 +7,9 @@
 
 namespace RedWire
 {
-	struct PowerTool : Tool
+	struct SourceTool : Tool
 	{
-		PowerTool(InputManager& manager);
+		SourceTool(InputManager& manager);
 
 		void update(const Float2& position, const Int2& cell, const bool& down, const bool& changed) override;
 

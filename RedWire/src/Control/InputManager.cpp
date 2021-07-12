@@ -7,7 +7,7 @@
 #include "../Component.h"
 #include "../Interface/GridView.h"
 #include "InputManager.h"
-#include "PowerTool.h"
+#include "SourceTool.h"
 #include "RemoveTool.h"
 #include "WireAdder.h"
 #include "PortAdder.h"
@@ -22,7 +22,7 @@ using namespace sf;
 
 InputManager::InputManager(Application& application) : Component(application), viewCenter(), viewExtend(20.0f), tools()
 {
-	tools[0] = std::make_unique<PowerTool>(*this);
+	tools[0] = std::make_unique<SourceTool>(*this);
 	tools[1] = std::make_unique<RemoveTool>(*this);
 	tools[2] = std::make_unique<WireAdder>(*this);
 	tools[3] = std::make_unique<PortAdder>(*this);

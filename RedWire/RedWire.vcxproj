@@ -165,7 +165,7 @@
     <ClCompile Include="src\Control\AreaSerializer.cpp" />
     <ClCompile Include="src\Control\Clipboard.cpp" />
     <ClCompile Include="src\Control\PortAdder.cpp" />
-    <ClCompile Include="src\Control\PowerTool.cpp" />
+    <ClCompile Include="src\Control\SourceTool.cpp" />
     <ClCompile Include="src\Control\RemoveTool.cpp" />
     <ClCompile Include="src\Control\Tool.cpp" />
     <ClCompile Include="src\Control\WireAdder.cpp" />
@@ -194,7 +194,7 @@
     <ClInclude Include="src\Control\AreaSerializer.h" />
     <ClInclude Include="src\Control\Clipboard.h" />
     <ClInclude Include="src\Control\PortAdder.h" />
-    <ClInclude Include="src\Control\PowerTool.h" />
+    <ClInclude Include="src\Control\SourceTool.h" />
     <ClInclude Include="src\Control\RemoveTool.h" />
     <ClInclude Include="src\Control\Tool.h" />
     <ClInclude Include="src\Control\WireAdder.h" />
