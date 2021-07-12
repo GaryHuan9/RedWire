@@ -12,52 +12,48 @@ using namespace RedWire;
 
 namespace fs = std::filesystem;
 
-Serialization::Serialization(Toolbox& toolbox) : Section(toolbox), filePath()
+Serialization::Serialization(Toolbox& toolbox) : Section(toolbox), fileName()
 {}
 
 void Serialization::show()
 {
 	if (!ImGui::CollapsingHeader("Serialization"))
 	{
-		if (!message.empty()) message.clear();
+		message.clear();
 		return;
 	}
 
-	ImGui::SliderInt("Mode", &mode, 0, 1, mode ? "Save" : "Load");
+	ImGui::SliderInt("Mode", &mode, 0, 1, mode ? "Clipboard" : "Circuit");
 
-	//not yet
-	if (ImGui::BeginListBox("Save Files"))
+	ImGui::InputText("File name", fileName.data(), fileName.size());
+
+	if (ImGui::BeginCombo("Save Files", "Choose save"))
 	{
 		if (fs::exists(defaultSaveDirectory))
 		{
 			for (auto& file : fs::directory_iterator(defaultSaveDirectory))
 			{
-				const auto& path = file.path();
-				const std::string fileName = path.filename().string();
+				const std::string targetFileName = file.path().filename().string();
 
-				if (!ImGui::Selectable(fileName.c_str())) continue;
+				if (!ImGui::Selectable(targetFileName.c_str())) continue;
 
-				const std::string pathString = path.string();
+				fileName.fill('\0');
 
-				filePath.fill('\0');
-
-				for (size_t i = 0ull; i < pathString.size(); i++)
-					filePath[i] = pathString[i];
+				for (size_t i = 0ull; i < targetFileName.size(); i++)
+					fileName[i] = targetFileName[i];
 			}
 		}
-		ImGui::EndListBox();
+		ImGui::EndCombo();
 	}
 
-	ImGui::InputText("File path", filePath.data(), filePath.size());
-
-	if (ImGui::Button("DO IT"))
+	if (ImGui::Button("Load"))
 	{
-		if (mode == 0) // load
+		if (mode == 0)
 		{
-			if (filePath[0] == '\0') message = "Loading nothing is unacceptable!";
+			if (fileName[0] == '\0') message = "Loading nothing is unacceptable!";
 			else
 			{
-				std::ifstream stream(filePath.data(), std::ifstream::binary);
+				std::ifstream stream(defaultSaveDirectory + fileName.data(), std::ifstream::binary);
 
 				if (stream.fail()) message = "failed to open path!";
 				else
@@ -69,12 +65,27 @@ void Serialization::show()
 				}
 			}
 		}
-		else if (mode == 1) // save
+		else if (mode == 1)
 		{
-			if (filePath[0] == '\0') message = "Loading nothing is unacceptable!";
+			//do loading into clipboard
+			message = "Not implemented hehe";
+		}
+		else
+		{
+			throw std::exception("You did the impossible :D");
+		}
+	}
+
+	ImGui::SameLine(0.f, 5.f);
+
+	if (ImGui::Button("Save"))
+	{
+		if (mode == 0)
+		{
+			if (fileName[0] == '\0') message = "Loading nothing is unacceptable!";
 			else
 			{
-				std::ofstream stream(filePath.data(), std::ofstream::trunc | std::ofstream::binary);
+				std::ofstream stream(defaultSaveDirectory + fileName.data(), std::ofstream::trunc | std::ofstream::binary);
 
 				if (stream.fail()) message = "failed to open path!";
 				else
@@ -86,9 +97,14 @@ void Serialization::show()
 				}
 			}
 		}
+		else if (mode == 1)
+		{
+			//do saving from clipboard
+			message = "Not implemented hehe";
+		}
 		else
 		{
-			throw std::exception("You did the impossible!");
+			throw std::exception("You did the impossible :D");
 		}
 	}
 

@@ -14,12 +14,12 @@ namespace RedWire
 		virtual void show() override;
 
 	private:
-		const char* defaultSaveDirectory = "saves";
+		const std::string defaultSaveDirectory = "saves/";
 
 		int mode = 0;
+
 		//finalized message
 		std::string message;
-		std::array<char, 100ull> filePath;
-		//char filePath[100] = "File path here";
+		std::array<char, 100ull> fileName;
 	};
 }
