@@ -29,7 +29,7 @@ namespace RedWire
 		Float2 viewCenter;
 		float  viewExtend;
 
-		std::array<std::unique_ptr<Tool>, 8> tools;
+		std::array<std::unique_ptr<Tool>, 7> tools;
 
 	private:
 		Float2 getMousePosition(); //Returns the world position of the mouse

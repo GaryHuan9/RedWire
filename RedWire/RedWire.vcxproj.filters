@@ -51,13 +51,10 @@
     <ClCompile Include="src\Control\WireAdder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Control\GateAdder.cpp">
+    <ClCompile Include="src\Control\PortAdder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Control\JoinAdder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Control\HandTool.cpp">
+    <ClCompile Include="src\Control\PowerTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Control\RemoveTool.cpp">
@@ -161,13 +158,10 @@
     <ClInclude Include="src\Control\WireAdder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Control\GateAdder.h">
+    <ClInclude Include="src\Control\PortAdder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Control\JoinAdder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Control\HandTool.h">
+    <ClInclude Include="src\Control\PowerTool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Control\RemoveTool.h">

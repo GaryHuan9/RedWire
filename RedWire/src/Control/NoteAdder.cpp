@@ -21,7 +21,7 @@ void NoteAdder::update(const Float2& position, const Int2& cell, const bool& dow
 
 bool NoteAdder::activationPredicate()
 {
-	return InputManager::isPressed(sf::Keyboard::Num4);
+	return InputManager::isPressed(sf::Keyboard::Num3);
 }
 
 void NoteAdder::setCell(const Int2& cell)

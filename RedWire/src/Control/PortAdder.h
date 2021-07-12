@@ -3,19 +3,27 @@
 #include "../Type2.h"
 #include "Tool.h"
 #include "InputManager.h"
-#include <SFML/System.hpp>
 
 namespace RedWire
 {
-	struct HandTool : Tool
+	struct PortAdder : Tool
 	{
-		HandTool(InputManager& manager);
+		PortAdder(InputManager& manager);
 
 		void update(const Float2& position, const Int2& cell, const bool& down, const bool& changed) override;
 
 		bool activationPredicate() override;
 
+		virtual void showUI() override;
+
 	private:
-		sf::Time pressedTime;
+
+		enum Mode
+		{
+			gate,
+			join
+		};
+
+		int mode = Mode::gate;
 	};
 }

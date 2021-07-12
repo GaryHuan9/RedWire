@@ -17,6 +17,14 @@ namespace RedWire
 		virtual void showUI() override;
 
 	private:
-		bool addSource{};
+
+		enum Mode
+		{
+			unchanged,
+			unpowered,
+			powered
+		};
+
+		int mode = Mode::unchanged;
 	};
 }

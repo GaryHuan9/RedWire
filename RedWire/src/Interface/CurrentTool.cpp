@@ -19,7 +19,7 @@ void CurrentTool::show()
 	auto& manager = toolbox.application.find<InputManager>();
 	auto& currentTool = *manager.getCurrentTool();
 
-	if (ImGui::BeginCombo("", currentTool.getName(), ImGuiComboFlags_NoArrowButton))
+	if (ImGui::BeginCombo("Current Tool", currentTool.getName(), ImGuiComboFlags_NoArrowButton))
 	{
 		for (size_t i = 0; i < manager.tools.size(); i++)
 		{
@@ -33,9 +33,6 @@ void CurrentTool::show()
 
 		ImGui::EndCombo();
 	}
-
-	ImGui::SameLine(0.0f, 8.0f);
-	ImGui::Text("Current Tool");
 
 	currentTool.showUI();
 }

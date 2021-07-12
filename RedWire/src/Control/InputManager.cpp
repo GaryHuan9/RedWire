@@ -7,11 +7,10 @@
 #include "../Component.h"
 #include "../Interface/GridView.h"
 #include "InputManager.h"
-#include "HandTool.h"
+#include "PowerTool.h"
 #include "RemoveTool.h"
 #include "WireAdder.h"
-#include "GateAdder.h"
-#include "JoinAdder.h"
+#include "PortAdder.h"
 #include "NoteAdder.h"
 #include "Clipboard.h"
 #include "AreaSerializer.h"
@@ -23,14 +22,13 @@ using namespace sf;
 
 InputManager::InputManager(Application& application) : Component(application), viewCenter(), viewExtend(20.0f), tools()
 {
-	tools[0] = std::make_unique<HandTool>(*this);
+	tools[0] = std::make_unique<PowerTool>(*this);
 	tools[1] = std::make_unique<RemoveTool>(*this);
 	tools[2] = std::make_unique<WireAdder>(*this);
-	tools[3] = std::make_unique<GateAdder>(*this);
-	tools[4] = std::make_unique<JoinAdder>(*this);
-	tools[5] = std::make_unique<Clipboard>(*this);
-	tools[6] = std::make_unique<AreaSerializer>(*this);
-	tools[7] = std::make_unique<NoteAdder>(*this);
+	tools[3] = std::make_unique<PortAdder>(*this);
+	tools[4] = std::make_unique<Clipboard>(*this);
+	tools[5] = std::make_unique<AreaSerializer>(*this);
+	tools[6] = std::make_unique<NoteAdder>(*this);
 }
 
 bool imGuiStoleInput()

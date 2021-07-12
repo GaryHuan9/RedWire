@@ -1,4 +1,4 @@
-#include "HandTool.h"
+#include "PowerTool.h"
 #include "Tool.h"
 #include "InputManager.h"
 #include "../Application.h"
@@ -8,10 +8,10 @@
 
 using namespace RedWire;
 
-HandTool::HandTool(InputManager& manager) : Tool(manager)
+PowerTool::PowerTool(InputManager& manager) : Tool(manager)
 {}
 
-void HandTool::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
+void PowerTool::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
 	if (!changed) return;
 
@@ -26,7 +26,7 @@ void HandTool::update(const Float2& position, const Int2& cell, const bool& down
 	}
 }
 
-bool HandTool::activationPredicate()
+bool PowerTool::activationPredicate()
 {
 	return InputManager::isPressed(sf::Mouse::Right);
 }
