@@ -86,6 +86,28 @@ void Clipboard::showUI()
 		isCopying = false;
 		updatePreview();
 	}
+
+	if (copiedSize != Int2(0))
+	{
+		ImGui::Text("Clipboard %u x %u", copiedSize.x, copiedSize.y);
+
+		ImGui::SameLine();
+
+		if (ImGui::SmallButton("Clear"))
+		{
+			copiedSize = Int2(0);
+			previewGrid.reset();
+		}
+	}
+
+	if (isCopying)
+	{
+		Int2 min = startCell.min(lastCell);
+		Int2 max = startCell.max(lastCell);
+
+		Int2 delta = max - min + Int2(1);
+		ImGui::Text("Copying %u x %u", delta.x, delta.y);
+	}
 }
 
 void Clipboard::updatePreview()
