@@ -50,7 +50,7 @@ void RemoveTool::update(const Float2& position, const Int2& cell, const bool& do
 void RemoveTool::onDisable()
 {
 	started = false;
-	updatePreview();
+	Tool::onDisable();
 }
 
 bool RemoveTool::activationPredicate()
@@ -65,16 +65,15 @@ void RemoveTool::showUI()
 	Int2 min = startCell.min(lastCell);
 	Int2 max = startCell.max(lastCell);
 
-	if (min == max) return;
-
 	Int2 delta = max - min + Int2(1);
-
 	ImGui::Text("Removing %u x %u", delta.x, delta.y);
 }
 
 void RemoveTool::updatePreview()
 {
 	GridView& view = manager.application.find<GridView>();
+
+	static const uint32_t color = 0xFF111113u;
 
 	if (started)
 	{
@@ -90,9 +89,15 @@ void RemoveTool::updatePreview()
 		{
 			for (int x = 0; x < size.x; x++)
 			{
-				view.setPreviewColor(Int2(x, y), 0xFF222223u);
+				view.setPreviewColor(Int2(x, y), color);
 			}
 		}
 	}
-	else view.setPreviewSize(Int2(0));
+	else
+	{
+		view.setPreviewMin(lastCell);
+		view.setPreviewSize(Int2(1));
+
+		view.setPreviewColor(Int2(0), color);
+	}
 }

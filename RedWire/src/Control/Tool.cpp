@@ -1,6 +1,7 @@
 #include "Tool.h"
 #include "InputManager.h"
 #include "../Application.h"
+#include "../Interface/GridView.h"
 
 #include <cstring>
 
@@ -10,7 +11,10 @@ Tool::Tool(InputManager& manager) : manager(manager), grid(manager.application.g
 {}
 
 void Tool::onDisable()
-{}
+{
+	GridView& view = manager.application.find<GridView>();
+	view.setPreviewSize(Int2(0));
+}
 
 void Tool::showUI()
 {}

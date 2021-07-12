@@ -39,7 +39,7 @@ namespace RedWire
 		void setPreviewColor(const Int2& position, const uint32_t& color);
 
 		float lineThickness = 1.8f;
-		sf::Uint8 previewAlpha = 48;
+		sf::Uint8 previewAlpha = 84;
 
 	private:
 

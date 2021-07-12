@@ -37,12 +37,12 @@ uint32_t Area::getColor(const Int2& position) const
 	return cell->getColor();
 }
 
-template<typename T> void write(std::ostream& stream, const T& value)
+template<typename T> void write(ostream& stream, const T& value)
 {
 	stream.write((const char*)&value, sizeof(T));
 }
 
-template<typename T> T read(std::istream& stream)
+template<typename T> T read(istream& stream)
 {
 	union
 	{
@@ -57,7 +57,7 @@ template<typename T> T read(std::istream& stream)
 /// <summary>
 /// Variable length encode a lane id and lane length pair.
 /// </summary>
-void write(std::ostream& stream, const uint8_t& id, const uint32_t& length)
+void write(ostream& stream, const uint8_t& id, const uint32_t& length)
 {
 	uint8_t first = id & 0b1111u;
 	uint32_t remain = length >> 3;
@@ -83,7 +83,7 @@ void write(std::ostream& stream, const uint8_t& id, const uint32_t& length)
 /// <summary>
 /// Variable length decode a lane id and lane length pair.
 /// </summary>
-void read(std::istream& stream, uint8_t& id, uint32_t& length)
+void read(istream& stream, uint8_t& id, uint32_t& length)
 {
 	uint8_t first = read<uint8_t>(stream);
 
@@ -106,7 +106,7 @@ void read(std::istream& stream, uint8_t& id, uint32_t& length)
 	}
 }
 
-void Area::writeTo(std::ostream& stream, const Int2& min, const Int2& max) const //Max is inclusive
+void Area::writeTo(ostream& stream, const Int2& min, const Int2& max) const //Max is inclusive
 {
 	write<uint32_t>(stream, 0); //Write version
 	write(stream, max - min + Int2(1)); //Write size
@@ -137,7 +137,19 @@ void Area::writeTo(std::ostream& stream, const Int2& min, const Int2& max) const
 	}
 }
 
-void Area::readFrom(std::istream& stream, Grid& grid, const Int2& min)
+void Area::writeTo(ostream& stream, const Float2& viewCenter, const float& viewExtend) const
+{
+	Int2 min;
+	Int2 max;
+
+	findBorder(min, max);
+	writeTo(stream, min, max);
+
+	write(stream, viewCenter - to_type2(float, min));
+	write(stream, viewExtend);
+}
+
+void Area::readFrom(istream& stream, Grid& grid, const Int2& min)
 {
 	auto version = read<uint32_t>(stream);
 	auto size = read<Int2>(stream);
@@ -159,22 +171,17 @@ void Area::readFrom(std::istream& stream, Grid& grid, const Int2& min)
 	}
 }
 
-void Area::writeTo(std::ostream& stream, const Float2& viewCenter, const float& viewExtend) const
-{
-	Int2 min;
-	Int2 max;
-
-	findBorder(min, max);
-	writeTo(stream, min, max);
-
-	write(stream, viewCenter - to_type2(float, min));
-	write(stream, viewExtend);
-}
-
-unique_ptr<Grid> Area::readFrom(std::istream& stream, Float2& viewCenter, float& viewExtend)
+unique_ptr<Grid> Area::readFrom(istream& stream)
 {
 	auto grid = make_unique<Grid>();
 	readFrom(stream, *grid, Int2());
+
+	return grid;
+}
+
+unique_ptr<Grid> Area::readFrom(istream& stream, Float2& viewCenter, float& viewExtend)
+{
+	auto grid = readFrom(stream);
 
 	viewCenter = read<Float2>(stream);
 	viewExtend = read<float>(stream);

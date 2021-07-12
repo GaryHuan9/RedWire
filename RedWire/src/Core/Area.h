@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <fstream>
 #include <memory>
 #include "../Type2.h"
 
@@ -8,9 +9,6 @@ namespace RedWire
 {
 	struct Cell;
 	struct Grid;
-
-	struct ostream;
-	struct istream;
 
 	struct Area
 	{
@@ -22,9 +20,10 @@ namespace RedWire
 		uint32_t getColor(const Int2& position) const;
 
 		void writeTo(std::ostream& stream, const Int2& min, const Int2& max) const;
-		static void readFrom(std::istream& stream, Grid& grid, const Int2& min);
-
 		void writeTo(std::ostream& stream, const Float2& viewCenter, const float& viewExtend) const;
+
+		static void readFrom(std::istream& stream, Grid& grid, const Int2& min);
+		static std::unique_ptr<Grid> readFrom(std::istream& stream);
 		static std::unique_ptr<Grid> readFrom(std::istream& stream, Float2& viewCenter, float& viewExtend);
 
 		struct Tile
