@@ -1,6 +1,8 @@
 #pragma once
 
 #include <SFML/Window.hpp>
+#include <unordered_map>
+#include <typeindex>
 #include <memory>
 #include <string>
 #include <array>
@@ -24,12 +26,14 @@ namespace RedWire
 		virtual void update() override;
 
 		Tool* getCurrentTool() const;
-		void setCurrentTool(size_t tool);
+		void setCurrentTool(Tool* tool);
 
 		Float2 viewCenter;
 		float  viewExtend;
 
-		std::array<std::unique_ptr<Tool>, 6> tools;
+		template<typename Type> Type& find();
+
+		std::unordered_map<std::type_index, std::unique_ptr<Tool>> tools;
 
 	private:
 		Float2 getMousePosition(); //Returns the world position of the mouse
@@ -37,8 +41,13 @@ namespace RedWire
 		bool leftMouse{};
 		bool middleMouse{};
 
-		size_t currentTool{ 0 };
+		Tool* currentTool{ 0 };
 		Float2 pressedPosition;
 	};
+
+	template<typename Type> inline Type& InputManager::find()
+	{
+		return dynamic_cast<Type&>(*tools[typeid(Type)]);
+	}
 }
 

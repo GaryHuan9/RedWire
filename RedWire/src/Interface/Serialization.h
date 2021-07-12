@@ -2,6 +2,7 @@
 
 #include "Section.h"
 #include <string>
+#include <filesystem>
 
 namespace RedWire
 {
@@ -14,9 +15,15 @@ namespace RedWire
 		virtual void show() override;
 
 	private:
-		const std::string defaultSaveDirectory = "saves/";
+		const std::filesystem::path savePath = "saves/";
 
-		int mode = 0;
+		enum Mode
+		{
+			circuit,
+			clipboard
+		};
+
+		int mode = Mode::circuit;
 
 		//finalized message
 		std::string message;

@@ -21,8 +21,20 @@ namespace RedWire
 
 		void showUI() override;
 
+		bool writeTo(std::ostream& stream);
+		void readFrom(std::istream& stream);
+
 	private:
 		void updatePreview();
+
+		enum Mode
+		{
+			copy,
+			cut,
+			paste
+		};
+
+		int mode = Mode::copy;
 
 		Int2 startCell;
 		Int2 lastCell;
@@ -30,9 +42,7 @@ namespace RedWire
 
 		bool isCopying{};
 
-		int mode{}; //0 is copy, 1 is paste
-
 		std::unique_ptr<Grid> previewGrid;
-		std::unique_ptr<std::stringstream> stream; //Because this stream could potentially be very larger, we put it on the heap
+		std::unique_ptr<std::stringstream> buffer; //Because this stream could potentially be very larger, we put it on the heap
 	};
 }

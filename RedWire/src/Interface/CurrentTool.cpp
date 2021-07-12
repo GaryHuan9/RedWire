@@ -2,6 +2,7 @@
 #include "CurrentTool.h"
 #include "../Application.h"
 #include "../Control/InputManager.h"
+#include "../Control/Tool.h"
 
 #include "imgui.h"
 #include <cstring>
@@ -19,15 +20,14 @@ void CurrentTool::show()
 	auto& manager = toolbox.application.find<InputManager>();
 	auto& currentTool = *manager.getCurrentTool();
 
-	if (ImGui::BeginCombo("Current Tool", currentTool.getName(), ImGuiComboFlags_NoArrowButton))
+	if (ImGui::BeginCombo("Tool", currentTool.getName()))
 	{
-		for (size_t i = 0; i < manager.tools.size(); i++)
+		for (auto& pair : manager.tools)
 		{
-			std::unique_ptr<Tool>& tool = manager.tools[i];
+			std::unique_ptr<Tool>& tool = pair.second;
 			const bool selected = &currentTool == tool.get();
 
-			if (ImGui::Selectable(tool->getName(), selected)) manager.setCurrentTool(i);
-
+			if (ImGui::Selectable(tool->getName(), selected)) manager.setCurrentTool(tool.get());
 			if (selected) ImGui::SetItemDefaultFocus();
 		}
 

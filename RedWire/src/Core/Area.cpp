@@ -130,18 +130,6 @@ template<typename T> void write(ostream& stream, const T& value)
 	stream.write((const char*)&value, sizeof(T));
 }
 
-template<typename T> T read(istream& stream)
-{
-	union
-	{
-		T value;
-		char bytes[sizeof(T)];
-	} fuse{};
-
-	stream.read(fuse.bytes, sizeof(T));
-	return fuse.value;
-}
-
 /// <summary>
 /// Variable length encode a lane id and lane length pair.
 /// </summary>
@@ -166,32 +154,6 @@ void write(ostream& stream, const uint8_t& id, const uint32_t& length)
 		write(stream, (uint8_t)remain);
 	}
 	else write(stream, (uint8_t)(first & Mask));
-}
-
-/// <summary>
-/// Variable length decode a lane id and lane length pair.
-/// </summary>
-void read(istream& stream, uint8_t& id, uint32_t& length)
-{
-	uint8_t first = read<uint8_t>(stream);
-
-	id = (uint8_t)(first & 0b1111u);
-	length = (uint32_t)(first >> 4);
-
-	static const uint32_t Mask = 0b0111'1111u;
-
-	if (first > Mask)
-	{
-		length &= 0b0111u;
-
-		for (uint32_t i = 3;; i += 7)
-		{
-			uint8_t part = read<uint8_t>(stream);
-			length |= (uint32_t)(part & Mask) << i;
-
-			if ((part & ~Mask) == 0) break;
-		}
-	}
 }
 
 void Area::writeTo(ostream& stream, const Int2& min, const Int2& max) const //Max is inclusive
@@ -237,7 +199,45 @@ void Area::writeTo(ostream& stream, const Float2& viewCenter, const float& viewE
 	write(stream, viewExtend);
 }
 
-void Area::readFrom(istream& stream, Grid& grid, const Int2& min)
+template<typename T> T read(istream& stream)
+{
+	union
+	{
+		T value;
+		char bytes[sizeof(T)];
+	} fuse{};
+
+	stream.read(fuse.bytes, sizeof(T));
+	return fuse.value;
+}
+
+/// <summary>
+/// Variable length decode a lane id and lane length pair.
+/// </summary>
+void read(istream& stream, uint8_t& id, uint32_t& length)
+{
+	uint8_t first = read<uint8_t>(stream);
+
+	id = (uint8_t)(first & 0b1111u);
+	length = (uint32_t)(first >> 4);
+
+	static const uint32_t Mask = 0b0111'1111u;
+
+	if (first > Mask)
+	{
+		length &= 0b0111u;
+
+		for (uint32_t i = 3;; i += 7)
+		{
+			uint8_t part = read<uint8_t>(stream);
+			length |= (uint32_t)(part & Mask) << i;
+
+			if ((part & ~Mask) == 0) break;
+		}
+	}
+}
+
+Int2 Area::readFrom(istream& stream, Grid& grid, const Int2& min)
 {
 	auto version = read<uint32_t>(stream);
 	auto size = read<Int2>(stream);
@@ -257,6 +257,8 @@ void Area::readFrom(istream& stream, Grid& grid, const Int2& min)
 			--length;
 		}
 	}
+
+	return size;
 }
 
 unique_ptr<Grid> Area::readFrom(istream& stream)

@@ -3,8 +3,10 @@
 #include "../Application.h"
 #include "../Core/Grid.h"
 #include "../Control/InputManager.h"
+#include "../Control/Clipboard.h"
 
 #include "imgui.h"
+#include "imgui_internal.h"
 #include <filesystem>
 #include <fstream>
 
@@ -23,94 +25,109 @@ void Serialization::show()
 		return;
 	}
 
-	ImGui::SliderInt("Mode", &mode, 0, 1, mode ? "Clipboard" : "Circuit");
+	ImGui::SliderInt("Mode", &mode, 0, 1, mode == Mode::circuit ? "Circuit" : "Clipboard");
+	ImGui::InputText("Save Name", fileName.data(), fileName.size(), ImGuiInputTextFlags_AutoSelectAll);
 
-	ImGui::InputText("File name", fileName.data(), fileName.size());
-
-	if (ImGui::BeginCombo("Save Files", "Choose save"))
+	if (ImGui::BeginCombo("Saves", fileName.data()))
 	{
-		if (fs::exists(defaultSaveDirectory))
+		if (fs::exists(savePath))
 		{
-			for (auto& file : fs::directory_iterator(defaultSaveDirectory))
+			for (auto& file : fs::directory_iterator(savePath))
 			{
-				const std::string targetFileName = file.path().filename().string();
-
-				if (!ImGui::Selectable(targetFileName.c_str())) continue;
+				const auto& target = file.path().filename().string();
+				if (!ImGui::Selectable(target.c_str())) continue;
 
 				fileName.fill('\0');
+				message.clear();
 
-				for (size_t i = 0ull; i < targetFileName.size(); i++)
-					fileName[i] = targetFileName[i];
+				std::copy(target.cbegin(), target.cend(), fileName.begin());
 			}
 		}
 		ImGui::EndCombo();
 	}
 
-	if (ImGui::Button("Load"))
+	bool hasName = fileName[0] != '\0';
+	//TODO: Use PushDisable when we update ImGui to gray out the buttons
+
+	if (ImGui::Button("Load") && hasName)
 	{
-		if (mode == 0)
+		std::ifstream stream(savePath / fileName.data(), std::ifstream::binary);
+
+		if (!stream.fail())
 		{
-			if (fileName[0] == '\0') message = "Loading nothing is unacceptable!";
-			else
+			auto& manager = toolbox.application.find<InputManager>();
+
+			switch (mode)
 			{
-				std::ifstream stream(defaultSaveDirectory + fileName.data(), std::ifstream::binary);
-
-				if (stream.fail()) message = "failed to open path!";
-				else
+				case Mode::circuit:
 				{
-					auto& manager = toolbox.application.find<InputManager>();
-
 					toolbox.application.grid = Area::readFrom(stream, manager.viewCenter, manager.viewExtend);
-					message = "Successfully loaded save file!";
+					message = "Successfully loaded circuit";
+
+					break;
+				}
+				case Mode::clipboard:
+				{
+					manager.find<Clipboard>().readFrom(stream);
+					message = "Successfully loaded clipboard";
+
+					break;
 				}
 			}
 		}
-		else if (mode == 1)
-		{
-			//do loading into clipboard
-			message = "Not implemented hehe";
-		}
-		else
-		{
-			throw std::exception("You did the impossible :D");
-		}
+		else message = "Failed to open path";
 	}
 
-	ImGui::SameLine(0.f, 5.f);
+	ImGui::SameLine();
 
-	if (ImGui::Button("Save"))
+	if (ImGui::Button("Save") && hasName)
 	{
-		if (mode == 0)
+		std::ofstream stream(savePath / fileName.data(), std::ofstream::trunc | std::ofstream::binary);
+
+		if (!stream.fail())
 		{
-			if (fileName[0] == '\0') message = "Loading nothing is unacceptable!";
-			else
+			auto& manager = toolbox.application.find<InputManager>();
+
+			switch (mode)
 			{
-				std::ofstream stream(defaultSaveDirectory + fileName.data(), std::ofstream::trunc | std::ofstream::binary);
-
-				if (stream.fail()) message = "failed to open path!";
-				else
+				case Mode::circuit:
 				{
-					auto& manager = toolbox.application.find<InputManager>();
-
 					toolbox.application.grid->writeTo(stream, manager.viewCenter, manager.viewExtend);
-					message = "Successfully saved file!";
+					message = "Successfully saved circuit";
+
+					break;
+				}
+				case Mode::clipboard:
+				{
+					manager.find<Clipboard>().writeTo(stream);
+					message = "Successfully saved clipboard";
+
+					break;
 				}
 			}
 		}
-		else if (mode == 1)
-		{
-			//do saving from clipboard
-			message = "Not implemented hehe";
-		}
-		else
-		{
-			throw std::exception("You did the impossible :D");
-		}
+		else message = "Failed to open path";
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Delete") && hasName)
+	{
+		fs::path path = savePath / fileName.data();
+
+		if (fs::exists(path) && fs::remove(path)) message = "Successfully deleted circuit";
+		else message = "Failed to delete path";
 	}
 
 	if (!message.empty())
 	{
-		ImGui::SameLine(0.f, 5.f);
+		ImGui::SameLine();
 		ImGui::Text(message.c_str());
+	}
+
+	if (!hasName)
+	{
+		ImGui::SameLine();
+		ImGui::Text("Missing file name");
 	}
 }

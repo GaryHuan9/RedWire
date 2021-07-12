@@ -7,13 +7,14 @@
 #include "../Interface/GridView.h"
 
 #include "imgui.h"
+#include <iterator>
 #include <sstream>
 #include <memory>
 #include <math.h>
 
 using namespace RedWire;
 
-Clipboard::Clipboard(InputManager& manager) : Tool(manager), stream(std::make_unique<std::stringstream>())
+Clipboard::Clipboard(InputManager& manager) : Tool(manager), buffer(std::make_unique<std::stringstream>())
 {}
 
 void Clipboard::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
@@ -21,44 +22,60 @@ void Clipboard::update(const Float2& position, const Int2& cell, const bool& dow
 	int oldMode = mode;
 	Int2 oldCell = lastCell;
 
-	if (InputManager::isPressed(sf::Keyboard::C)) mode = 0;
-	if (InputManager::isPressed(sf::Keyboard::V)) mode = 1;
+	if (InputManager::isPressed(sf::Keyboard::C)) mode = Mode::copy;
+	if (InputManager::isPressed(sf::Keyboard::X)) mode = Mode::cut;
+	if (InputManager::isPressed(sf::Keyboard::V)) mode = Mode::paste;
 
 	lastCell = cell;
 
 	if (changed && down)
 	{
-		if (mode)
+		switch (mode)
 		{
-			//Pasting
-
-			if (copiedSize != Int2(0))
+			case Mode::copy:
+			case Mode::cut:
 			{
-				stream->seekg(0);
-				Area::readFrom(*stream, *grid, cell);
+				if (isCopying)
+				{
+					buffer->seekp(0);
+					buffer->str("");
+
+					Int2 min = startCell.min(cell);
+					Int2 max = startCell.max(cell);
+
+					copiedSize = max - min + Int2(1);
+					grid->writeTo(*buffer, min, max);
+
+					previewGrid.reset();
+					isCopying = false;
+
+					if (mode == Mode::cut)
+					{
+						for (int y = min.y; y <= max.y; y++)
+						{
+							for (int x = min.x; x <= max.x; x++)
+							{
+								grid->remove(Int2(x, y));
+							}
+						}
+					}
+				}
+				else
+				{
+					startCell = cell;
+					isCopying = true;
+				}
+
+				break;
 			}
-		}
-		else
-		{
-			//Copying
-
-			if (isCopying)
+			case Mode::paste:
 			{
-				stream->seekp(0);
+				if (copiedSize == Int2(0)) break;
 
-				Int2 min = startCell.min(cell);
-				Int2 max = startCell.max(cell);
+				buffer->seekg(0);
+				Area::readFrom(*buffer, *grid, cell);
 
-				copiedSize = max - min + Int2(1);
-				grid->writeTo(*stream, min, max);
-
-				previewGrid.reset();
-				isCopying = false;
-			}
-			else
-			{
-				startCell = cell;
-				isCopying = true;
+				break;
 			}
 		}
 
@@ -76,12 +93,14 @@ void Clipboard::onDisable()
 bool Clipboard::activationPredicate()
 {
 	return InputManager::isPressed(sf::Keyboard::C)
+		|| InputManager::isPressed(sf::Keyboard::X)
 		|| InputManager::isPressed(sf::Keyboard::V);
 }
 
 void Clipboard::showUI()
 {
-	if (ImGui::SliderInt("Mode", &mode, 0, 1, mode ? "Paste" : "Copy"))
+	static const char* names[] = { "Copy", "Cut", "Paste" };
+	if (ImGui::SliderInt("Mode", &mode, 0, 2, names[mode]))
 	{
 		isCopying = false;
 		updatePreview();
@@ -110,66 +129,101 @@ void Clipboard::showUI()
 	}
 }
 
+std::unique_ptr<Grid> createGrid(std::istream& stream, Int2& size)
+{
+	stream.seekg(0);
+
+	auto pointer = std::make_unique<Grid>();
+	size = Area::readFrom(stream, *pointer);
+
+	return pointer;
+}
+
+bool Clipboard::writeTo(std::ostream& stream)
+{
+	if (copiedSize == Int2(0)) return false;
+
+	if (previewGrid == nullptr) previewGrid = createGrid(*buffer, copiedSize);
+	previewGrid->writeTo(stream, Float2(0.0f), 16.0f);
+
+	return true;
+}
+
+void Clipboard::readFrom(std::istream& stream)
+{
+	buffer->seekp(0);
+	buffer->str("");
+
+	std::copy
+	(
+		std::istream_iterator<char>(stream),
+		std::istream_iterator<char>(),
+		std::ostream_iterator<char>(*buffer)
+	);
+
+	previewGrid = createGrid(*buffer, copiedSize);
+}
+
 void Clipboard::updatePreview()
 {
 	GridView& view = manager.application.find<GridView>();
 
-	if (mode)
+	switch (mode)
 	{
-		//Pasting
-
-		if (copiedSize != Int2(0))
+		case Mode::copy:
+		case Mode::cut:
 		{
-			if (previewGrid == nullptr)
-			{
-				stream->seekg(0);
-				previewGrid = Area::readFrom(*stream);
-			}
+			static const uint32_t color = 0xFF111113u;
 
-			view.setPreviewMin(lastCell);
-			view.setPreviewSize(copiedSize);
-
-			for (int y = 0; y < copiedSize.y; y++)
+			if (isCopying)
 			{
-				for (int x = 0; x < copiedSize.x; x++)
+				Int2 min = startCell.min(lastCell);
+				Int2 max = startCell.max(lastCell);
+
+				Int2 size = max - min + Int2(1);
+
+				view.setPreviewMin(min);
+				view.setPreviewSize(size);
+
+				for (int y = 0; y < size.y; y++)
 				{
-					const Int2 position(x, y);
-					view.setPreviewColor(position, previewGrid->getColor(position));
+					for (int x = 0; x < size.x; x++)
+					{
+						view.setPreviewColor(Int2(x, y), color);
+					}
 				}
 			}
-		}
-		else view.setPreviewSize(Int2(0));
-	}
-	else
-	{
-		//Copying
-
-		static const uint32_t color = 0xFF111113u;
-
-		if (isCopying)
-		{
-			Int2 min = startCell.min(lastCell);
-			Int2 max = startCell.max(lastCell);
-
-			Int2 size = max - min + Int2(1);
-
-			view.setPreviewMin(min);
-			view.setPreviewSize(size);
-
-			for (int y = 0; y < size.y; y++)
+			else
 			{
-				for (int x = 0; x < size.x; x++)
+				view.setPreviewMin(lastCell);
+				view.setPreviewSize(Int2(1));
+
+				view.setPreviewColor(Int2(0), color);
+			}
+
+			break;
+		}
+		case Mode::paste:
+		{
+			if (copiedSize != Int2(0))
+			{
+				if (previewGrid == nullptr) previewGrid = createGrid(*buffer, copiedSize);
+
+				view.setPreviewMin(lastCell);
+				view.setPreviewSize(copiedSize);
+
+				for (int y = 0; y < copiedSize.y; y++)
 				{
-					view.setPreviewColor(Int2(x, y), color);
+					for (int x = 0; x < copiedSize.x; x++)
+					{
+						const Int2 position(x, y);
+						view.setPreviewColor(position, previewGrid->getColor(position));
+					}
 				}
 			}
-		}
-		else
-		{
-			view.setPreviewMin(lastCell);
-			view.setPreviewSize(Int2(1));
+			else view.setPreviewSize(Int2(0));
 
-			view.setPreviewColor(Int2(0), color);
+			break;
 		}
 	}
 }

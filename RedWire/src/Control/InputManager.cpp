@@ -1,3 +1,5 @@
+#include <unordered_map>
+#include <typeindex>
 #include <algorithm>
 #include <string>
 #include <memory>
@@ -21,12 +23,14 @@ using namespace sf;
 
 InputManager::InputManager(Application& application) : Component(application), viewCenter(), viewExtend(20.0f), tools()
 {
-	tools[0] = std::make_unique<SourceTool>(*this);
-	tools[1] = std::make_unique<RemoveTool>(*this);
-	tools[2] = std::make_unique<WireAdder>(*this);
-	tools[3] = std::make_unique<PortAdder>(*this);
-	tools[4] = std::make_unique<Clipboard>(*this);
-	tools[5] = std::make_unique<NoteAdder>(*this);
+	tools[typeid(SourceTool)] = std::make_unique<SourceTool>(*this);
+	tools[typeid(RemoveTool)] = std::make_unique<RemoveTool>(*this);
+	tools[typeid(WireAdder)] = std::make_unique<WireAdder>(*this);
+	tools[typeid(PortAdder)] = std::make_unique<PortAdder>(*this);
+	tools[typeid(Clipboard)] = std::make_unique<Clipboard>(*this);
+	tools[typeid(NoteAdder)] = std::make_unique<NoteAdder>(*this);
+
+	currentTool = tools[typeid(SourceTool)].get();
 }
 
 bool imGuiStoleInput()
@@ -98,14 +102,14 @@ void InputManager::update()
 	bool left = isPressed(Mouse::Button::Left);
 	bool middle = isPressed(Mouse::Button::Middle);
 
-	for (size_t i = 0; i < tools.size(); i++)
+	for (auto& pair : tools)
 	{
-		auto& tool = tools[i];
+		Tool* tool = pair.second.get();
 
 		bool activate = tool->activationPredicate();
-		if (!activate || currentTool == i) continue;
+		if (!activate || currentTool == tool) continue;
 
-		setCurrentTool(i);
+		setCurrentTool(tool);
 	}
 
 	getCurrentTool()->update(position, cell, left, left != leftMouse);
@@ -139,18 +143,18 @@ void InputManager::update()
 	view.setView(viewCenter - extend, viewCenter + extend);
 }
 
-void InputManager::setCurrentTool(size_t tool)
+void InputManager::setCurrentTool(Tool* tool)
 {
 	if (currentTool == tool) return;
-	auto& disabling = *getCurrentTool();
+	if (tools.find(typeid(*tool)) == tools.end()) throw std::exception("Invalid tool");
 
-	disabling.onDisable();
+	currentTool->onDisable();
 	currentTool = tool;
 }
 
 Tool* InputManager::getCurrentTool() const
 {
-	return tools.at(currentTool).get();
+	return currentTool;
 }
 
 Float2 InputManager::getMousePosition()
