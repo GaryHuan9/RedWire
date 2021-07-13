@@ -37,6 +37,8 @@ bool imGuiStoleInput()
 {
 	ImGuiIO& io = ImGui::GetIO();
 
+	//not the best solution but it works
+	if (!(io.MouseDown[0] || io.MouseDown[1] || io.MouseDown[2])) return false;
 	if (io.WantCaptureMouse) return true;
 	if (io.WantCaptureKeyboard) return true;
 
