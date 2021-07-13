@@ -11,9 +11,7 @@ namespace RedWire
 		HelpWindow(Application& application);
 
 	protected:
-		void doUI() override;
-
-	private:
+		void showUI() override;
 	};
 }
 

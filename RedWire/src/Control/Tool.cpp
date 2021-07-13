@@ -20,13 +20,12 @@ void Tool::onDisable()
 void Tool::showUI()
 {}
 
-void RedWire::Tool::doHelpUI()
+void Tool::showHelpUI()
 {
-	ImGui::Text("No description yet.");
+	ImGui::Text("No description");
 }
 
 const char* Tool::getName()
 {
-	//const char* name = ;
 	return std::strrchr(typeid(*this).name(), ':') + 1;
 }

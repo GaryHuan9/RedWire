@@ -22,7 +22,7 @@ namespace RedWire
 		void update() override;
 
 	protected:
-		virtual void doUI() = 0;
+		virtual void showUI() = 0;
 
 	private:
 		bool active = false;

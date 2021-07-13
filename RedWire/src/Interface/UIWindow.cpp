@@ -3,12 +3,12 @@
 using namespace RedWire;
 
 
-RedWire::UIWindow::UIWindow(Application& application) : Component(application)
+UIWindow::UIWindow(Application& application) : Component(application)
 {}
 
-void RedWire::UIWindow::update()
+void UIWindow::update()
 {
 	if (!active) return;
 
-	doUI();
+	showUI();
 }

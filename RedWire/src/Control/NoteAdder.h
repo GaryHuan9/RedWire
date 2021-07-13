@@ -16,7 +16,7 @@ namespace RedWire
 
 		virtual void showUI() override;
 		
-		void doHelpUI() override;
+		void showHelpUI() override;
 
 	private:
 		bool drawLines{};

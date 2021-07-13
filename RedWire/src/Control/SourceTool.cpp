@@ -32,8 +32,9 @@ bool SourceTool::activationPredicate()
 	return InputManager::isPressed(sf::Mouse::Right);
 }
 
-void SourceTool::doHelpUI()
+void SourceTool::showHelpUI()
 {
-	ImGui::Text("This controls the source toggling on wire cells, you can toggle on or off a single bundle of wire cell(s)\n\
-To use it, click on any wire cell to toggle their powered state");
+	ImGui::Text("The SourceTool is the default tool; it is used to control whether a [Wire] is a power source");
+	ImGui::Text("Simply click on a [Wire] will change the power state of that [Wire] from Off to On or vice versa");
+	ImGui::Text("Pressing the Right Mouse Button will switch from any selected tool back to the default SourceTool");
 }

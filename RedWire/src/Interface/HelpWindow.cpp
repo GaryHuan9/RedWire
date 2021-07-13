@@ -12,45 +12,52 @@ using namespace RedWire;
 HelpWindow::HelpWindow(Application& application) : UIWindow(application)
 {}
 
-void HelpWindow::doUI()
+void HelpWindow::showUI()
 {
-	if (ImGui::Begin("Help"))
-	{
-		//NOTE: this is not final! I suck at describing
-		InputManager& inputManager = application.find<InputManager>();
+	bool active = isActive();
 
-		ImGui::Text("RedWire is a 2D logic circuit builder made by MMXXX-VII and CXRedix\n\n\
-use [Middle mouse button] to pan around\n\
-In order to make a circuit, we place [Cells] using [Tools] inside the [Toolbox] into the grid shown in front of you\n\
-The Toolbox consists of multiple [Sections], as you can tell, you are already familiary with it since how come you came here :)\n\n"); // except you are reading the code lol *wink wink*
+	if (ImGui::Begin("Help", &active, ImGuiWindowFlags_HorizontalScrollbar))
+	{
+		auto& inputManager = application.find<InputManager>();
+
+		ImGui::Text("RedWire is a 2D logic circuit builder made by MMX3VII and CXRedix");
+
+		ImGui::Dummy(ImVec2(0.0f, 20.0f));
+
+		ImGui::Text("The [Toolbox] consists of multiple sections that can be used to control and monitor all nessessary parameters and information");
+		ImGui::Text("To start making a circuit, place down [Wires] by selecting the [WireAdder] in the [Toolbox] and start drawing in the square [Grid]");
 
 		if (ImGui::CollapsingHeader("How to basics"))
 		{
-			ImGui::Text("use [Middle mouse button] to pan around the grid\n\
-To select a [Tool], navigate to the [Toolbox] and inside [Tools] section, choose a Tool of choice from the drop down.");
+			ImGui::Text("You can navigate around the [Grid] by dragging with the Middle Mouse Button or pressing the WASD keys");
+			ImGui::Text("Note that all navigation and keyboard shortcuts are disabled while you are interacting with the [Toolbox]");
+
+			ImGui::Text("The circuit logic is simulated based on [Ticks], which are usually triggered automatically as time passes");
+
+			ImGui::Dummy(ImVec2(0.0f, 10.0f));
+
+			ImGui::Text("More information about individual tools can be found below in the Tools section");
 		}
 
 		if (ImGui::CollapsingHeader("Tools"))
 		{
-			ImGui::Text((std::string("There are currently ") + std::to_string(inputManager.tools.size()) + " tools in redwire, each of them have their unique use case\n\n").c_str());
-
 			if (ImGui::BeginTabBar("Tools Tab"))
 			{
 				for (auto& item : inputManager.tools)
 				{
-					if (ImGui::BeginTabItem((std::string(item.second->getName()).c_str())))
-					{
-						ImGui::PushID(&item);
-						item.second->doHelpUI();
-						ImGui::PopID();
-						ImGui::EndTabItem();
-					}
+					if (!ImGui::BeginTabItem(item.second->getName())) continue;
+
+					ImGui::PushID(&item);
+					item.second->showHelpUI();
+					ImGui::PopID();
+					ImGui::EndTabItem();
 				}
 
 				ImGui::EndTabBar();
 			}
 		}
-
-		ImGui::End();
 	}
+
+	setActive(active);
+	ImGui::End();
 }

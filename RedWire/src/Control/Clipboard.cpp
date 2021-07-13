@@ -166,19 +166,25 @@ void Clipboard::readFrom(std::istream& stream)
 	previewGrid = createGrid(*buffer, copiedSize);
 }
 
-void Clipboard::doHelpUI()
+void Clipboard::showHelpUI()
 {
-	ImGui::Text("This could");
+	ImGui::TextWrapped("The Clipboard can ");
 
-	ImGui::SameLine(); ImGui::Button("Copy");
-	ImGui::SameLine(); ImGui::Text("|");
-	ImGui::SameLine(); ImGui::Button("Cut");
-	ImGui::SameLine(); ImGui::Text("|");
-	ImGui::SameLine(); ImGui::Button("Paste");
-	ImGui::SameLine(); ImGui::Text("a rectangular area of cells\n");
+	ImGui::SameLine(); ImGui::SmallButton("Copy");
+	ImGui::SameLine(); ImGui::SmallButton("Cut");
+	ImGui::SameLine(); ImGui::SmallButton("Paste");
+	ImGui::SameLine();
 
-	ImGui::Text("To use [Copy] or [Cut], select the mode and select two corner cells to [Copy] or [Cut]\n\
-To use [Paste], select the mode and align the preview then click on the cell to [Paste]");
+	ImGui::Text(" a rectangular area of cells on the [Grid]");
+
+	ImGui::Text("To Copy or Cut, click on two corners to select all cells underneath and buffer them");
+	ImGui::Text("While Pasting, the buffered cells will appear as a preview and click to place them down");
+
+	ImGui::Dummy(ImVec2(0.0f, 10.0f));
+
+	ImGui::Text("Keyboard Shortcut (Copy): C");
+	ImGui::Text("Keyboard Shortcut (Cut): X");
+	ImGui::Text("Keyboard Shortcut (Paste): V");
 }
 
 void Clipboard::updatePreview()

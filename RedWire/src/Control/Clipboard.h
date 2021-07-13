@@ -24,7 +24,7 @@ namespace RedWire
 		bool writeTo(std::ostream& stream);
 		void readFrom(std::istream& stream);
 		
-		void doHelpUI() override;
+		void showHelpUI() override;
 
 	private:
 		void updatePreview();

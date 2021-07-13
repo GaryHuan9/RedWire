@@ -40,7 +40,12 @@ void WireAdder::showUI()
 	LineTool::showUI();
 }
 
-void WireAdder::doHelpUI()
+void WireAdder::showHelpUI()
 {
-	ImGui::Text("Basically the most important tool in RedWire\nTo use it, select / drag on the grid to create a single [Wire] cell, or a line of [Wire] cells.");
+	ImGui::Text("Use the WireAdder by dragging or clicking on the [Grid] to create a line of [Wires]");
+	ImGui::Text("All adjacent [Wires] are connected into a bundle, which powers and unpowers collectively");
+
+	ImGui::Dummy(ImVec2(0.0f, 10.0f));
+
+	ImGui::Text("Keyboard Shortcut: E");
 }

@@ -69,9 +69,14 @@ void RemoveTool::showUI()
 	ImGui::Text("Removing %u x %u", delta.x, delta.y);
 }
 
-void RemoveTool::doHelpUI()
+void RemoveTool::showHelpUI()
 {
-	ImGui::Text("This can remove a rectangular area of cells\nTo use it, click on two corner cells to remove a rectangular area.");
+	ImGui::Text("The RemoveTool removes a rectangular area of cells");
+	ImGui::Text("Click on two corners to remove all cells underneath");
+
+	ImGui::Dummy(ImVec2(0.0f, 10.0f));
+
+	ImGui::Text("Keyboard Shortcut: Q");
 }
 
 void RemoveTool::updatePreview()

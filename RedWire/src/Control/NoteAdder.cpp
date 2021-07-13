@@ -36,9 +36,12 @@ void NoteAdder::showUI()
 	LineTool::showUI();
 }
 
-void NoteAdder::doHelpUI()
+void NoteAdder::showHelpUI()
 {
-	ImGui::Text("The Note adder adds a single [Note] Cell into the circuit.\n\
-To use it, drag on the grid to place multiple [Note] cells.\n\
-To draw a straight line, press [SHIFT] then drag on grid.");
+	ImGui::Text("The NoteAdder adds [Note] cells onto the circuit, which are fully decorative cells that serve no actual functionalities");
+	ImGui::Text("To place down [Note] cells, either simply drag to draw freely, or hold down the Shift key to draw in straight lines");
+
+	ImGui::Dummy(ImVec2(0.0f, 10.0f));
+
+	ImGui::Text("Keyboard Shortcut: Number Key 3");
 }

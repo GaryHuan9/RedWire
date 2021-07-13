@@ -21,7 +21,7 @@ namespace RedWire
 		};
 
 		Mode mode = Mode::perSecond;
-		size_t magnitude = 1;
+		size_t magnitude = 10;
 
 	private:
 		void updateSingle();
