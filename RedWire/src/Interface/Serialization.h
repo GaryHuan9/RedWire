@@ -15,7 +15,7 @@ namespace RedWire
 		virtual void show() override;
 
 	private:
-		const std::filesystem::path savePath = "saves/";
+		const std::filesystem::path savePath = "saves";
 
 		enum class Mode
 		{

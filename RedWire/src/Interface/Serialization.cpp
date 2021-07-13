@@ -27,7 +27,7 @@ void Serialization::show()
 
 	int* ptr = reinterpret_cast<int*>(&mode);
 
-	static const char* names[] = { "Circuit","Clipboard" };
+	static const char* names[] = { "Circuit", "Clipboard" };
 	ImGui::SliderInt("Mode", ptr, 0, 1, names[*ptr]);
 
 	ImGui::InputText("Save Name", fileName.data(), fileName.size(), ImGuiInputTextFlags_AutoSelectAll);
@@ -47,6 +47,12 @@ void Serialization::show()
 				std::copy(target.cbegin(), target.cend(), fileName.begin());
 			}
 		}
+		else
+		{
+			bool created = fs::create_directory(savePath);
+			if (!created) message = "Failed to create path";
+		}
+
 		ImGui::EndCombo();
 	}
 
