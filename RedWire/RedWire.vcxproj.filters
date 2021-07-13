@@ -234,7 +234,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Assets\Resource\CommonResource.rc">
+    <ResourceCompile Include="Assets\Resource\Resource.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
