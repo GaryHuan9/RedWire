@@ -51,6 +51,11 @@ grid(std::make_unique<Grid>()), components(), clock()
 	components[typeid(GridView)] = std::make_unique<GridView>(*this);
 	components[typeid(Toolbox)] = std::make_unique<Toolbox>(*this);
 	components[typeid(UIManager)] = std::make_unique<UIManager>(*this);
+
+	sf::Image icon;
+	icon.loadFromFile("Assets/Logo/RedWireIcon.png");
+
+	setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
 
 void Application::start()
