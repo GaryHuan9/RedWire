@@ -4,6 +4,7 @@
 #include "../Control/InputManager.h"
 #include "../Core/Grid.h"
 
+#include <math.h>
 #include "imgui.h"
 
 using namespace RedWire;

@@ -127,7 +127,13 @@ void Area::findBorder(Int2& min, Int2& max) const
 
 template<typename T> void write(ostream& stream, const T& value)
 {
-	stream.write((const char*)&value, sizeof(T));
+	union
+	{
+		T value;
+		char bytes[sizeof(T)];
+	} fuse{ value };
+
+	stream.write(fuse.bytes, sizeof(T));
 }
 
 /// <summary>
@@ -158,8 +164,10 @@ void write(ostream& stream, const uint8_t& id, const uint32_t& length)
 
 void Area::writeTo(ostream& stream, const Int2& min, const Int2& max) const //Max is inclusive
 {
-	write<uint32_t>(stream, 0); //Write version
-	write(stream, max - min + Int2(1)); //Write size
+	write<uint32_t>(stream, 1); //Write version
+
+	write(stream, min);
+	write(stream, max);
 
 	for (int32_t y = min.y; y <= max.y; y++)
 	{
@@ -195,7 +203,9 @@ void Area::writeTo(ostream& stream, const Float2& viewCenter, const float& viewE
 	findBorder(min, max);
 	writeTo(stream, min, max);
 
-	write(stream, viewCenter - to_type2(float, min));
+	write<uint8_t>(stream, 1); //Write one to indicate that view data is stored
+
+	write(stream, viewCenter);
 	write(stream, viewExtend);
 }
 
@@ -237,10 +247,25 @@ void read(istream& stream, uint8_t& id, uint32_t& length)
 	}
 }
 
-Int2 Area::readFrom(istream& stream, Grid& grid, const Int2& min)
+Int2 read(std::istream& stream, Grid& grid, const Int2 const* destination)
 {
 	auto version = read<uint32_t>(stream);
-	auto size = read<Int2>(stream);
+
+	Int2 min;
+	Int2 size;
+
+	if (version == 0)
+	{
+		min = Int2(0);
+		size = read<Int2>(stream);
+	}
+	else
+	{
+		min = read<Int2>(stream);
+		size = read<Int2>(stream) - min + Int2(1);
+	}
+
+	Int2 offset = destination == nullptr ? min : *destination;
 
 	for (int32_t y = 0; y < size.y; y++)
 	{
@@ -249,7 +274,7 @@ Int2 Area::readFrom(istream& stream, Grid& grid, const Int2& min)
 
 		for (int32_t x = 0; x < size.x; x++)
 		{
-			Int2 position = min + Int2(x, y);
+			Int2 position = Int2(x, y) + offset;
 
 			if (length == 0) read(stream, laneId, length);
 			if (laneId != 0) grid.add(position, laneId);
@@ -261,11 +286,20 @@ Int2 Area::readFrom(istream& stream, Grid& grid, const Int2& min)
 	return size;
 }
 
+Int2 Area::readFrom(istream& stream, Grid& grid)
+{
+	return read(stream, grid, nullptr);
+}
+
+Int2 Area::readFrom(std::istream& stream, Grid& grid, const Int2& destination)
+{
+	return read(stream, grid, &destination);
+}
+
 unique_ptr<Grid> Area::readFrom(istream& stream)
 {
 	auto grid = make_unique<Grid>();
-	readFrom(stream, *grid, Int2());
-
+	readFrom(stream, *grid);
 	return grid;
 }
 
@@ -273,8 +307,11 @@ unique_ptr<Grid> Area::readFrom(istream& stream, Float2& viewCenter, float& view
 {
 	auto grid = readFrom(stream);
 
-	viewCenter = read<Float2>(stream);
-	viewExtend = read<float>(stream);
+	if (read<uint8_t>(stream) > 0)
+	{
+		viewCenter = read<Float2>(stream);
+		viewExtend = read<float>(stream);
+	}
 
 	return grid;
 }

@@ -134,7 +134,7 @@ std::unique_ptr<Grid> createGrid(std::istream& stream, Int2& size)
 	stream.seekg(0);
 
 	auto pointer = std::make_unique<Grid>();
-	size = Area::readFrom(stream, *pointer);
+	size = Area::readFrom(stream, *pointer, Int2(0));
 
 	return pointer;
 }
@@ -144,7 +144,7 @@ bool Clipboard::writeTo(std::ostream& stream)
 	if (copiedSize == Int2(0)) return false;
 
 	if (previewGrid == nullptr) previewGrid = createGrid(*buffer, copiedSize);
-	previewGrid->writeTo(stream, Float2(0.0f), 16.0f);
+	previewGrid->writeTo(stream, Int2(0), copiedSize - Int2(1));
 
 	return true;
 }
@@ -156,9 +156,9 @@ void Clipboard::readFrom(std::istream& stream)
 
 	std::copy
 	(
-		std::istream_iterator<char>(stream),
-		std::istream_iterator<char>(),
-		std::ostream_iterator<char>(*buffer)
+		std::istreambuf_iterator<char>(stream),
+		std::istreambuf_iterator<char>(),
+		std::ostreambuf_iterator<char>(*buffer)
 	);
 
 	previewGrid = createGrid(*buffer, copiedSize);

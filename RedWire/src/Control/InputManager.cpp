@@ -43,6 +43,9 @@ bool imGuiStoleInput()
 	return false;
 }
 
+static const float minExtend = 6.0f;
+static const float maxExtend = 84.0f;
+
 void InputManager::onEventPoll(const Event& event)
 {
 	if (imGuiStoleInput()) return;
@@ -51,9 +54,7 @@ void InputManager::onEventPoll(const Event& event)
 	{
 		case Event::MouseWheelScrolled:
 		{
-			static const float sensitivity = 1.5f;
-			static const float minExtend = 6.0f;
-			static const float maxExtend = 84.0f;
+			static const float sensitivity = 1.8f;
 
 			float oldExtend = viewExtend;
 
@@ -125,11 +126,13 @@ void InputManager::update()
 	middleMouse = middle;
 
 	//Keyboard view movement
-	static const float movementSpeed = 1.5f;
+	static const float movementSpeed = 1.8f;
 	auto& view = application.find<GridView>();
 
 	float speed = application.getDeltaTime().asSeconds() * movementSpeed;
+
 	viewCenter += getMovement() * speed * viewExtend;
+	viewExtend = std::clamp(viewExtend, minExtend, maxExtend);
 
 	Vector2u windowSize = application.getSize();
 	Int2 size = Int2(windowSize.x, windowSize.y);
