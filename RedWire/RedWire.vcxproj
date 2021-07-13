@@ -230,6 +230,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Logo\RedWireIcon.ico" />
+    <Image Include="Assets\Logo\RedWireIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Assets\Resource\Resource.rc" />
