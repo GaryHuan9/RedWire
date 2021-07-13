@@ -2,6 +2,7 @@
 #include "General.h"
 #include "../Application.h"
 #include "../Control/InputManager.h"
+#include "../Core/TickManager.h"
 #include "../Core/Grid.h"
 
 #include <math.h>
@@ -35,4 +36,20 @@ void General::show()
 		InputManager& inputManager = toolbox.application.find<InputManager>();
 		inputManager.viewCenter = extend + Float2(0.5f) + min.toType<float>();
 	}
+
+	showTickControls();
+}
+
+void General::showTickControls()
+{
+	TickManager& manager = toolbox.application.find<TickManager>();
+	static const char* names[] = { "Per Second", "Per Frame", "Manual" };
+
+	int* modePtr = reinterpret_cast<int*>(&manager.mode);
+	int* ratePtr = reinterpret_cast<int*>(&manager.magnitude);
+
+	ImGui::SliderInt("Tick Mode", modePtr, 0, 2, names[*modePtr]);
+
+	if (ImGui::InputInt("Tick Rate", ratePtr)) manager.magnitude = std::max(1ull, manager.magnitude);
+	if (manager.mode == TickManager::Mode::manual && ImGui::Button("Tick")) manager.updateGrid();
 }

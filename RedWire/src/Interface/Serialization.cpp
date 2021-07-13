@@ -19,13 +19,17 @@ Serialization::Serialization(Toolbox& toolbox) : Section(toolbox), fileName()
 
 void Serialization::show()
 {
-	if (!ImGui::CollapsingHeader("Serialization"))
+	if (!ImGui::CollapsingHeader("Serialization", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		message.clear();
 		return;
 	}
 
-	ImGui::SliderInt("Mode", &mode, 0, 1, mode == Mode::circuit ? "Circuit" : "Clipboard");
+	int* ptr = reinterpret_cast<int*>(&mode);
+
+	static const char* names[] = { "Circuit","Clipboard" };
+	ImGui::SliderInt("Mode", ptr, 0, 1, names[*ptr]);
+
 	ImGui::InputText("Save Name", fileName.data(), fileName.size(), ImGuiInputTextFlags_AutoSelectAll);
 
 	if (ImGui::BeginCombo("Saves", fileName.data()))

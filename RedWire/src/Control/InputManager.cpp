@@ -126,7 +126,7 @@ void InputManager::update()
 	middleMouse = middle;
 
 	//Keyboard view movement
-	static const float movementSpeed = 1.8f;
+	static const float movementSpeed = 1.5f;
 	auto& view = application.find<GridView>();
 
 	float speed = application.getDeltaTime().asSeconds() * movementSpeed;

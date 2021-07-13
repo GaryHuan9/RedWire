@@ -28,14 +28,16 @@ void Toolbox::update()
 	const ImVec2 size = viewport->WorkSize;
 
 	const static float margin = 36.0f;
-	const static Float2 percent(0.2f, 0.3f);
+	const static float percent = 0.2f;
 
 	const ImVec2 corner(origin.x + size.x - margin, origin.y + margin);
 
 	if (resetWindowOrientation)
 	{
-		ImGui::SetNextWindowPos(ImVec2(corner.x - size.x * percent.x, corner.y));
-		ImGui::SetNextWindowSize(ImVec2(size.x * percent.x, size.y * percent.x));
+		float width = size.x * percent;
+
+		ImGui::SetNextWindowPos(ImVec2(corner.x - width, corner.y));
+		ImGui::SetNextWindowSize(ImVec2(width, width));
 
 		resetWindowOrientation = false;
 	}

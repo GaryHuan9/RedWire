@@ -34,6 +34,8 @@ bool PortAdder::activationPredicate()
 
 void PortAdder::showUI()
 {
+	int* ptr = reinterpret_cast<int*>(&mode);
+
 	static const char* modeNames[] = { "Gate", "Join" };
-	ImGui::SliderInt("Mode", &mode, 0, 1, modeNames[mode]);
+	ImGui::SliderInt("Mode", ptr, 0, 1, modeNames[*ptr]);
 }

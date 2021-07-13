@@ -17,13 +17,13 @@ namespace RedWire
 	private:
 		const std::filesystem::path savePath = "saves/";
 
-		enum Mode
+		enum class Mode
 		{
 			circuit,
 			clipboard
 		};
 
-		int mode = Mode::circuit;
+		Mode mode = Mode::circuit;
 
 		//finalized message
 		std::string message;

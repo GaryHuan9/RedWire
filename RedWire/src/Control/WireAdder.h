@@ -18,13 +18,13 @@ namespace RedWire
 
 	private:
 
-		enum Mode
+		enum class Mode
 		{
 			unchanged,
 			unpowered,
 			powered
 		};
 
-		int mode = Mode::unchanged;
+		Mode mode = Mode::unchanged;
 	};
 }

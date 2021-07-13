@@ -168,6 +168,7 @@
     <ClCompile Include="src\Control\RemoveTool.cpp" />
     <ClCompile Include="src\Control\Tool.cpp" />
     <ClCompile Include="src\Control\WireAdder.cpp" />
+    <ClCompile Include="src\Core\TickManager.cpp" />
     <ClCompile Include="src\Interface\CurrentTool.cpp" />
     <ClCompile Include="src\Interface\General.cpp" />
     <ClCompile Include="src\Interface\GridView.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="src\Control\RemoveTool.h" />
     <ClInclude Include="src\Control\Tool.h" />
     <ClInclude Include="src\Control\WireAdder.h" />
+    <ClInclude Include="src\Core\TickManager.h" />
     <ClInclude Include="src\Interface\CurrentTool.h" />
     <ClInclude Include="src\Interface\General.h" />
     <ClInclude Include="src\Interface\GridView.h" />

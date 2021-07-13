@@ -11,5 +11,15 @@ namespace RedWire
 		General(Toolbox& toolbox);
 
 		virtual void show() override;
+
+	private:
+		void showTickControls();
+
+		enum TickMode
+		{
+			perSecond,
+			perFrame,
+			manual
+		};
 	};
-}
+} 

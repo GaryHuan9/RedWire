@@ -18,12 +18,12 @@ namespace RedWire
 
 	private:
 
-		enum Mode
+		enum class Mode
 		{
 			gate,
 			join
 		};
 
-		int mode = Mode::gate;
+		Mode mode = Mode::gate;
 	};
 }

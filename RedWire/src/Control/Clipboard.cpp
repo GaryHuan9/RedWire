@@ -19,7 +19,7 @@ Clipboard::Clipboard(InputManager& manager) : Tool(manager), buffer(std::make_un
 
 void Clipboard::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
-	int oldMode = mode;
+	Mode oldMode = mode;
 	Int2 oldCell = lastCell;
 
 	if (InputManager::isPressed(sf::Keyboard::C)) mode = Mode::copy;
@@ -99,8 +99,10 @@ bool Clipboard::activationPredicate()
 
 void Clipboard::showUI()
 {
+	int* ptr = reinterpret_cast<int*>(&mode);
 	static const char* names[] = { "Copy", "Cut", "Paste" };
-	if (ImGui::SliderInt("Mode", &mode, 0, 2, names[mode]))
+
+	if (ImGui::SliderInt("Mode", ptr, 0, 2, names[*ptr]))
 	{
 		isCopying = false;
 		updatePreview();

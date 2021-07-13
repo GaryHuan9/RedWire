@@ -27,14 +27,14 @@ namespace RedWire
 	private:
 		void updatePreview();
 
-		enum Mode
+		enum class Mode
 		{
 			copy,
 			cut,
 			paste
 		};
 
-		int mode = Mode::copy;
+		Mode mode = Mode::copy;
 
 		Int2 startCell;
 		Int2 lastCell;

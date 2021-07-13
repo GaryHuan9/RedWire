@@ -2,11 +2,13 @@
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
+#include "Application.h"
+#include "Core/Grid.h"
+
 #include "Control/InputManager.h"
 #include "Interface/GridView.h"
 #include "Interface/Toolbox.h"
-#include "Application.h"
-#include "Core/Grid.h"
+#include "Core/TickManager.h"
 
 #include <iostream>
 #include <memory>
@@ -44,6 +46,7 @@ Application::Application() : RenderWindow(VideoMode::getDesktopMode(), "Red Wire
 grid(std::make_unique<Grid>()), components(), clock()
 {
 	components[typeid(InputManager)] = std::make_unique<InputManager>(*this);
+	components[typeid(TickManager)] = std::make_unique<TickManager>(*this);
 	components[typeid(GridView)] = std::make_unique<GridView>(*this);
 	components[typeid(Toolbox)] = std::make_unique<Toolbox>(*this);
 }
@@ -65,6 +68,8 @@ void Application::start()
 	style.FrameBorderSize = 1;
 	style.TabRounding = 0.0f;
 	style.ScrollbarRounding = 0.0f;
+	style.ItemInnerSpacing.x = 10.0f;
+	style.WindowPadding = ImVec2(10.0f, 5.0f);
 
 	ImGui::SFML::UpdateFontTexture();
 }
@@ -101,14 +106,13 @@ void Application::dispatchEvents()
 
 void Application::update()
 {
-	Time lastTime = totalTime;
+	const Time lastTime = totalTime;
 
 	totalTime = clock.getElapsedTime();
 	deltaTime = totalTime - lastTime;
 
 	ImGui::SFML::Update(*this, deltaTime);
 
-	/*if (Keyboard::isKeyPressed(Keyboard::Space))*/ grid->update();
 	for (auto& component : components) component.second->update();
 
 	//ImGui::ShowDemoWindow();

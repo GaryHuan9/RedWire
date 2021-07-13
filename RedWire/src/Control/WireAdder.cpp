@@ -32,8 +32,10 @@ void WireAdder::setCell(const Int2& cell)
 
 void WireAdder::showUI()
 {
+	int* ptr = reinterpret_cast<int*>(&mode);
+
 	static const char* modeNames[] = { "Unchanged", "Unpowered", "Powered" };
-	ImGui::SliderInt("Mode", &mode, 0, 2, modeNames[mode]);
+	ImGui::SliderInt("Mode", ptr, 0, 2, modeNames[*ptr]);
 
 	LineTool::showUI();
 }
