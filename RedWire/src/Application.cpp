@@ -9,6 +9,7 @@
 #include "Interface/GridView.h"
 #include "Interface/Toolbox.h"
 #include "Core/TickManager.h"
+#include "Control/UIManager.h"
 
 #include <iostream>
 #include <memory>
@@ -49,6 +50,7 @@ grid(std::make_unique<Grid>()), components(), clock()
 	components[typeid(TickManager)] = std::make_unique<TickManager>(*this);
 	components[typeid(GridView)] = std::make_unique<GridView>(*this);
 	components[typeid(Toolbox)] = std::make_unique<Toolbox>(*this);
+	components[typeid(UIManager)] = std::make_unique<UIManager>(*this);
 }
 
 void Application::start()
@@ -115,6 +117,5 @@ void Application::update()
 
 	for (auto& component : components) component.second->update();
 
-	//ImGui::ShowDemoWindow();
 	ImGui::SFML::Render(*this);
 }

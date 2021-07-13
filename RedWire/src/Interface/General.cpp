@@ -4,6 +4,8 @@
 #include "../Control/InputManager.h"
 #include "../Core/TickManager.h"
 #include "../Core/Grid.h"
+#include "../Control/UIManager.h"
+#include "HelpWindow.h"
 
 #include <math.h>
 #include "imgui.h"
@@ -37,7 +39,16 @@ void General::show()
 		inputManager.viewCenter = extend + Float2(0.5f) + min.toType<float>();
 	}
 
+	ImGui::SameLine();
+	
+	if (ImGui::Button("Help"))
+	{
+		UIManager& uiManager = toolbox.application.find<UIManager>();
+		uiManager.find<HelpWindow>().toggleActive();
+	}
+
 	showTickControls();
+
 }
 
 void General::showTickControls()
