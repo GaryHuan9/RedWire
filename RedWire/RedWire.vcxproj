@@ -191,6 +191,7 @@
     <ClCompile Include="src\Control\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Assets\Resource\resource.h" />
     <ClInclude Include="src\Interface\HelpWindow.h" />
     <ClInclude Include="src\Control\LineTool.h" />
     <ClInclude Include="src\Control\NoteAdder.h" />
@@ -226,6 +227,12 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\JetBrainsMono\JetBrainsMono-Bold.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Logo\RedWireIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Assets\Resource\CommonResource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
