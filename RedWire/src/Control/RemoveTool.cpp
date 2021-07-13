@@ -69,9 +69,9 @@ void RemoveTool::showUI()
 	ImGui::Text("Removing %u x %u", delta.x, delta.y);
 }
 
-const char* RedWire::RemoveTool::getDescription()
+void RemoveTool::doHelpUI()
 {
-	return "This can remove a rectangular area of cells;\nTo use it, click on two corner cells to remove a rectangular area.";
+	ImGui::Text("This can remove a rectangular area of cells;\nTo use it, click on two corner cells to remove a rectangular area.");
 }
 
 void RemoveTool::updatePreview()

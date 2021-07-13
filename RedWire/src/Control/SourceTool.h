@@ -15,7 +15,7 @@ namespace RedWire
 
 		bool activationPredicate() override;
 
-		const char* getDescription() override;
+		void doHelpUI() override;
 
 	private:
 		sf::Time pressedTime;

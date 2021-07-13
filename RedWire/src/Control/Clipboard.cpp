@@ -166,11 +166,19 @@ void Clipboard::readFrom(std::istream& stream)
 	previewGrid = createGrid(*buffer, copiedSize);
 }
 
-const char* RedWire::Clipboard::getDescription()
+void Clipboard::doHelpUI()
 {
-	return "This could [Copy] | [Cut] | [Paste] a rectangular area of cells;\n\
-To use [Copy] or [Cut], select the mode and select two corner cells to [Copy] or [Cut];\n\
-To use [Paste], select the mode and align the preview then click on the cell to [Paste]";
+	ImGui::Text("This could");
+
+	ImGui::SameLine(); ImGui::Button("Copy");
+	ImGui::SameLine(); ImGui::Text("|");
+	ImGui::SameLine(); ImGui::Button("Cut");
+	ImGui::SameLine(); ImGui::Text("|");
+	ImGui::SameLine(); ImGui::Button("Paste");
+	ImGui::SameLine(); ImGui::Text("a rectangular area of cells; \n");
+
+	ImGui::Text("To use [Copy] or [Cut], select the mode and select two corner cells to [Copy] or [Cut];\n\
+To use [Paste], select the mode and align the preview then click on the cell to [Paste]");
 }
 
 void Clipboard::updatePreview()

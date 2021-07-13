@@ -36,7 +36,7 @@ void NoteAdder::showUI()
 	LineTool::showUI();
 }
 
-const char* NoteAdder::getDescription()
+void NoteAdder::doHelpUI()
 {
-	return "The Note adder adds a single \"Note\" Cell into the circuit.";
+	ImGui::Text("The Note adder adds a single [Note] Cell into the circuit.");
 }

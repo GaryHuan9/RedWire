@@ -4,6 +4,7 @@
 #include "../Application.h"
 #include "../Type2.h"
 #include "../Core/Grid.h"
+#include "imgui.h"
 #include <SFML/System.hpp>
 
 using namespace RedWire;
@@ -31,8 +32,8 @@ bool SourceTool::activationPredicate()
 	return InputManager::isPressed(sf::Mouse::Right);
 }
 
-const char* SourceTool::getDescription()
+void SourceTool::doHelpUI()
 {
-	return "This controls the source toggling on wire cells, you can toggle on or off a single bundle of wire cell(s);\n\
-To use it, click on any wire cell to toggle their powered state";
+	ImGui::Text("This controls the source toggling on wire cells, you can toggle on or off a single bundle of wire cell(s);\n\
+To use it, click on any wire cell to toggle their powered state");
 }

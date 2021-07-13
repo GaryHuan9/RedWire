@@ -28,13 +28,23 @@ The Toolbox consists of multiple [Sections], as you can tell, you are already fa
 		{
 			ImGui::Text((std::string("There are currently ") + std::to_string(inputManager.tools.size()) + " tools in redwire, each of them have their unique use case\n\n").c_str());
 
-			for (auto& item : inputManager.tools)
+			if (ImGui::BeginTabBar("Tools Tab"))
 			{
-				if (ImGui::CollapsingHeader((std::string(item.second->getName()).c_str())))
+				for (auto& item : inputManager.tools)
 				{
-					ImGui::Text(std::string(item.second->getDescription()).c_str());
+					if (ImGui::BeginTabItem((std::string(item.second->getName()).c_str())))
+					{
+						ImGui::PushID(&item);
+						item.second->doHelpUI();
+						ImGui::PopID();
+						ImGui::EndTabItem();
+					}
 				}
+
+				ImGui::EndTabBar();
 			}
+
+			
 		}
 
 		ImGui::End();

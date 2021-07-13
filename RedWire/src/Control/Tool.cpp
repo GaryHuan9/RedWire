@@ -2,6 +2,7 @@
 #include "InputManager.h"
 #include "../Application.h"
 #include "../Interface/GridView.h"
+#include "imgui.h"
 
 #include <cstring>
 
@@ -19,9 +20,9 @@ void Tool::onDisable()
 void Tool::showUI()
 {}
 
-const char* Tool::getDescription()
+void RedWire::Tool::doHelpUI()
 {
-	return "No description for this tool yet.";
+	ImGui::Text("No description yet.");
 }
 
 const char* Tool::getName()

@@ -16,7 +16,7 @@ namespace RedWire
 
 		virtual void showUI() override;
 		
-		const char* getDescription() override;
+		void doHelpUI() override;
 
 	private:
 		bool drawLines{};
