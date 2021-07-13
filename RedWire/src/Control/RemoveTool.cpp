@@ -69,6 +69,11 @@ void RemoveTool::showUI()
 	ImGui::Text("Removing %u x %u", delta.x, delta.y);
 }
 
+const char* RedWire::RemoveTool::getDescription()
+{
+	return "This can remove a rectangular area of cells;\nTo use it, click on two corner cells to remove a rectangular area.";
+}
+
 void RemoveTool::updatePreview()
 {
 	GridView& view = manager.application.find<GridView>();

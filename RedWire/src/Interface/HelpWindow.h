@@ -12,6 +12,8 @@ namespace RedWire
 
 	protected:
 		void doUI() override;
+
+	private:
 	};
 }
 

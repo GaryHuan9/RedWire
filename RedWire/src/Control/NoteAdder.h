@@ -15,6 +15,8 @@ namespace RedWire
 		void setCell(const Int2& cell) override;
 
 		virtual void showUI() override;
+		
+		const char* getDescription() override;
 
 	private:
 		bool drawLines{};

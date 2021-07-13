@@ -36,7 +36,9 @@ namespace RedWire
 		/// </summary>
 		virtual void showUI();
 
-		const char*& getName();
+		virtual const char* getDescription();
+
+		const char* getName();
 
 	protected:
 

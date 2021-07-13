@@ -23,6 +23,8 @@ namespace RedWire
 
 		bool writeTo(std::ostream& stream);
 		void readFrom(std::istream& stream);
+		
+		const char* getDescription() override;
 
 	private:
 		void updatePreview();

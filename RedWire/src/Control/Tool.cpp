@@ -19,8 +19,13 @@ void Tool::onDisable()
 void Tool::showUI()
 {}
 
-const char*& Tool::getName()
+const char* Tool::getDescription()
 {
-	const char* name = std::strrchr(typeid(*this).name(), ':') + 1;
-	return name;
+	return "No description for this tool yet.";
+}
+
+const char* Tool::getName()
+{
+	//const char* name = ;
+	return std::strrchr(typeid(*this).name(), ':') + 1;
 }

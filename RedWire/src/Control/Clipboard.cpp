@@ -166,6 +166,13 @@ void Clipboard::readFrom(std::istream& stream)
 	previewGrid = createGrid(*buffer, copiedSize);
 }
 
+const char* RedWire::Clipboard::getDescription()
+{
+	return "This could [Copy] | [Cut] | [Paste] a rectangular area of cells;\n\
+To use [Copy] or [Cut], select the mode and select two corner cells to [Copy] or [Cut];\n\
+To use [Paste], select the mode and align the preview then click on the cell to [Paste]";
+}
+
 void Clipboard::updatePreview()
 {
 	GridView& view = manager.application.find<GridView>();

@@ -35,3 +35,8 @@ void NoteAdder::showUI()
 	ImGui::Checkbox("Draw Lines", &drawLines);
 	LineTool::showUI();
 }
+
+const char* NoteAdder::getDescription()
+{
+	return "The Note adder adds a single \"Note\" Cell into the circuit.";
+}

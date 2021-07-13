@@ -1,5 +1,11 @@
-#include "HelpWindow.h"
 #include "imgui.h"
+
+#include "HelpWindow.h"
+#include "../Application.h"
+#include "../Control/InputManager.h"
+#include "../Control/Tool.h"
+
+#include <string>
 
 using namespace RedWire;
 
@@ -10,7 +16,27 @@ void HelpWindow::doUI()
 {
 	if (ImGui::Begin("Help"))
 	{
-		ImGui::Text("Help window here...");
+		//NOTE: this is not final! I suck at describing
+		InputManager& inputManager = application.find<InputManager>();
+
+		ImGui::Text("RedWire is a 2D logic circuit builder made by MMXXX-VII and CXRedix\n\n\
+use [Middle mouse button] to pan around\n\
+In order to make a circuit, we place [Cells] using [Tools] inside the [Toolbox] into the grid shown in front of you\n\
+The Toolbox consists of multiple [Sections], as you can tell, you are already familiary with it since how come you came here :)\n\n"); // except you are reading the code lol *wink wink*
+
+		if (ImGui::CollapsingHeader("Tools"))
+		{
+			ImGui::Text((std::string("There are currently ") + std::to_string(inputManager.tools.size()) + " tools in redwire, each of them have their unique use case\n\n").c_str());
+
+			for (auto& item : inputManager.tools)
+			{
+				if (ImGui::CollapsingHeader((std::string(item.second->getName()).c_str())))
+				{
+					ImGui::Text(std::string(item.second->getDescription()).c_str());
+				}
+			}
+		}
+
 		ImGui::End();
 	}
 }

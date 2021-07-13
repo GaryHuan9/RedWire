@@ -18,6 +18,8 @@ namespace RedWire
 
 		virtual void showUI() override;
 
+		const char* getDescription() override;
+
 	private:
 
 		void updatePreview();
