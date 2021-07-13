@@ -38,5 +38,7 @@ void NoteAdder::showUI()
 
 void NoteAdder::doHelpUI()
 {
-	ImGui::Text("The Note adder adds a single [Note] Cell into the circuit.");
+	ImGui::Text("The Note adder adds a single [Note] Cell into the circuit.\n\
+To use it, drag on the grid to place multiple [Note] cells.\n\
+To draw a straight line, press [SHIFT] then drag on grid.");
 }

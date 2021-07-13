@@ -39,3 +39,8 @@ void PortAdder::showUI()
 	static const char* modeNames[] = { "Gate", "Join" };
 	ImGui::SliderInt("Mode", ptr, 0, 1, modeNames[*ptr]);
 }
+
+void PortAdder::doHelpUI()
+{
+	ImGui::Text("This adds a single [Port] cell into the circuit.\nTo use it, select on the grid to place a [Port] cell.");
+}

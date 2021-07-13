@@ -39,3 +39,8 @@ void WireAdder::showUI()
 
 	LineTool::showUI();
 }
+
+void WireAdder::doHelpUI()
+{
+	ImGui::Text("Basically the most important tool in RedWire\nTo use it, select / drag on the grid to create a single [Wire] cell, or a line of [Wire] cells.");
+}

@@ -16,6 +16,8 @@ namespace RedWire
 
 		virtual void showUI() override;
 
+		void doHelpUI() override;
+
 	private:
 
 		enum class Mode

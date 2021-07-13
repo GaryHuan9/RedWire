@@ -34,6 +34,6 @@ bool SourceTool::activationPredicate()
 
 void SourceTool::doHelpUI()
 {
-	ImGui::Text("This controls the source toggling on wire cells, you can toggle on or off a single bundle of wire cell(s);\n\
+	ImGui::Text("This controls the source toggling on wire cells, you can toggle on or off a single bundle of wire cell(s)\n\
 To use it, click on any wire cell to toggle their powered state");
 }

@@ -175,9 +175,9 @@ void Clipboard::doHelpUI()
 	ImGui::SameLine(); ImGui::Button("Cut");
 	ImGui::SameLine(); ImGui::Text("|");
 	ImGui::SameLine(); ImGui::Button("Paste");
-	ImGui::SameLine(); ImGui::Text("a rectangular area of cells; \n");
+	ImGui::SameLine(); ImGui::Text("a rectangular area of cells\n");
 
-	ImGui::Text("To use [Copy] or [Cut], select the mode and select two corner cells to [Copy] or [Cut];\n\
+	ImGui::Text("To use [Copy] or [Cut], select the mode and select two corner cells to [Copy] or [Cut]\n\
 To use [Paste], select the mode and align the preview then click on the cell to [Paste]");
 }
 

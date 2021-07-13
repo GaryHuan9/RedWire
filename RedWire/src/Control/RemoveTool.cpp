@@ -71,7 +71,7 @@ void RemoveTool::showUI()
 
 void RemoveTool::doHelpUI()
 {
-	ImGui::Text("This can remove a rectangular area of cells;\nTo use it, click on two corner cells to remove a rectangular area.");
+	ImGui::Text("This can remove a rectangular area of cells\nTo use it, click on two corner cells to remove a rectangular area.");
 }
 
 void RemoveTool::updatePreview()
