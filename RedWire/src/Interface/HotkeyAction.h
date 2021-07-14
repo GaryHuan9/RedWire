@@ -16,5 +16,3 @@ namespace RedWire
 		bool initialActivate = false;
 	};
 }
-
-
