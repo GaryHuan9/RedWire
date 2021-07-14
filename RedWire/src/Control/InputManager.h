@@ -9,6 +9,7 @@
 #include "Tool.h"
 #include "../Component.h"
 #include "../Type2.h"
+#include "../Interface/HotkeyAction.h"
 
 namespace RedWire
 {
@@ -40,6 +41,8 @@ namespace RedWire
 
 		bool leftMouse{};
 		bool middleMouse{};
+
+		std::vector<std::unique_ptr<HotkeyAction>> hotkeyActions;
 
 		Tool* currentTool{ 0 };
 		Float2 pressedPosition;

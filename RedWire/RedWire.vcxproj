@@ -157,6 +157,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Interface\SaveHotkeyAction.cpp" />
+    <ClCompile Include="src\Interface\HotkeyAction.cpp" />
     <ClCompile Include="src\Interface\CreditWindow.cpp" />
     <ClCompile Include="src\Interface\HelpWindow.cpp" />
     <ClCompile Include="imgui-SFML.cpp" />
@@ -197,6 +199,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assets\Resource\resource.h" />
+    <ClInclude Include="src\Interface\SaveHotkeyAction.h" />
+    <ClInclude Include="src\Interface\HotkeyAction.h" />
     <ClInclude Include="src\Interface\CreditWindow.h" />
     <ClInclude Include="src\Interface\HelpWindow.h" />
     <ClInclude Include="src\Control\LineTool.h" />

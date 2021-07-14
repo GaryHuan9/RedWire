@@ -10,6 +10,8 @@
 #include "NoteAdder.h"
 #include "Clipboard.h"
 
+#include "../Interface/SaveHotkeyAction.h"
+
 #include "imgui.h"
 
 using namespace RedWire;
@@ -17,12 +19,22 @@ using namespace sf;
 
 InputManager::InputManager(Application& application) : Component(application), viewCenter(), viewExtend(20.0f), tools()
 {
-	tools[typeid(SourceTool)] = std::make_unique<SourceTool>(*this);
-	tools[typeid(RemoveTool)] = std::make_unique<RemoveTool>(*this);
-	tools[typeid(WireAdder)] = std::make_unique<WireAdder>(*this);
-	tools[typeid(PortAdder)] = std::make_unique<PortAdder>(*this);
-	tools[typeid(Clipboard)] = std::make_unique<Clipboard>(*this);
-	tools[typeid(NoteAdder)] = std::make_unique<NoteAdder>(*this);
+#define make_tool(type) tools[typeid(type)] = std::make_unique<type>(*this)
+
+	make_tool(SourceTool);
+	make_tool(RemoveTool);
+	make_tool(WireAdder);
+	make_tool(PortAdder);
+	make_tool(Clipboard);
+	make_tool(NoteAdder);
+
+#undef make_tool
+
+#define make_hotkey(type) hotkeyActions.push_back(std::make_unique<type>(application))
+
+	make_hotkey(SaveHotkeyAction);
+
+#undef make_hotkey
 
 	currentTool = tools[typeid(SourceTool)].get();
 }
@@ -32,7 +44,6 @@ bool imGuiStoleInput()
 	ImGuiIO& io = ImGui::GetIO();
 
 	//not the best solution but it works
-	
 	if (io.WantCaptureMouse && ImGui::IsAnyMouseDown()) return true;
 	if (io.WantCaptureKeyboard) return true;
 
@@ -140,6 +151,14 @@ void InputManager::update()
 	Float2 extend = size.toType<float>() / logSize * viewExtend;
 
 	view.setView(viewCenter - extend, viewCenter + extend);
+
+	//Hotkey execution, we don't put this in onEventPoll because if we focus on any ImGUI window, all kinds of hotkeys can't execute
+	for (auto& action : hotkeyActions)
+	{
+		if (!action->checkActivation()) continue;
+
+		action->doAction();
+	}
 }
 
 void InputManager::setCurrentTool(Tool* tool)
