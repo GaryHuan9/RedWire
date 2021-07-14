@@ -6,6 +6,7 @@
 #include "../Core/Grid.h"
 #include "../Control/UIManager.h"
 #include "HelpWindow.h"
+#include "CreditWindow.h"
 
 #include <math.h>
 #include "imgui.h"
@@ -45,6 +46,13 @@ void General::show()
 	{
 		UIManager& uiManager = toolbox.application.find<UIManager>();
 		uiManager.find<HelpWindow>().toggleActive();
+	}
+	
+
+	if (ImGui::Button("Credits"))
+	{
+		UIManager& uiManager = toolbox.application.find<UIManager>();
+		uiManager.find<CreditWindow>().toggleActive();
 	}
 
 	showTickControls();
