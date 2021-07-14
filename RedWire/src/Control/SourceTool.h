@@ -1,9 +1,10 @@
 #pragma once
 
+#include <SFML/System.hpp>
+
 #include "../Type2.h"
 #include "Tool.h"
 #include "InputManager.h"
-#include <SFML/System.hpp>
 
 namespace RedWire
 {

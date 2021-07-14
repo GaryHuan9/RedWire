@@ -7,7 +7,6 @@
 
 #include "imgui.h"
 #include "imgui_internal.h"
-#include <filesystem>
 #include <fstream>
 
 using namespace RedWire;

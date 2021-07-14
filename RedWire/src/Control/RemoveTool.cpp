@@ -1,9 +1,6 @@
 #include "RemoveTool.h"
-#include "Tool.h"
-#include "InputManager.h"
 #include "../Application.h"
 #include "../Interface/GridView.h"
-#include "../Type2.h"
 #include "../Core/Grid.h"
 
 #include <iostream>

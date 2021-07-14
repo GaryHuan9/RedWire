@@ -1,7 +1,5 @@
 #pragma once
 
-#include <SFML/System.hpp>
-#include <SFML/Graphics.hpp>
 #include "Application.h"
 #include "Core/Grid.h"
 
@@ -12,7 +10,6 @@
 #include "Control/UIManager.h"
 
 #include <iostream>
-#include <memory>
 
 #include "imgui.h"
 #include "imgui-SFML.h"
@@ -52,11 +49,6 @@ grid(std::make_unique<Grid>()), components(), clock()
 	make_component(TickManager);
 	make_component(GridView);
 	make_component(UIManager);
-
-	/*components[typeid(InputManager)] = std::make_unique<InputManager>(*this);
-	components[typeid(TickManager)] = std::make_unique<TickManager>(*this);
-	components[typeid(GridView)] = std::make_unique<GridView>(*this);
-	components[typeid(UIManager)] = std::make_unique<UIManager>(*this);*/
 
 #undef make_component
 

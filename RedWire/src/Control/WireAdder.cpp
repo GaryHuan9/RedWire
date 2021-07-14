@@ -1,8 +1,5 @@
-#include "InputManager.h"
 #include "WireAdder.h"
 #include "Tool.h"
-#include "LineTool.h"
-#include "../Type2.h"
 #include "../Core/Grid.h"
 
 #include <iostream>

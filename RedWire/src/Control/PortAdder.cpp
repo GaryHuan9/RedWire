@@ -1,7 +1,5 @@
 #include "PortAdder.h"
-#include "Tool.h"
 #include "InputManager.h"
-#include "../Type2.h"
 #include "../Core/Grid.h"
 
 #include "imgui.h"

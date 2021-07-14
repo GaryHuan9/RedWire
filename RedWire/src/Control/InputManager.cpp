@@ -1,12 +1,6 @@
-#include <unordered_map>
-#include <typeindex>
 #include <algorithm>
-#include <string>
-#include <memory>
 #include <math.h>
-#include <array>
 #include "../Application.h"
-#include "../Component.h"
 #include "../Interface/GridView.h"
 #include "InputManager.h"
 #include "SourceTool.h"

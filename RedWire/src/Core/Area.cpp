@@ -1,13 +1,9 @@
-#include "../Type2.h"
 #include "Area.h"
 #include "Cell.h"
 #include "Grid.h"
 
-#include <unordered_map>
 #include <functional>
-#include <fstream>
 #include <cstdint>
-#include <memory>
 #include <limits>
 #include <vector>
 
@@ -246,8 +242,9 @@ void read(istream& stream, uint8_t& id, uint32_t& length)
 		}
 	}
 }
-
-Int2 read(std::istream& stream, Grid& grid, const Int2 const* destination)
+// const will qualify left keyword unless the const is the first, thus const Int2 const* is redundant
+// I think u meant const Int2* const or Int2 const * const
+Int2 read(std::istream& stream, Grid& grid, const Int2* const destination)
 {
 	auto version = read<uint32_t>(stream);
 

@@ -1,11 +1,7 @@
 #include "SourceTool.h"
-#include "Tool.h"
-#include "InputManager.h"
 #include "../Application.h"
-#include "../Type2.h"
 #include "../Core/Grid.h"
 #include "imgui.h"
-#include <SFML/System.hpp>
 
 using namespace RedWire;
 
