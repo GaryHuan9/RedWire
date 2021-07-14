@@ -48,11 +48,20 @@ void General::show()
 		uiManager.find<HelpWindow>().toggleActive();
 	}
 	
+	// = New Line = //
 
 	if (ImGui::Button("Credits"))
 	{
 		UIManager& uiManager = toolbox.application.find<UIManager>();
 		uiManager.find<CreditWindow>().toggleActive();
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("New"))
+	{
+		toolbox.application.grid = std::make_unique<Grid>();
+		//check for changes, if so, ask for
 	}
 
 	showTickControls();

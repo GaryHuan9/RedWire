@@ -18,9 +18,16 @@ void CreditWindow::showUI()
 
 		ImGui::Dummy(ImVec2(0.f, 10.f));
 
-		ImGui::Text("Used Libraries:");
-		ImGui::Text("UI: ImGUI");
-		ImGui::Text("Underlying core: SFML");
+		if (ImGui::CollapsingHeader("Assets"))
+		{
+			ImGui::Text("RedWire Icon: CXRedix");
+			ImGui::Text("Font: Jetbrains Mono");
+		}
+		if (ImGui::CollapsingHeader("Libraries"))
+		{
+			ImGui::Text("UI core: ImGUI");
+			ImGui::Text("Underlying core: SFML");
+		}
 	}
 
 	setActive(active);

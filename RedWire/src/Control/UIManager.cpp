@@ -19,7 +19,6 @@ UIManager::UIManager(Application& application) : Component(application), windows
 #undef make_window // undefine macro make_window to make it private
 }
 
-
 void UIManager::update()
 {
 	for (auto& window : windows)
