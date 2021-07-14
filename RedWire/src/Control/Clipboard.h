@@ -3,8 +3,9 @@
 #include "Tool.h"
 #include "InputManager.h"
 #include "../Type2.h"
-#include "../Core/Grid.h"
-#include <sstream>
+#include "../Core/Region.h"
+#include <istream>
+#include <ostream>
 #include <memory>
 
 namespace RedWire
@@ -23,7 +24,7 @@ namespace RedWire
 
 		bool writeTo(std::ostream& stream);
 		void readFrom(std::istream& stream);
-		
+
 		void showHelpUI() override;
 
 	private:
@@ -40,11 +41,8 @@ namespace RedWire
 
 		Int2 startCell;
 		Int2 lastCell;
-		Int2 copiedSize;
 
 		bool isCopying{};
-
-		std::unique_ptr<Grid> previewGrid;
-		std::unique_ptr<std::stringstream> buffer; //Because this stream could potentially be very larger, we put it on the heap
+		Region buffer;
 	};
 }

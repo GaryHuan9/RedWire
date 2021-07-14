@@ -13,6 +13,7 @@ namespace RedWire
 	struct Cell;
 	struct Wire;
 	struct Gate;
+	struct Region;
 
 	struct Grid : Area
 	{
@@ -28,14 +29,19 @@ namespace RedWire
 
 		void remove(const Int2& position);
 
-		void add(const Int2& position, const uint8_t& id);
 		void setSource(const Int2& position, const bool& isSource);
 		bool getSource(const Int2& position);
 
 		void update();
 
-	private:
+	protected:
 
+		friend class Region;
+
+		uint8_t getId(const Int2& position) const override;
+		void setId(const Int2& position, const uint8_t& id) override;
+
+	private:
 		friend void Join::refresh(Grid& grid, const Int2& position);
 
 		struct SearchPack

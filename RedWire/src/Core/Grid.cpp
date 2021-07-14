@@ -161,7 +161,31 @@ void Grid::remove(const Int2& position)
 	else if (dynamic_cast<Note*>(previous) != nullptr) removeNote(position);
 }
 
-void Grid::add(const Int2& position, const uint8_t& id)
+void Grid::setSource(const Int2& position, const bool& isSource)
+{
+	Wire* wire = dynamic_cast<Wire*>(get(position));
+	if (wire != nullptr) wire->isSource = isSource;
+}
+
+bool Grid::getSource(const Int2& position)
+{
+	Wire* wire = dynamic_cast<Wire*>(get(position));
+	return wire != nullptr && wire->isSource;
+}
+
+void Grid::update()
+{
+	for (shared_ptr<Gate>& gate : gates) gate->update();
+	for (shared_ptr<Wire>& wire : wires) wire->update();
+}
+
+uint8_t Grid::getId(const Int2& position) const
+{
+	shared_ptr<Cell> ptr = getPtr(position);
+	return ptr ? ptr->getCellId() : 0u;
+}
+
+void Grid::setId(const Int2& position, const uint8_t& id)
 {
 	switch (id)
 	{
@@ -180,24 +204,6 @@ void Grid::add(const Int2& position, const uint8_t& id)
 	if (wire == nullptr) throw exception("Invalid");
 
 	wire->process(id);
-}
-
-void Grid::setSource(const Int2& position, const bool& isSource)
-{
-	Wire* wire = dynamic_cast<Wire*>(get(position));
-	if (wire != nullptr) wire->isSource = isSource;
-}
-
-bool Grid::getSource(const Int2& position)
-{
-	Wire* wire = dynamic_cast<Wire*>(get(position));
-	return wire != nullptr && wire->isSource;
-}
-
-void Grid::update()
-{
-	for (shared_ptr<Gate>& gate : gates) gate->update();
-	for (shared_ptr<Wire>& wire : wires) wire->update();
 }
 
 void Grid::removeWire(const Int2& position)

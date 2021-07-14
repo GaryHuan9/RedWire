@@ -1,9 +1,11 @@
 #include "Area.h"
 #include "Cell.h"
 #include "Grid.h"
+#include "IdField.h"
 
-#include <functional>
 #include <cstdint>
+#include <istream>
+#include <ostream>
 #include <limits>
 #include <vector>
 
@@ -132,72 +134,13 @@ template<typename T> void write(ostream& stream, const T& value)
 	stream.write(fuse.bytes, sizeof(T));
 }
 
-/// <summary>
-/// Variable length encode a lane id and lane length pair.
-/// </summary>
-void write(ostream& stream, const uint8_t& id, const uint32_t& length)
-{
-	uint8_t first = id & 0b1111u;
-	uint32_t remain = length >> 3;
-	first |= (uint8_t)(length << 4);
-
-	static const uint32_t Mask = 0b0111'1111u;
-
-	if (remain > 0)
-	{
-		write(stream, (uint8_t)(first | ~Mask));
-
-		while (remain > Mask)
-		{
-			write(stream, (uint8_t)(remain | ~Mask));
-			remain >>= 7;
-		}
-
-		write(stream, (uint8_t)remain);
-	}
-	else write(stream, (uint8_t)(first & Mask));
-}
-
-void Area::writeTo(ostream& stream, const Int2& min, const Int2& max) const //Max is inclusive
-{
-	write<uint32_t>(stream, 1); //Write version
-
-	write(stream, min);
-	write(stream, max);
-
-	for (int32_t y = min.y; y <= max.y; y++)
-	{
-		uint8_t laneId{ 0u };
-		uint32_t length{ 0u };
-
-		for (int32_t x = min.x; x <= max.x; x++)
-		{
-			Cell* const cell = get(Int2(x, y));
-			uint8_t id = cell == nullptr ? 0u : cell->getCellId();
-
-			if (laneId == id)
-			{
-				++length;
-				continue;
-			}
-
-			if (length > 0) write(stream, laneId, length);
-
-			laneId = id;
-			length = 1;
-		}
-
-		write(stream, laneId, length);
-	}
-}
-
 void Area::writeTo(ostream& stream, const Float2& viewCenter, const float& viewExtend) const
 {
 	Int2 min;
 	Int2 max;
 
 	findBorder(min, max);
-	writeTo(stream, min, max);
+	IdField::writeTo(stream, min, max);
 
 	write<uint8_t>(stream, 1); //Write one to indicate that view data is stored
 
@@ -217,86 +160,10 @@ template<typename T> T read(istream& stream)
 	return fuse.value;
 }
 
-/// <summary>
-/// Variable length decode a lane id and lane length pair.
-/// </summary>
-void read(istream& stream, uint8_t& id, uint32_t& length)
-{
-	uint8_t first = read<uint8_t>(stream);
-
-	id = (uint8_t)(first & 0b1111u);
-	length = (uint32_t)(first >> 4);
-
-	static const uint32_t Mask = 0b0111'1111u;
-
-	if (first > Mask)
-	{
-		length &= 0b0111u;
-
-		for (uint32_t i = 3;; i += 7)
-		{
-			uint8_t part = read<uint8_t>(stream);
-			length |= (uint32_t)(part & Mask) << i;
-
-			if ((part & ~Mask) == 0) break;
-		}
-	}
-}
-// const will qualify left keyword unless the const is the first, thus const Int2 const* is redundant
-// I think u meant const Int2* const or Int2 const * const
-Int2 read(std::istream& stream, Grid& grid, const Int2* const destination)
-{
-	auto version = read<uint32_t>(stream);
-
-	Int2 min;
-	Int2 size;
-
-	if (version == 0)
-	{
-		min = Int2(0);
-		size = read<Int2>(stream);
-	}
-	else
-	{
-		min = read<Int2>(stream);
-		size = read<Int2>(stream) - min + Int2(1);
-	}
-
-	Int2 offset = destination == nullptr ? min : *destination;
-
-	for (int32_t y = 0; y < size.y; y++)
-	{
-		uint8_t laneId{ 0u };
-		uint32_t length{ 0u };
-
-		for (int32_t x = 0; x < size.x; x++)
-		{
-			Int2 position = Int2(x, y) + offset;
-
-			if (length == 0) read(stream, laneId, length);
-			if (laneId != 0) grid.add(position, laneId);
-
-			--length;
-		}
-	}
-
-	return size;
-}
-
-Int2 Area::readFrom(istream& stream, Grid& grid)
-{
-	return read(stream, grid, nullptr);
-}
-
-Int2 Area::readFrom(std::istream& stream, Grid& grid, const Int2& destination)
-{
-	return read(stream, grid, &destination);
-}
-
 unique_ptr<Grid> Area::readFrom(istream& stream)
 {
 	auto grid = make_unique<Grid>();
-	readFrom(stream, *grid);
+	IdField::readFrom(stream, *grid);
 	return grid;
 }
 

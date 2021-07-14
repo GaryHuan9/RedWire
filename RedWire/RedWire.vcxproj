@@ -157,6 +157,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\IdField.cpp" />
+    <ClCompile Include="src\Core\Region.cpp" />
     <ClCompile Include="src\Interface\SaveHotkeyAction.cpp" />
     <ClCompile Include="src\Interface\HotkeyAction.cpp" />
     <ClCompile Include="src\Interface\CreditWindow.cpp" />
@@ -199,6 +201,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assets\Resource\resource.h" />
+    <ClInclude Include="src\Core\IdField.h" />
+    <ClInclude Include="src\Core\Region.h" />
     <ClInclude Include="src\Interface\SaveHotkeyAction.h" />
     <ClInclude Include="src\Interface\HotkeyAction.h" />
     <ClInclude Include="src\Interface\CreditWindow.h" />

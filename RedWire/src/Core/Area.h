@@ -1,16 +1,18 @@
 #pragma once
 
 #include <unordered_map>
-#include <fstream>
+#include <istream>
+#include <ostream>
 #include <memory>
 #include "../Type2.h"
+#include "IdField.h"
 
 namespace RedWire
 {
 	struct Cell;
 	struct Grid;
 
-	struct Area
+	struct Area : IdField
 	{
 		Area();
 
@@ -21,11 +23,8 @@ namespace RedWire
 
 		void findBorder(Int2& min, Int2& max) const;
 
-		void writeTo(std::ostream& stream, const Int2& min, const Int2& max) const;
 		void writeTo(std::ostream& stream, const Float2& viewCenter, const float& viewExtend) const;
 
-		static Int2 readFrom(std::istream& stream, Grid& grid);
-		static Int2 readFrom(std::istream& stream, Grid& grid, const Int2& destination);
 		static std::unique_ptr<Grid> readFrom(std::istream& stream);
 		static std::unique_ptr<Grid> readFrom(std::istream& stream, Float2& viewCenter, float& viewExtend);
 
@@ -47,7 +46,6 @@ namespace RedWire
 	protected:
 
 		static Int2 getTilePosition(const Int2& position);
-
 		std::shared_ptr<Cell> getPtr(const Int2& position) const;
 		void set(const Int2& position, const std::shared_ptr<Cell> cell);
 

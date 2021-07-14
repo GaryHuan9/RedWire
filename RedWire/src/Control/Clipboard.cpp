@@ -3,18 +3,19 @@
 #include "InputManager.h"
 #include "../Type2.h"
 #include "../Core/Grid.h"
+#include "../Core/IdField.h"
 #include "../Application.h"
 #include "../Interface/GridView.h"
 
 #include "imgui.h"
-#include <iterator>
-#include <sstream>
+#include <istream>
+#include <ostream>
 #include <memory>
 #include <math.h>
 
 using namespace RedWire;
 
-Clipboard::Clipboard(InputManager& manager) : Tool(manager), buffer(std::make_unique<std::stringstream>())
+Clipboard::Clipboard(InputManager& manager) : Tool(manager)
 {}
 
 void Clipboard::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
@@ -37,16 +38,12 @@ void Clipboard::update(const Float2& position, const Int2& cell, const bool& dow
 			{
 				if (isCopying)
 				{
-					buffer->seekp(0);
-					buffer->str("");
-
 					Int2 min = startCell.min(cell);
 					Int2 max = startCell.max(cell);
 
-					copiedSize = max - min + Int2(1);
-					grid->writeTo(*buffer, min, max);
+					buffer.setSize(max - min + Int2(1));
+					buffer.copyFrom(min, *grid);
 
-					previewGrid.reset();
 					isCopying = false;
 
 					if (mode == Mode::cut)
@@ -70,10 +67,8 @@ void Clipboard::update(const Float2& position, const Int2& cell, const bool& dow
 			}
 			case Mode::paste:
 			{
-				if (copiedSize == Int2(0)) break;
-
-				buffer->seekg(0);
-				Area::readFrom(*buffer, *grid, cell);
+				if (buffer.getSize() == Int2(0)) break;
+				buffer.pasteTo(cell, *grid);
 
 				break;
 			}
@@ -108,17 +103,15 @@ void Clipboard::showUI()
 		updatePreview();
 	}
 
-	if (copiedSize != Int2(0))
+	Int2 size = buffer.getSize();
+
+	if (size != Int2(0))
 	{
-		ImGui::Text("Clipboard %u x %u", copiedSize.x, copiedSize.y);
+		ImGui::Text("Clipboard %u x %u", size.x, size.y);
 
 		ImGui::SameLine();
 
-		if (ImGui::SmallButton("Clear"))
-		{
-			copiedSize = Int2(0);
-			previewGrid.reset();
-		}
+		if (ImGui::SmallButton("Clear")) buffer.setSize(Int2(0));
 	}
 
 	if (isCopying)
@@ -131,39 +124,17 @@ void Clipboard::showUI()
 	}
 }
 
-std::unique_ptr<Grid> createGrid(std::istream& stream, Int2& size)
-{
-	stream.seekg(0);
-
-	auto pointer = std::make_unique<Grid>();
-	size = Area::readFrom(stream, *pointer, Int2(0));
-
-	return pointer;
-}
-
 bool Clipboard::writeTo(std::ostream& stream)
 {
-	if (copiedSize == Int2(0)) return false;
+	if (buffer.getSize() == Int2(0)) return false;
 
-	if (previewGrid == nullptr) previewGrid = createGrid(*buffer, copiedSize);
-	previewGrid->writeTo(stream, Int2(0), copiedSize - Int2(1));
-
+	buffer.writeTo(stream);
 	return true;
 }
 
 void Clipboard::readFrom(std::istream& stream)
 {
-	buffer->seekp(0);
-	buffer->str("");
-
-	std::copy
-	(
-		std::istreambuf_iterator<char>(stream),
-		std::istreambuf_iterator<char>(),
-		std::ostreambuf_iterator<char>(*buffer)
-	);
-
-	previewGrid = createGrid(*buffer, copiedSize);
+	buffer.readFrom(stream);
 }
 
 void Clipboard::showHelpUI()
@@ -200,10 +171,10 @@ void Clipboard::updatePreview()
 
 			if (isCopying)
 			{
-				Int2 min = startCell.min(lastCell);
-				Int2 max = startCell.max(lastCell);
+				const Int2 min = startCell.min(lastCell);
+				const Int2 max = startCell.max(lastCell);
 
-				Int2 size = max - min + Int2(1);
+				const Int2 size = max - min + Int2(1);
 
 				view.setPreviewMin(min);
 				view.setPreviewSize(size);
@@ -228,23 +199,25 @@ void Clipboard::updatePreview()
 		}
 		case Mode::paste:
 		{
-			if (copiedSize != Int2(0))
+			Int2 size = buffer.getSize();
+
+			if (size == Int2(0))
 			{
-				if (previewGrid == nullptr) previewGrid = createGrid(*buffer, copiedSize);
+				view.setPreviewSize(Int2(0));
+				break;
+			}
 
-				view.setPreviewMin(lastCell);
-				view.setPreviewSize(copiedSize);
+			view.setPreviewMin(lastCell);
+			view.setPreviewSize(size);
 
-				for (int y = 0; y < copiedSize.y; y++)
+			for (int32_t y = 0; y < size.y; y++)
+			{
+				for (int32_t x = 0; x < size.x; x++)
 				{
-					for (int x = 0; x < copiedSize.x; x++)
-					{
-						const Int2 position(x, y);
-						view.setPreviewColor(position, previewGrid->getColor(position));
-					}
+					const Int2 position(x, y);
+					view.setPreviewColor(position, buffer.getColor(position));
 				}
 			}
-			else view.setPreviewSize(Int2(0));
 
 			break;
 		}
