@@ -52,7 +52,7 @@ void Toolbox::showUI()
 		resetWindowOrientation = false;
 	}
 
-	if (!ImGui::Begin("Toolbox"))
+	if (!ImGui::Begin("Toolbox", nullptr, ImGuiWindowFlags_HorizontalScrollbar))
 	{
 		ImGui::End();
 		return;

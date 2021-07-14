@@ -22,8 +22,12 @@ namespace RedWire
 		void copyFrom(const Int2& position, const IdField& field);
 		void pasteTo(const Int2& position, IdField& field);
 
-		void writeTo(std::ostream& stream) const;
 		void readFrom(std::istream& stream);
+		void writeTo(std::ostream& stream) const;
+
+		void rotatePositive();
+		void rotateNegative();
+		void rotate180();
 
 	protected:
 		uint8_t getId(const Int2& position) const override;

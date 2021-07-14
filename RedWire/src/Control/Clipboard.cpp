@@ -48,9 +48,9 @@ void Clipboard::update(const Float2& position, const Int2& cell, const bool& dow
 
 					if (mode == Mode::cut)
 					{
-						for (int y = min.y; y <= max.y; y++)
+						for (int32_t y = min.y; y <= max.y; y++)
 						{
-							for (int x = min.x; x <= max.x; x++)
+							for (int32_t x = min.x; x <= max.x; x++)
 							{
 								grid->remove(Int2(x, y));
 							}
@@ -109,9 +109,13 @@ void Clipboard::showUI()
 	{
 		ImGui::Text("Clipboard %u x %u", size.x, size.y);
 
-		ImGui::SameLine();
+		ImGui::SameLine(); if (ImGui::SmallButton("Clear")) buffer.setSize(Int2(0));
 
-		if (ImGui::SmallButton("Clear")) buffer.setSize(Int2(0));
+		ImGui::Text("Rotate", size.x, size.y);
+
+		ImGui::SameLine(); if (ImGui::SmallButton("Forward")) buffer.rotatePositive();
+		ImGui::SameLine(); if (ImGui::SmallButton("Backward")) buffer.rotateNegative();
+		ImGui::SameLine(); if (ImGui::SmallButton("180")) buffer.rotate180();
 	}
 
 	if (isCopying)
@@ -124,17 +128,17 @@ void Clipboard::showUI()
 	}
 }
 
+void Clipboard::readFrom(std::istream& stream)
+{
+	buffer.readFrom(stream);
+}
+
 bool Clipboard::writeTo(std::ostream& stream)
 {
 	if (buffer.getSize() == Int2(0)) return false;
 
 	buffer.writeTo(stream);
 	return true;
-}
-
-void Clipboard::readFrom(std::istream& stream)
-{
-	buffer.readFrom(stream);
 }
 
 void Clipboard::showHelpUI()
