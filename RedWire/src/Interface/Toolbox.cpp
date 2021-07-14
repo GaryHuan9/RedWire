@@ -12,15 +12,17 @@
 
 using namespace RedWire;
 
-Toolbox::Toolbox(Application& application) : Component(application), sections()
+Toolbox::Toolbox(Application& application) : UIWindow(application), sections()
 {
+	setActive(true);
+
 	sections[0] = std::make_unique<General>(*this);
 	sections[1] = std::make_unique<CurrentTool>(*this);
 	sections[2] = std::make_unique<Serialization>(*this);
 	sections[3] = std::make_unique<Information>(*this);
 }
 
-void Toolbox::update()
+void Toolbox::showUI()
 {
 	const ImGuiViewport* viewport = ImGui::GetMainViewport();
 

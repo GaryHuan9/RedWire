@@ -4,20 +4,21 @@
 #include <array>
 
 #include "Section.h"
-#include "../Component.h"
+#include "UIWindow.h"
 
 namespace RedWire
 {
 	struct Application;
 
 	//Should I inherit tool box with UIWindow since it's technically a window
-	struct Toolbox : Component
+	struct Toolbox : UIWindow
 	{
 		Toolbox(Application& application);
 
-		virtual void update() override;
-
 		inline void resetWindow() { resetWindowOrientation = true; }
+
+	protected:
+		void showUI() override;
 
 	private:
 
