@@ -1,7 +1,5 @@
 #pragma once
 
-#include <SFML/Window.hpp>
-
 namespace RedWire
 {
 	//Not sure if this is the best solution, I tried

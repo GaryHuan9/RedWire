@@ -11,7 +11,7 @@ SaveHotkeyAction::SaveHotkeyAction(Application& application) : application(appli
 
 void SaveHotkeyAction::doAction()
 {
-	//we need to seperate this into another class that manages the names of the files n stuff
+	//we need a way to access Serialization.cpp or another class that stores the fileName from Serialization since it's a UI
 }
 
 bool SaveHotkeyAction::activationPredicate()
