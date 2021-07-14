@@ -6,11 +6,17 @@
 
 using namespace RedWire;
 
+
 UIManager::UIManager(Application& application) : Component(application), windows()
 {
-	windows[typeid(HelpWindow)] = std::make_unique<HelpWindow>(application);
-	windows[typeid(Toolbox)] = std::make_unique<Toolbox>(application);
+#define make_window(type) windows[typeid(type)] = std::make_unique<type>(application)
+
+	make_window(HelpWindow);
+	make_window(Toolbox);
+
+#undef make_window // undefine macro make_window to make it private
 }
+
 
 void UIManager::update()
 {

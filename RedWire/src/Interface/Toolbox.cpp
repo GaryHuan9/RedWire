@@ -12,15 +12,23 @@
 
 using namespace RedWire;
 
+
 Toolbox::Toolbox(Application& application) : UIWindow(application), sections()
 {
 	setActive(true);
 
-	sections[0] = std::make_unique<General>(*this);
-	sections[1] = std::make_unique<CurrentTool>(*this);
-	sections[2] = std::make_unique<Serialization>(*this);
-	sections[3] = std::make_unique<Information>(*this);
+	int i = 0;
+
+#define make_section(type) sections[i] = std::make_unique<type>(*this); i++
+
+	make_section(General);
+	make_section(CurrentTool);
+	make_section(Serialization);
+	make_section(Information);
+
+#undef make_section // undefine macro make_section to make it private
 }
+
 
 void Toolbox::showUI()
 {

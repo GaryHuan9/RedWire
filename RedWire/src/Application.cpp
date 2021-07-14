@@ -46,10 +46,19 @@ int main()
 Application::Application() : RenderWindow(VideoMode::getDesktopMode(), "Red Wire", Style::Default, ContextSettings{ 0, 0, 2, 1, 1, ContextSettings::Attribute::Default, true }),
 grid(std::make_unique<Grid>()), components(), clock()
 {
-	components[typeid(InputManager)] = std::make_unique<InputManager>(*this);
+#define make_component(type) components[typeid(type)] = std::make_unique<type>(*this);
+
+	make_component(InputManager);
+	make_component(TickManager);
+	make_component(GridView);
+	make_component(UIManager);
+
+	/*components[typeid(InputManager)] = std::make_unique<InputManager>(*this);
 	components[typeid(TickManager)] = std::make_unique<TickManager>(*this);
 	components[typeid(GridView)] = std::make_unique<GridView>(*this);
-	components[typeid(UIManager)] = std::make_unique<UIManager>(*this);
+	components[typeid(UIManager)] = std::make_unique<UIManager>(*this);*/
+
+#undef make_component
 
 	sf::Image icon;
 	icon.loadFromFile("Assets/Logo/RedWireIcon.png");
