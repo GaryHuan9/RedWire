@@ -10,7 +10,6 @@ namespace RedWire
 {
 	struct Application;
 
-	//Should I inherit tool box with UIWindow since it's technically a window
 	struct Toolbox : UIWindow
 	{
 		Toolbox(Application& application);

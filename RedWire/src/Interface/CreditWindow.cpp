@@ -13,7 +13,11 @@ void CreditWindow::showUI()
 
 	if (ImGui::Begin("Credits", &active, ImGuiWindowFlags_AlwaysHorizontalScrollbar))
 	{
-		ImGui::Text("RedWire idea: MMXX3VII");
+		ImGui::Text("RedWire v0.0.2");
+
+		ImGui::Dummy(ImVec2(0.f, 20.f));
+
+		ImGui::Text("RedWire ideation: MMXX3VII");
 		ImGui::Text("RedWire developers: MMXX3VII & CXRedix");
 
 		ImGui::Dummy(ImVec2(0.f, 10.f));
@@ -23,9 +27,10 @@ void CreditWindow::showUI()
 			ImGui::Text("RedWire Icon: CXRedix");
 			ImGui::Text("Font: Jetbrains Mono");
 		}
+
 		if (ImGui::CollapsingHeader("Libraries"))
 		{
-			ImGui::Text("UI core: ImGUI");
+			ImGui::Text("UI core: Dear ImGUI");
 			ImGui::Text("Underlying core: SFML");
 		}
 	}

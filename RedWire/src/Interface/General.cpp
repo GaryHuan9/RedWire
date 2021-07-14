@@ -20,6 +20,14 @@ void General::show()
 {
 	if (!ImGui::CollapsingHeader("General")) return;
 
+	if (ImGui::Button("New"))
+	{
+		toolbox.application.grid = std::make_unique<Grid>();
+		//check for changes, if so, ask for
+	}
+
+	ImGui::SameLine();
+
 	if (ImGui::Button("Exit")) toolbox.application.close();
 
 	ImGui::SameLine();
@@ -41,14 +49,14 @@ void General::show()
 	}
 
 	ImGui::SameLine();
-	
+
 	if (ImGui::Button("Help"))
 	{
 		UIManager& uiManager = toolbox.application.find<UIManager>();
 		uiManager.find<HelpWindow>().toggleActive();
 	}
-	
-	// = New Line = //
+
+	ImGui::SameLine();
 
 	if (ImGui::Button("Credits"))
 	{
@@ -56,16 +64,7 @@ void General::show()
 		uiManager.find<CreditWindow>().toggleActive();
 	}
 
-	ImGui::SameLine();
-
-	if (ImGui::Button("New"))
-	{
-		toolbox.application.grid = std::make_unique<Grid>();
-		//check for changes, if so, ask for
-	}
-
 	showTickControls();
-
 }
 
 void General::showTickControls()

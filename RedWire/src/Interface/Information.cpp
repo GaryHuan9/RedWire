@@ -41,6 +41,4 @@ void Information::show()
 	ImGui::Text(wireCountString.c_str());
 	ImGui::Text(gateCountString.c_str());
 	ImGui::Text(FPSString.c_str());
-
-	ImGui::Text("RedWire v0.0.1");
 }
