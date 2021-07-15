@@ -1,9 +1,7 @@
 #include "SaveManager.h"
 
 #include "../Application.h"
-
 #include "InputManager.h"
-
 #include "../Core/Grid.h"
 
 using namespace RedWire;

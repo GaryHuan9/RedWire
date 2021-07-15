@@ -44,7 +44,9 @@ bool imGuiStoleInput()
 	ImGuiIO& io = ImGui::GetIO();
 
 	//not the best solution but it works
-	if (io.WantCaptureMouse && ImGui::IsAnyMouseDown()) return true;
+	if (io.WantCaptureMouse && ImGui::IsMouseDown(ImGuiMouseButton_Left)) return true;
+	//ehh, this code looks ugly, we need a way to check if the mouse in on any ImGUIWindow, but I dunno how
+	if (ImGui::IsMouseDown(ImGuiMouseButton_Middle)) return false;
 	if (io.WantCaptureKeyboard) return true;
 
 	return false;
@@ -105,7 +107,7 @@ void InputManager::update()
 {
 	//Tools
 	Float2 position = getMousePosition();
-	Int2 cell = position.getFloor().toType<int32_t>();
+	Int2 cell = (Int2)position.getFloor();
 
 	bool left = isPressed(Mouse::Button::Left);
 	bool middle = isPressed(Mouse::Button::Middle);
@@ -148,7 +150,7 @@ void InputManager::update()
 	float logHeight = std::logf((float)size.y);
 
 	float logSize = std::exp((logWidth + logHeight) / 2.0f);
-	Float2 extend = size.toType<float>() / logSize * viewExtend;
+	Float2 extend = (Float2)size / logSize * viewExtend;
 
 	view.setView(viewCenter - extend, viewCenter + extend);
 

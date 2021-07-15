@@ -15,7 +15,7 @@ using namespace RedWire;
 
 namespace fs = std::filesystem;
 
-Serialization::Serialization(Toolbox& toolbox) : Section(toolbox)//, fileName()
+Serialization::Serialization(Toolbox& toolbox) : Section(toolbox)
 {}
 
 void Serialization::show()
