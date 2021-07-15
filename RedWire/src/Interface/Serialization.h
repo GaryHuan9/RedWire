@@ -15,8 +15,6 @@ namespace RedWire
 		virtual void show() override;
 
 	private:
-		const std::filesystem::path savePath = "saves";
-
 		enum class Mode
 		{
 			circuit,
@@ -27,6 +25,5 @@ namespace RedWire
 
 		//finalized message
 		std::string message;
-		std::array<char, 100ull> fileName;
 	};
 }

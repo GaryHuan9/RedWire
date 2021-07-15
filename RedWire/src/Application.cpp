@@ -3,11 +3,13 @@
 #include "Application.h"
 #include "Core/Grid.h"
 
+#include "Core/TickManager.h"
 #include "Control/InputManager.h"
+#include "Control/UIManager.h"
+
 #include "Interface/GridView.h"
 #include "Interface/Toolbox.h"
-#include "Core/TickManager.h"
-#include "Control/UIManager.h"
+#include "Control/SaveManager.h"
 
 #include <iostream>
 
@@ -49,6 +51,7 @@ grid(std::make_unique<Grid>()), components(), clock()
 	make_component(TickManager);
 	make_component(GridView);
 	make_component(UIManager);
+	make_component(SaveManager);
 
 #undef make_component
 

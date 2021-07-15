@@ -9,11 +9,13 @@
 #include "imgui_internal.h"
 #include <fstream>
 
+#include "../Control/SaveManager.h"
+
 using namespace RedWire;
 
 namespace fs = std::filesystem;
 
-Serialization::Serialization(Toolbox& toolbox) : Section(toolbox), fileName()
+Serialization::Serialization(Toolbox& toolbox) : Section(toolbox)//, fileName()
 {}
 
 void Serialization::show()
@@ -23,6 +25,11 @@ void Serialization::show()
 		message.clear();
 		return;
 	}
+
+	SaveManager& saveManager = toolbox.application.find<SaveManager>();
+
+	std::array<char, 100ull>& fileName = saveManager.getLast();
+	const fs::path& savePath = saveManager.savePath;
 
 	int* ptr = reinterpret_cast<int*>(&mode);
 
@@ -35,15 +42,14 @@ void Serialization::show()
 	{
 		if (fs::exists(savePath))
 		{
-			for (auto& file : fs::directory_iterator(savePath))
+			for (auto& file : saveManager.getSavesIterator())
 			{
 				const auto& target = file.path().filename().string();
 				if (!ImGui::Selectable(target.c_str())) continue;
 
-				fileName.fill('\0');
 				message.clear();
 
-				std::copy(target.cbegin(), target.cend(), fileName.begin());
+				saveManager.setLast(target);
 			}
 		}
 		else
@@ -57,10 +63,13 @@ void Serialization::show()
 
 	bool hasName = fileName[0] != '\0';
 	//TODO: Use PushDisable when we update ImGui to gray out the buttons
+	//understood :D
 
 	if (ImGui::Button("Load") && hasName)
 	{
-		std::ifstream stream(savePath / fileName.data(), std::ifstream::binary);
+		std::ifstream stream;
+
+		saveManager.getLoadFileStream(&stream);
 
 		if (!stream.fail())
 		{
@@ -91,7 +100,9 @@ void Serialization::show()
 
 	if (ImGui::Button("Save") && hasName)
 	{
-		std::ofstream stream(savePath / fileName.data(), std::ofstream::trunc | std::ofstream::binary);
+		std::ofstream stream;
+
+		saveManager.getSaveFileStream(&stream);
 
 		if (!stream.fail())
 		{
@@ -122,7 +133,7 @@ void Serialization::show()
 
 	if (ImGui::Button("Delete") && hasName)
 	{
-		fs::path path = savePath / fileName.data();
+		fs::path path = saveManager.getLastFilePath();
 
 		if (fs::exists(path) && fs::remove(path)) message = "Successfully deleted circuit";
 		else message = "Failed to delete path";

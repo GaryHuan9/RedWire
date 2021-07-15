@@ -2,6 +2,7 @@
 
 #include "../Application.h"
 #include "../Control/UIManager.h"
+#include "../Control/SaveManager.h"
 #include "HelpWindow.h"
 
 using namespace RedWire;
@@ -11,7 +12,9 @@ SaveHotkeyAction::SaveHotkeyAction(Application& application) : application(appli
 
 void SaveHotkeyAction::doAction()
 {
-	//we need a way to access Serialization.cpp or another class that stores the fileName from Serialization since it's a UI
+	SaveManager& manager = application.find<SaveManager>();
+
+	manager.saveCircuit();
 }
 
 bool SaveHotkeyAction::activationPredicate()

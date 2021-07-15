@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Control\SaveManager.cpp" />
     <ClCompile Include="src\Core\IdField.cpp" />
     <ClCompile Include="src\Core\Region.cpp" />
     <ClCompile Include="src\Interface\SaveHotkeyAction.cpp" />
@@ -201,6 +202,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assets\Resource\resource.h" />
+    <ClInclude Include="src\Control\SaveManager.h" />
     <ClInclude Include="src\Core\IdField.h" />
     <ClInclude Include="src\Core\Region.h" />
     <ClInclude Include="src\Interface\SaveHotkeyAction.h" />

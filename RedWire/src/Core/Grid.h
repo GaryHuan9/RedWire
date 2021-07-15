@@ -36,7 +36,7 @@ namespace RedWire
 
 	protected:
 
-		friend class Region;
+		friend struct Region;
 
 		uint8_t getId(const Int2& position) const override;
 		void setId(const Int2& position, const uint8_t& id) override;
