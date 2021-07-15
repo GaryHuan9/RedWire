@@ -80,7 +80,7 @@ void RemoveTool::updatePreview()
 {
 	GridView& view = manager.application.find<GridView>();
 
-	static const uint32_t color = 0xFF111113u;
+	static const uint32_t color = 0xFF030122u;
 
 	if (started)
 	{

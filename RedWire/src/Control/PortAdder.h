@@ -19,7 +19,6 @@ namespace RedWire
 		void showHelpUI() override;
 
 	private:
-
 		enum class Mode
 		{
 			gate,
@@ -27,5 +26,6 @@ namespace RedWire
 		};
 
 		Mode mode = Mode::gate;
+		bool overrideCell{ true };
 	};
 }

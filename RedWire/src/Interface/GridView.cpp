@@ -11,8 +11,11 @@ using namespace sf;
 
 GridView::GridView(Application& application) : Component(application), lines(PrimitiveType::Triangles)
 {
-	background.setFillColor(Color(0x000002FFu));
+	background.setFillColor(Color(0u, 0u, 2u));
 	background.setPosition(Vector2f(0.0f, 0.0f));
+
+	preview.setOutlineColor(Color(80u, 80u, 83u));
+	preview.setOutlineThickness(3.0f);
 }
 
 //For some reason the view occationally jitter randomly while we move

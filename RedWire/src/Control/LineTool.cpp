@@ -18,11 +18,6 @@ void LineTool::showUI()
 
 void LineTool::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
-	doLineDraw(down, cell);
-}
-
-void LineTool::doLineDraw(const bool& down, const Int2& cell)
-{
 	if (!down)
 	{
 		positionSet = false;

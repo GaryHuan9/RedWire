@@ -15,7 +15,7 @@ void NoteAdder::update(const Float2& position, const Int2& cell, const bool& dow
 		drawLines = !drawLines;
 	}
 
-	if (drawLines) doLineDraw(down, cell);
+	if (drawLines) LineTool::update(position, cell, down, changed);
 	else if (down) setCell(cell);
 }
 
@@ -26,8 +26,7 @@ bool NoteAdder::activationPredicate()
 
 void NoteAdder::setCell(const Int2& cell)
 {
-	if (grid->get(cell) == nullptr)
-		grid->addNote(cell);
+	if (grid->get(cell) == nullptr) grid->addNote(cell);
 }
 
 void NoteAdder::showUI()

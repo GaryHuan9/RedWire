@@ -171,7 +171,7 @@ void Clipboard::updatePreview()
 		case Mode::copy:
 		case Mode::cut:
 		{
-			static const uint32_t color = 0xFF111113u;
+			static const uint32_t color = 0xFF131111u;
 
 			if (isCopying)
 			{

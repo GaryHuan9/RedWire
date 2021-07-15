@@ -1,4 +1,5 @@
 #include "PortAdder.h"
+#include "Tool.h"
 #include "InputManager.h"
 #include "../Core/Grid.h"
 
@@ -14,7 +15,7 @@ void PortAdder::update(const Float2& position, const Int2& cell, const bool& dow
 	if (InputManager::isPressed(sf::Keyboard::Num1)) mode = Mode::gate;
 	if (InputManager::isPressed(sf::Keyboard::Num2)) mode = Mode::join;
 
-	if (down && changed)
+	if (down && changed && (overrideCell || grid->get(cell) == nullptr))
 	{
 		switch (mode)
 		{
@@ -36,6 +37,7 @@ void PortAdder::showUI()
 
 	static const char* modeNames[] = { "Gate", "Join" };
 	ImGui::SliderInt("Mode", ptr, 0, 1, modeNames[*ptr]);
+	ImGui::Checkbox("Override Previous", &overrideCell);
 }
 
 void PortAdder::showHelpUI()

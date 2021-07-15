@@ -11,10 +11,9 @@ namespace RedWire
 		virtual void showUI() override;
 
 	protected:
-		void doLineDraw(const bool& down, const Int2& cell);
-
 		virtual void update(const Float2& position, const Int2& cell, const bool& down, const bool& changed) override;
 
+		inline Int2 getStartCell() { return startCell; }
 		virtual void setCell(const Int2& cell) = 0;
 
 	private:

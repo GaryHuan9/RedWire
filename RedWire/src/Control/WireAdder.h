@@ -28,5 +28,7 @@ namespace RedWire
 		};
 
 		Mode mode = Mode::unchanged;
+		bool overrideCell{ true };
+		bool autoAddJoin{ false };
 	};
 }
