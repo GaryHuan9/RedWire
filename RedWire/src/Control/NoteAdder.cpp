@@ -1,4 +1,5 @@
 #include "NoteAdder.h"
+
 #include "InputManager.h"
 #include "../Core/Grid.h"
 #include "imgui.h"

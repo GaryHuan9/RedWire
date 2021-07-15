@@ -44,8 +44,7 @@ bool imGuiStoleInput()
 	ImGuiIO& io = ImGui::GetIO();
 
 	//not the best solution but it works
-	if (io.WantCaptureMouse && ImGui::IsMouseDown(ImGuiMouseButton_Left)) return true;
-	//ehh, this code looks ugly, we need a way to check if the mouse in on any ImGUIWindow, but I dunno how
+	if (io.WantCaptureMouse && ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) return true;
 	if (ImGui::IsMouseDown(ImGuiMouseButton_Middle)) return false;
 	if (io.WantCaptureKeyboard) return true;
 
