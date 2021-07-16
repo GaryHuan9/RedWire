@@ -21,9 +21,18 @@ namespace RedWire
 			clipboard
 		};
 
+		enum class FileMode
+		{
+			_load, _save, _delete
+		};
+
 		Mode mode = Mode::circuit;
 
 		//finalized message
 		std::string message;
+
+		bool confirming = false;
+
+		FileMode fileMode{};
 	};
 }

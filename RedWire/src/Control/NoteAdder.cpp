@@ -4,9 +4,12 @@
 #include "../Core/Grid.h"
 #include "imgui.h"
 
+#include "imgui_internal.h"
+
 using namespace RedWire;
 
-NoteAdder::NoteAdder(InputManager& manager) : LineTool(manager) {}
+NoteAdder::NoteAdder(InputManager& manager) : LineTool(manager), inputText()
+{}
 
 void NoteAdder::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
@@ -34,6 +37,33 @@ void NoteAdder::showUI()
 {
 	ImGui::Checkbox("Draw Lines", &drawLines);
 	LineTool::showUI();
+
+	ImGui::InputText("Text", inputText.data(), inputText.size());
+
+	//I'm not sure why but our copy of ImGUI doesn't have a PushDisable?
+	bool disabled = inputText[0] == '\0';
+
+	if (disabled)
+	{
+		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * .5f);
+	}
+
+	if (ImGui::Button("Confirm"))
+	{
+		//do something that does the note serializing :D
+	}
+
+	if (disabled)
+	{
+		ImGui::PopItemFlag();
+		ImGui::PopStyleVar();
+	}
+
+	if (ImGui::Button("Confirm"))
+	{
+		//do something that does the note serializing :D
+	}
 }
 
 void NoteAdder::showHelpUI()

@@ -62,81 +62,135 @@ void Serialization::show()
 	}
 
 	bool hasName = fileName[0] != '\0';
-	//TODO: Use PushDisable when we update ImGui to gray out the buttons
-	//understood :D
 
-	if (ImGui::Button("Load") && hasName)
+	if (!hasName)
 	{
-		std::ifstream stream;
-
-		saveManager.getLoadFileStream(&stream);
-
-		if (!stream.fail())
-		{
-			auto& manager = toolbox.application.find<InputManager>();
-
-			switch (mode)
-			{
-				case Mode::circuit:
-				{
-					toolbox.application.grid = Area::readFrom(stream, manager.viewCenter, manager.viewExtend);
-					message = "Successfully loaded circuit";
-
-					break;
-				}
-				case Mode::clipboard:
-				{
-					manager.find<Clipboard>().readFrom(stream);
-					message = "Successfully loaded clipboard";
-
-					break;
-				}
-			}
-		}
-		else message = "Failed to open path";
+		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * .5f);
 	}
 
-	ImGui::SameLine();
+	static const char* FILE_MODE_NAMES[3]{ "Load", "Save", "Delete" };
 
-	if (ImGui::Button("Save") && hasName)
+	if (!confirming)
 	{
-		std::ofstream stream;
-
-		saveManager.getSaveFileStream(&stream);
-
-		if (!stream.fail())
+		for (uint32_t i = 0ull; i < 3; i++)
 		{
-			auto& manager = toolbox.application.find<InputManager>();
-
-			switch (mode)
+			if (!ImGui::Button(FILE_MODE_NAMES[i]))
 			{
-				case Mode::circuit:
+				if (i != 2) ImGui::SameLine();
+
+				continue;
+			}
+
+			//else pressed
+
+			fileMode = static_cast<FileMode>(i);
+
+			if (i != 2) ImGui::SameLine();
+
+			confirming = true;
+		}
+	}
+	else
+	{
+		if (ImGui::Button("Confirm"))
+		{
+			confirming = false;
+
+			switch (fileMode)
+			{
+				case FileMode::_load:
 				{
-					toolbox.application.grid->writeTo(stream, manager.viewCenter, manager.viewExtend);
-					message = "Successfully saved circuit";
+					std::ifstream stream;
+
+					saveManager.getLoadFileStream(&stream);
+
+					if (!stream.fail())
+					{
+						auto& manager = toolbox.application.find<InputManager>();
+
+						switch (mode)
+						{
+							case Mode::circuit:
+							{
+								toolbox.application.grid = Area::readFrom(stream, manager.viewCenter, manager.viewExtend);
+								message = "Successfully loaded circuit";
+
+								break;
+							}
+							case Mode::clipboard:
+							{
+								manager.find<Clipboard>().readFrom(stream);
+								message = "Successfully loaded clipboard";
+
+								break;
+							}
+						}
+					}
+					else message = "Failed to open path";
 
 					break;
 				}
-				case Mode::clipboard:
-				{
-					manager.find<Clipboard>().writeTo(stream);
-					message = "Successfully saved clipboard";
 
+				case FileMode::_save:
+				{
+					std::ofstream stream;
+
+					saveManager.getSaveFileStream(&stream);
+
+					if (!stream.fail())
+					{
+						auto& manager = toolbox.application.find<InputManager>();
+
+						switch (mode)
+						{
+							case Mode::circuit:
+							{
+								toolbox.application.grid->writeTo(stream, manager.viewCenter, manager.viewExtend);
+								message = "Successfully saved circuit";
+
+								break;
+							}
+							case Mode::clipboard:
+							{
+								manager.find<Clipboard>().writeTo(stream);
+								message = "Successfully saved clipboard";
+
+								break;
+							}
+						}
+					}
+					else message = "Failed to open path";
 					break;
 				}
+
+				case FileMode::_delete:
+				{
+					fs::path path = saveManager.getLastFilePath();
+
+					if (fs::exists(path) && fs::remove(path)) message = "Successfully deleted circuit";
+					else message = "Failed to delete path";
+					break;
+				}
+
+				default: throw std::exception("Not possible!");
 			}
 		}
-		else message = "Failed to open path";
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel"))
+		{
+			message = "Cancelled!";
+			confirming = false;
+		}
 	}
 
-	ImGui::SameLine();
 
-	if (ImGui::Button("Delete") && hasName)
+	if (!hasName)
 	{
-		fs::path path = saveManager.getLastFilePath();
-
-		if (fs::exists(path) && fs::remove(path)) message = "Successfully deleted circuit";
-		else message = "Failed to delete path";
+		ImGui::PopItemFlag();
+		ImGui::PopStyleVar();
 	}
 
 	if (!message.empty())

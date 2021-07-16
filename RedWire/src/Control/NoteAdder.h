@@ -2,6 +2,8 @@
 
 #include "LineTool.h"
 
+#include <array>
+
 namespace RedWire
 {
 	struct NoteAdder : LineTool
@@ -21,6 +23,8 @@ namespace RedWire
 	private:
 		bool drawLines{};
 		bool pressed{};
+
+		std::array<char, 100ull> inputText;
 	};
 }
 
