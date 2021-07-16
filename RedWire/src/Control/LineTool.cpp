@@ -30,12 +30,14 @@ void LineTool::update(const Float2& position, const Int2& cell, const bool& down
 	{
 		startCell = cell;
 		positionSet = true;
-		setCell(cell); //In case you wanna click set, instead of drag set
-		return;
 	}
 
 	//If not moved
-	if (startCell == cell && !directionSet) return;
+	if (startCell == cell && !directionSet)
+	{
+		setCell(cell);
+		return;
+	}
 
 	if (!directionSet)
 	{
