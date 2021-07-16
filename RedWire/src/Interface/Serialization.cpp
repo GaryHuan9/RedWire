@@ -89,6 +89,8 @@ void Serialization::show()
 	{
 		if (ImGui::Button("Confirm"))
 		{
+			confirming = false;
+
 			switch (fileMode)
 			{
 				case FileMode::load:
@@ -165,7 +167,6 @@ void Serialization::show()
 			}
 		}
 
-		confirming = false;
 		ImGui::SameLine();
 
 		if (ImGui::Button("Cancel"))
