@@ -8,6 +8,7 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 #include <fstream>
+#include <string>
 
 #include "../Control/SaveManager.h"
 
@@ -33,8 +34,8 @@ void Serialization::show()
 
 	int* ptr = reinterpret_cast<int*>(&mode);
 
-	static const char* names[] = { "Circuit", "Clipboard" };
-	ImGui::SliderInt("Mode", ptr, 0, 1, names[*ptr]);
+	static const char* modeNames[] = { "Circuit", "Clipboard" };
+	ImGui::SliderInt("Mode", ptr, 0, 1, modeNames[*ptr]);
 
 	ImGui::InputText("Save Name", fileName.data(), fileName.size(), ImGuiInputTextFlags_AutoSelectAll);
 
@@ -69,37 +70,28 @@ void Serialization::show()
 		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * .5f);
 	}
 
-	static const char* FILE_MODE_NAMES[3]{ "Load", "Save", "Delete" };
-
 	if (!confirming)
 	{
-		for (uint32_t i = 0ull; i < 3; i++)
+		static const char* fileModeNames[] = { "Load", "Save", "Delete" };
+
+		for (size_t i = 0ull; i < 3; i++)
 		{
-			if (!ImGui::Button(FILE_MODE_NAMES[i]))
+			if (i != 0) ImGui::SameLine();
+
+			if (ImGui::Button(fileModeNames[i]))
 			{
-				if (i != 2) ImGui::SameLine();
-
-				continue;
+				fileMode = static_cast<FileMode>(i);
+				confirming = true;
 			}
-
-			//else pressed
-
-			fileMode = static_cast<FileMode>(i);
-
-			if (i != 2) ImGui::SameLine();
-
-			confirming = true;
 		}
 	}
 	else
 	{
 		if (ImGui::Button("Confirm"))
 		{
-			confirming = false;
-
 			switch (fileMode)
 			{
-				case FileMode::_load:
+				case FileMode::load:
 				{
 					std::ifstream stream;
 
@@ -131,8 +123,7 @@ void Serialization::show()
 
 					break;
 				}
-
-				case FileMode::_save:
+				case FileMode::save:
 				{
 					std::ofstream stream;
 
@@ -163,8 +154,7 @@ void Serialization::show()
 					else message = "Failed to open path";
 					break;
 				}
-
-				case FileMode::_delete:
+				case FileMode::remove:
 				{
 					fs::path path = saveManager.getLastFilePath();
 
@@ -172,17 +162,16 @@ void Serialization::show()
 					else message = "Failed to delete path";
 					break;
 				}
-
-				default: throw std::exception("Not possible!");
 			}
 		}
 
+		confirming = false;
 		ImGui::SameLine();
 
 		if (ImGui::Button("Cancel"))
 		{
-			message = "Cancelled!";
 			confirming = false;
+			message = "Cancelled";
 		}
 	}
 

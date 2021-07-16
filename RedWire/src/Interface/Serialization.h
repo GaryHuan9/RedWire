@@ -23,16 +23,17 @@ namespace RedWire
 
 		enum class FileMode
 		{
-			_load, _save, _delete
+			load,
+			save,
+			remove
 		};
 
 		Mode mode = Mode::circuit;
+		FileMode fileMode{};
 
 		//finalized message
 		std::string message;
 
-		bool confirming = false;
-
-		FileMode fileMode{};
+		bool confirming{ false };
 	};
 }

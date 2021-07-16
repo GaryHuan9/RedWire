@@ -9,12 +9,8 @@
 #include <limits>
 #include <vector>
 
-#include <chrono>
-
 using namespace RedWire;
 using namespace std;
-
-using namespace chrono;
 
 Area::Area() : tiles()
 {
