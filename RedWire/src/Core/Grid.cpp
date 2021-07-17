@@ -2,7 +2,7 @@
 #include "Wire.h"
 #include "Port.h"
 #include "Gate.h"
-#include "Join.h"
+#include "Bridge.h"
 #include "Note.h"
 
 using namespace RedWire;
@@ -49,9 +49,9 @@ void Grid::floodSearch(const SearchPack& pack, const Int2& source, const Int2& d
 	const Int2 local = source + direction;
 
 	Cell* const cell = get(local);
-	Join* const join = dynamic_cast<Join*>(cell);
+	Bridge* const bridge = dynamic_cast<Bridge*>(cell);
 
-	if (join != nullptr && join->getEnabled())
+	if (bridge != nullptr && bridge->getEnabled())
 	{
 		floodSearch(pack, local, direction);
 		return;
@@ -124,17 +124,17 @@ void Grid::addGate(const Int2& position)
 	gate->refresh(*this, position);
 }
 
-void Grid::addJoin(const Int2& position)
+void Grid::addBridge(const Int2& position)
 {
 	Cell* previous = get(position);
 
-	if (dynamic_cast<Join*>(previous) != nullptr) return;
+	if (dynamic_cast<Bridge*>(previous) != nullptr) return;
 	if (previous != nullptr) remove(position);
 
-	shared_ptr<Join> join = make_shared<Join>();
+	shared_ptr<Bridge> bridge = make_shared<Bridge>();
 
-	set(position, join);
-	join->refresh(*this, position);
+	set(position, bridge);
+	bridge->refresh(*this, position);
 }
 
 void Grid::addNote(const Int2& position)
@@ -157,20 +157,8 @@ void Grid::remove(const Int2& position)
 
 	/**/ if (dynamic_cast<Wire*>(previous) != nullptr) removeWire(position);
 	else if (dynamic_cast<Gate*>(previous) != nullptr) removeGate(position);
-	else if (dynamic_cast<Join*>(previous) != nullptr) removeJoin(position);
+	else if (dynamic_cast<Bridge*>(previous) != nullptr) removeBridge(position);
 	else if (dynamic_cast<Note*>(previous) != nullptr) removeNote(position);
-}
-
-void Grid::setSource(const Int2& position, const bool& isSource)
-{
-	Wire* wire = dynamic_cast<Wire*>(get(position));
-	if (wire != nullptr) wire->isSource = isSource;
-}
-
-bool Grid::getSource(const Int2& position)
-{
-	Wire* wire = dynamic_cast<Wire*>(get(position));
-	return wire != nullptr && wire->isSource;
 }
 
 void Grid::update()
@@ -191,7 +179,7 @@ void Grid::setId(const Int2& position, const uint8_t& id)
 	{
 		case 0: remove(position); return;
 		case 5: addGate(position); return;
-		case 6: addJoin(position); return;
+		case 6: addBridge(position); return;
 		case 7: addNote(position); return;
 		case 1: addWire(position); return;
 		case 2: addWire(position); break;
@@ -231,7 +219,7 @@ void Grid::removeGate(const Int2& position)
 	set(position, nullptr);
 }
 
-void Grid::removeJoin(const Int2& position)
+void Grid::removeBridge(const Int2& position)
 {
 	set(position, nullptr);
 	splitNeighbors(position);
@@ -257,12 +245,12 @@ bool Grid::splitNeighbors(const Int2& position)
 
 		if (neighbor == nullptr) continue;
 
-		//The the current cell is a Join, we move
+		//The the current cell is a Bridge, we move
 		//one block further to check for wires
 
-		Join* join = dynamic_cast<Join*>(neighbor.get());
+		Bridge* bridge = dynamic_cast<Bridge*>(neighbor.get());
 
-		if (join != nullptr)
+		if (bridge != nullptr)
 		{
 			local = position + offset * 2;
 			neighbor = getPtr(local);
@@ -292,7 +280,7 @@ bool Grid::splitNeighbors(const Int2& position)
 }
 
 /// <summary>
-/// Updates either the gate or join at position
+/// Updates either the gate or bridge at position
 /// by scanning its neighbors/surroundings
 /// </summary>
 void Grid::scanPort(const Int2& position)
@@ -301,8 +289,8 @@ void Grid::scanPort(const Int2& position)
 	if (port == nullptr) return;
 
 	Gate* const gate = dynamic_cast<Gate*>(port);
-	Join* const join = dynamic_cast<Join*>(port);
+	Bridge* const bridge = dynamic_cast<Bridge*>(port);
 
 	if (gate != nullptr) gate->refresh(*this, position);
-	if (join != nullptr) join->refresh(*this, position);
+	if (bridge != nullptr) bridge->refresh(*this, position);
 }

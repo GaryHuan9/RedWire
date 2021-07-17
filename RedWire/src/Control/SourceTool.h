@@ -1,13 +1,12 @@
 #pragma once
 
-#include <SFML/System.hpp>
-
 #include "../Type2.h"
 #include "Tool.h"
-#include "InputManager.h"
 
 namespace RedWire
 {
+	struct InputManager;
+
 	struct SourceTool : Tool
 	{
 		SourceTool(InputManager& manager);
@@ -16,9 +15,25 @@ namespace RedWire
 
 		bool activationPredicate() override;
 
+		void showUI() override;
+
 		void showHelpUI() override;
 
 	private:
-		sf::Time pressedTime;
+		enum class Mode
+		{
+			toggle,
+			power,
+			unpower
+		};
+
+		enum class Type
+		{
+			permanent,
+			temporary
+		};
+
+		Mode mode = Mode::toggle;
+		Type type = Type::permanent;
 	};
 }

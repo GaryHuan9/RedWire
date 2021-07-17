@@ -5,12 +5,17 @@
 
 using namespace RedWire;
 
+#ifdef _DEBUG
+
 std::random_device device;
 std::mt19937 generator(device());
 std::uniform_int_distribution<uint16_t> distribution(255);
 
-Wire::Wire() : isSource(false), poweredLast(false), poweredNext(false)
+#endif
+
+Wire::Wire()
 {
+#ifdef _DEBUG
 	uint8_t bytes[4]
 	{
 		255,
@@ -20,11 +25,14 @@ Wire::Wire() : isSource(false), poweredLast(false), poweredNext(false)
 	};
 
 	debugColor = *reinterpret_cast<uint32_t*>(bytes);
+#endif
 }
 
 uint32_t Wire::getColor() const
 {
+#ifdef _DEBUG
 	//return debugColor;
+#endif
 
 	if (isSource) return 0xFF0A55EEu;
 	if (getPowered()) return 0xFF0B02FDu;

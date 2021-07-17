@@ -6,7 +6,7 @@
 #include <memory>
 #include "../Type2.h"
 #include "Area.h"
-#include "Join.h"
+#include "Bridge.h"
 
 namespace RedWire
 {
@@ -24,13 +24,10 @@ namespace RedWire
 
 		void addWire(const Int2& position);
 		void addGate(const Int2& position);
-		void addJoin(const Int2& position);
+		void addBridge(const Int2& position);
 		void addNote(const Int2& position);
 
 		void remove(const Int2& position);
-
-		void setSource(const Int2& position, const bool& isSource);
-		bool getSource(const Int2& position);
 
 		void update();
 
@@ -42,7 +39,7 @@ namespace RedWire
 		void setId(const Int2& position, const uint8_t& id) override;
 
 	private:
-		friend void Join::refresh(Grid& grid, const Int2& position);
+		friend void Bridge::refresh(Grid& grid, const Int2& position);
 
 		struct SearchPack
 		{
@@ -63,7 +60,7 @@ namespace RedWire
 
 		void removeWire(const Int2& position);
 		void removeGate(const Int2& position);
-		void removeJoin(const Int2& position);
+		void removeBridge(const Int2& position);
 		void removeNote(const Int2& position);
 
 		template<typename Type> static void removeFrom(std::vector<std::shared_ptr<Type>>& vector, Type* target);

@@ -6,9 +6,9 @@ namespace RedWire
 {
 	struct Grid;
 
-	struct Join : Port
+	struct Bridge : Port
 	{
-		Join();
+		Bridge();
 
 		uint32_t getColor() const override;
 		uint8_t getCellId() const override;

@@ -25,9 +25,9 @@ void WireAdder::setCell(const Int2& cell)
 		if (previous && !dynamic_cast<Wire*>(previous)) return;
 	}
 
-	bool addJoin = false;
+	bool addBridge = false;
 
-	if (autoAddJoin && getStartCell() != cell)
+	if (autoAddBridge && getStartCell() != cell)
 	{
 		int count = 0;
 
@@ -37,21 +37,23 @@ void WireAdder::setCell(const Int2& cell)
 			if (dynamic_cast<Wire*>(target)) ++count;
 		}
 
-		if (count > 2) addJoin = true;
+		if (count > 2) addBridge = true;
 	}
 
-	if (!addJoin)
+	if (!addBridge)
 	{
 		grid->addWire(cell);
+
+		Wire* wire = dynamic_cast<Wire*>(grid->get(cell));
 
 		switch (mode)
 		{
 			case Mode::unchanged: break;
-			case Mode::unpowered: grid->setSource(cell, false); break;
-			case Mode::powered:   grid->setSource(cell, true);  break;
+			case Mode::unpowered: wire->isSource = false; break;
+			case Mode::powered:   wire->isSource = true;  break;
 		}
 	}
-	else grid->addJoin(cell);
+	else grid->addBridge(cell);
 }
 
 void WireAdder::showUI()
@@ -62,7 +64,7 @@ void WireAdder::showUI()
 
 	ImGui::SliderInt("Mode", ptr, 0, 2, modeNames[*ptr]);
 	ImGui::Checkbox("Override Previous", &overrideCell);
-	ImGui::Checkbox("Auto Place Joins", &autoAddJoin);
+	ImGui::Checkbox("Auto Place Bridges", &autoAddBridge);
 
 	LineTool::showUI();
 }

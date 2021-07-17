@@ -1,21 +1,23 @@
 #pragma once
 
-#include <stdint.h>
 #include "Cell.h"
+#include <stdint.h>
 
 namespace RedWire
 {
+	struct SourceTool;
+
 	struct Wire : Cell
 	{
 		Wire();
 
-		bool isSource;
+		bool isSource{ false };
 
 		uint32_t getColor() const override;
 		uint8_t getCellId() const override;
 
 		bool getPowered() const;
-		void setPowered(const bool powered);
+		void setPowered(const bool value);
 
 		void update();
 
@@ -23,10 +25,13 @@ namespace RedWire
 		void process(const uint8_t& id);
 
 	private:
+		friend struct SourceTool;
 
-		bool poweredLast;
-		bool poweredNext;
+		bool poweredLast{ false };
+		bool poweredNext{ false };
 
+#ifdef _DEBUG
 		uint32_t debugColor;
+#endif
 	};
 }

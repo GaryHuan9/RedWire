@@ -22,7 +22,7 @@ namespace RedWire
 		enum class Mode
 		{
 			gate,
-			join
+			bridge
 		};
 
 		Mode mode = Mode::gate;

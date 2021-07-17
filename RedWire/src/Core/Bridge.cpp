@@ -3,27 +3,27 @@
 #include "Grid.h"
 #include "Wire.h"
 #include "Port.h"
-#include "Join.h"
+#include "Bridge.h"
 
 using namespace RedWire;
 using namespace std;
 
-Join::Join()
+Bridge::Bridge()
 {
 
 }
 
-uint32_t Join::getColor() const
+uint32_t Bridge::getColor() const
 {
 	return getEnabled() ? 0xFF10BB00u : 0xFF042200u;
 }
 
-uint8_t Join::getCellId() const
+uint8_t Bridge::getCellId() const
 {
 	return 6;
 }
 
-void Join::refresh(Grid& grid, const Int2& position)
+void Bridge::refresh(Grid& grid, const Int2& position)
 {
 	setEnabled(false);
 

@@ -13,14 +13,14 @@ PortAdder::PortAdder(InputManager& manager) : Tool(manager)
 void PortAdder::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
 	if (InputManager::isPressed(sf::Keyboard::Num1)) mode = Mode::gate;
-	if (InputManager::isPressed(sf::Keyboard::Num2)) mode = Mode::join;
+	if (InputManager::isPressed(sf::Keyboard::Num2)) mode = Mode::bridge;
 
 	if (down && changed && (overrideCell || grid->get(cell) == nullptr))
 	{
 		switch (mode)
 		{
 			case Mode::gate: grid->addGate(cell); break;
-			case Mode::join: grid->addJoin(cell); break;
+			case Mode::bridge: grid->addBridge(cell); break;
 		}
 	}
 }
@@ -35,14 +35,14 @@ void PortAdder::showUI()
 {
 	int* ptr = reinterpret_cast<int*>(&mode);
 
-	static const char* modeNames[] = { "Gate", "Join" };
+	static const char* modeNames[] = { "Gate", "Bridge" };
 	ImGui::SliderInt("Mode", ptr, 0, 1, modeNames[*ptr]);
 	ImGui::Checkbox("Override Previous", &overrideCell);
 }
 
 void PortAdder::showHelpUI()
 {
-	ImGui::Text("The PortAdder can add two different types of [Port] ([Gate] and [Join]) by simply clicking on the [Grid]");
+	ImGui::Text("The PortAdder can add two different types of [Port] ([Gate] and [Bridge]) by simply clicking on the [Grid]");
 
 	ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
@@ -56,11 +56,11 @@ void PortAdder::showHelpUI()
 
 	ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
-	ImGui::Text("The [Join] serves as a junction that links two [Wires] on the same axis together");
+	ImGui::Text("The [Bridge] serves as a junction that links two [Wires] on the same axis together");
 	ImGui::Text("It allows the creation of '+' shaped circuits to transmit signals without interference");
 
 	ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
 	ImGui::Text("Keyboard Shortcut (Gate): Number Key 1");
-	ImGui::Text("Keyboard Shortcut (Join): Number Key 2");
+	ImGui::Text("Keyboard Shortcut (Bridge): Number Key 2");
 }

@@ -1,6 +1,9 @@
 #include "SourceTool.h"
+#include "InputManager.h"
 #include "../Application.h"
 #include "../Core/Grid.h"
+#include "../Core/Wire.h"
+
 #include "imgui.h"
 
 using namespace RedWire;
@@ -10,22 +13,42 @@ SourceTool::SourceTool(InputManager& manager) : Tool(manager)
 
 void SourceTool::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
-	if (!changed) return;
+	Wire* wire = dynamic_cast<Wire*>(grid->get(cell));
+	if (!changed || !down || wire == nullptr) return;
 
-	//Check toggle source
-	static const sf::Time maxDelay = sf::seconds(0.3f);
-	sf::Time time = manager.application.getTotalTime();
+	bool* pointer = nullptr;
 
-	if (down) pressedTime = time;
-	else if (time - pressedTime < maxDelay)
+	switch (type)
 	{
-		grid->setSource(cell, !grid->getSource(cell));
+		case Type::permanent: pointer = &wire->isSource;    break;
+		case Type::temporary: pointer = &wire->poweredLast; break;
+	}
+
+	if (pointer == nullptr) return;
+
+	switch (mode)
+	{
+		case Mode::toggle:  *pointer = !*pointer; break;
+		case Mode::power:   *pointer = true;      break;
+		case Mode::unpower: *pointer = false;     break;
 	}
 }
 
 bool SourceTool::activationPredicate()
 {
 	return InputManager::isPressed(sf::Mouse::Right);
+}
+
+void SourceTool::showUI()
+{
+	int* modePtr = reinterpret_cast<int*>(&mode);
+	int* typePtr = reinterpret_cast<int*>(&type);
+
+	static const char* modeNames[] = { "Toggle", "Power", "Unpower" };
+	static const char* typeNames[] = { "Permanent", "Temporary" };
+
+	ImGui::SliderInt("Mode", modePtr, 0, 2, modeNames[*modePtr]);
+	ImGui::SliderInt("Type", typePtr, 0, 1, typeNames[*typePtr]);
 }
 
 void SourceTool::showHelpUI()

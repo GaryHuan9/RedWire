@@ -158,7 +158,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Control\SaveManager.cpp" />
+    <ClCompile Include="src\Core\Cell.cpp" />
     <ClCompile Include="src\Core\IdField.cpp" />
+    <ClCompile Include="src\Core\Junction.cpp" />
     <ClCompile Include="src\Core\Region.cpp" />
     <ClCompile Include="src\Interface\SaveHotkeyAction.cpp" />
     <ClCompile Include="src\Interface\HotkeyAction.cpp" />
@@ -188,7 +190,7 @@
     <ClCompile Include="src\CXMath.cpp" />
     <ClCompile Include="src\Core\Gate.cpp" />
     <ClCompile Include="src\core\Grid.cpp" />
-    <ClCompile Include="src\Core\Join.cpp" />
+    <ClCompile Include="src\Core\Bridge.cpp" />
     <ClCompile Include="src\Core\Port.cpp" />
     <ClCompile Include="src\Core\Wire.cpp" />
     <ClCompile Include="src\Application.cpp" />
@@ -205,6 +207,7 @@
     <ClInclude Include="Assets\Resource\resource.h" />
     <ClInclude Include="src\Control\SaveManager.h" />
     <ClInclude Include="src\Core\IdField.h" />
+    <ClInclude Include="src\Core\Junction.h" />
     <ClInclude Include="src\Core\Region.h" />
     <ClInclude Include="src\Interface\SaveHotkeyAction.h" />
     <ClInclude Include="src\Interface\HotkeyAction.h" />
@@ -236,7 +239,7 @@
     <ClInclude Include="src\Core\Gate.h" />
     <ClInclude Include="src\Core\Grid.h" />
     <ClInclude Include="src\Core\Cell.h" />
-    <ClInclude Include="src\Core\Join.h" />
+    <ClInclude Include="src\Core\Bridge.h" />
     <ClInclude Include="src\Core\Wire.h" />
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\Interface\UIWindow.h" />
