@@ -40,7 +40,6 @@ void NoteAdder::showUI()
 
 	ImGui::InputText("Text", inputText.data(), inputText.size());
 
-	//I'm not sure why but our copy of ImGUI doesn't have a PushDisable?
 	bool disabled = inputText[0] == '\0';
 
 	if (disabled)
@@ -52,17 +51,13 @@ void NoteAdder::showUI()
 	if (ImGui::Button("Confirm"))
 	{
 		//do something that does the note serializing :D
+		
 	}
 
 	if (disabled)
 	{
 		ImGui::PopItemFlag();
 		ImGui::PopStyleVar();
-	}
-
-	if (ImGui::Button("Confirm"))
-	{
-		//do something that does the note serializing :D
 	}
 }
 

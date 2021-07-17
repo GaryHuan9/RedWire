@@ -4,6 +4,7 @@
 #include "InputManager.h"
 #include "../Type2.h"
 #include "../Core/Region.h"
+
 #include <istream>
 #include <ostream>
 #include <memory>

@@ -25,6 +25,7 @@ namespace RedWire
 		bool pressed{};
 
 		std::array<char, 100ull> inputText;
+		uint32_t textSize = 1u;
 	};
 }
 
