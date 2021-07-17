@@ -35,6 +35,20 @@ uint32_t Area::getColor(const Int2& position) const
 	return cell->getColor();
 }
 
+const shared_ptr<Cell>* Area::getAddress(const Int2& position) const
+{
+	Int2&& tilePosition = getTilePosition(position);
+	const auto& iterator = tiles.find(tilePosition);
+
+	if (iterator == tiles.end()) return nullptr;
+	tilePosition *= Area::Tile::size;
+
+	const Int2 local = position - tilePosition;
+	auto& cells = iterator->second.cells;
+
+	return &cells[local.y][local.x];
+}
+
 bool searchX(const vector<reference_wrapper<const Area::Tile>>& tiles, const size_t& y)
 {
 	for (const Area::Tile& tile : tiles)
@@ -194,17 +208,8 @@ Int2 Area::getTilePosition(const Int2& position)
 
 shared_ptr<Cell> Area::getPtr(const Int2& position) const
 {
-	Int2&& tilePosition = getTilePosition(position);
-
-	const auto& iterator = tiles.find(tilePosition);
-	if (iterator == tiles.end()) return nullptr;
-
-	tilePosition *= Area::Tile::size;
-
-	const Int2 local = position - tilePosition;
-	auto& cells = iterator->second.cells;
-
-	return cells[local.y][local.x];
+	auto address = getAddress(position);
+	return address ? *address : nullptr;
 }
 
 void Area::set(const Int2& position, const shared_ptr<Cell> cell)

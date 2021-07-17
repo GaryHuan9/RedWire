@@ -2,8 +2,6 @@
 
 using namespace RedWire;
 
-Port::Port() : enabled(false)
-{}
 
 bool Port::getEnabled() const
 {

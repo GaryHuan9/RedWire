@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Port.h"
+#include <memory>
 
 namespace RedWire
 {
@@ -8,8 +9,6 @@ namespace RedWire
 
 	struct Gate : Port
 	{
-		Gate();
-
 		uint32_t getColor() const override;
 		uint8_t getCellId() const override;
 
@@ -18,11 +17,12 @@ namespace RedWire
 		void update() const;
 
 	private:
+		Wire* const getWire(const Int2& position) const;
 
-		Grid* grid;
+		Grid* grid{};
 
-		Int2 sourcePosition;
-		Int2 targetPosition;
-		Int2 controlPosition;
+		const std::shared_ptr<Cell>* sourceWire = nullptr;
+		const std::shared_ptr<Cell>* targetWire = nullptr;
+		const std::shared_ptr<Cell>* controlWire = nullptr;
 	};
 }

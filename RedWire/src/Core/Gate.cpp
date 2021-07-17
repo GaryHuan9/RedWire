@@ -7,9 +7,6 @@
 
 using namespace RedWire;
 
-Gate::Gate() : grid(), sourcePosition(), targetPosition(), controlPosition()
-{}
-
 uint32_t Gate::getColor() const
 {
 	return getEnabled() ? 0xFFEE2200u : 0xFF330400u;
@@ -50,25 +47,29 @@ void Gate::refresh(Grid& grid, const Int2& position)
 		break;
 	}
 
-	Int2 swizzle(-direction.y, direction.x);
-	controlPosition = position + direction;
-
-	sourcePosition = position + swizzle;
-	targetPosition = position - swizzle;
-
 	this->grid = &grid;
+
+	Int2 swizzle(-direction.y, direction.x);
+
+	controlWire = grid.getAddress(position + direction);
+
+	sourceWire = grid.getAddress(position + swizzle);
+	targetWire = grid.getAddress(position - swizzle);
 }
 
 void Gate::update() const
 {
 	if (!getEnabled()) return;
 
-	Wire* const source = static_cast<Wire* const>(grid->get(sourcePosition));
-	Wire* const target = static_cast<Wire* const>(grid->get(targetPosition));
-	Wire* const control = static_cast<Wire* const>(grid->get(controlPosition));
+	Wire* const source = (Wire*)sourceWire->get();
+	Wire* const target = (Wire*)targetWire->get();
+	Wire* const control = (Wire*)controlWire->get();
 
 	bool powered = source->getPowered();
 	if (control->getPowered() ? !powered : powered) target->setPowered(true);
 }
 
-
+Wire* const Gate::getWire(const Int2& position) const
+{
+	return static_cast<Wire* const>(grid->get(position));
+}
