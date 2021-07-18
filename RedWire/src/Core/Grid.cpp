@@ -1,17 +1,13 @@
 #include "Grid.h"
 #include "Wire.h"
 #include "Port.h"
-#include "Gate.h"
+#include "Inverter.h"
 #include "Bridge.h"
 #include "Note.h"
+#include "Transistor.h"
 
 using namespace RedWire;
 using namespace std;
-
-Grid::Grid() : wires(), gates()
-{
-
-}
 
 template<typename Type> void Grid::removeFrom(vector<shared_ptr<Type>>& vector, Type* target)
 {
@@ -109,19 +105,19 @@ void Grid::addWire(const Int2& position)
 	for (const Int2& offset : Int2::edges4) scanPort(position + offset);
 }
 
-void Grid::addGate(const Int2& position)
+void Grid::addInverter(const Int2& position)
 {
 	Cell* previous = get(position);
 
-	if (dynamic_cast<Gate*>(previous) != nullptr) return;
+	if (dynamic_cast<Inverter*>(previous) != nullptr) return;
 	if (previous != nullptr) remove(position);
 
-	shared_ptr<Gate> gate = make_shared<Gate>();
+	shared_ptr<Inverter> inverter = make_shared<Inverter>();
 
-	set(position, gate);
-	gates.push_back(gate);
+	set(position, inverter);
+	inverters.push_back(inverter);
 
-	gate->refresh(*this, position);
+	inverter->refresh(*this, position);
 }
 
 void Grid::addBridge(const Int2& position)
@@ -144,9 +140,22 @@ void Grid::addNote(const Int2& position)
 	if (dynamic_cast<Note*>(previous) != nullptr) return;
 	if (previous != nullptr) remove(position);
 
-	shared_ptr<Note> note = make_shared<Note>();
+	set(position, make_shared<Note>());
+}
 
-	set(position, note);
+void Grid::addTransistor(const Int2& position)
+{
+	Cell* previous = get(position);
+
+	if (dynamic_cast<Transistor*>(previous) != nullptr) return;
+	if (previous != nullptr) remove(position);
+
+	shared_ptr<Transistor> transistor = make_shared<Transistor>();
+
+	set(position, transistor);
+	transistors.push_back(transistor);
+
+	transistor->refresh(*this, position);
 }
 
 void Grid::remove(const Int2& position)
@@ -156,15 +165,17 @@ void Grid::remove(const Int2& position)
 	//We must use else if because previous might become corruped/undefined when we remove something
 
 	/**/ if (dynamic_cast<Wire*>(previous) != nullptr) removeWire(position);
-	else if (dynamic_cast<Gate*>(previous) != nullptr) removeGate(position);
+	else if (dynamic_cast<Inverter*>(previous) != nullptr) removeInverter(position);
 	else if (dynamic_cast<Bridge*>(previous) != nullptr) removeBridge(position);
 	else if (dynamic_cast<Note*>(previous) != nullptr) removeNote(position);
+	else if (dynamic_cast<Transistor*>(previous) != nullptr) removeTransistor(position);
 }
 
 void Grid::update()
 {
-	for (shared_ptr<Gate>& gate : gates) gate->update();
-	for (shared_ptr<Wire>& wire : wires) wire->update();
+	for (auto& inverter : inverters) inverter->update();
+	for (auto& transistor : transistors) transistor->update();
+	for (auto& wire : wires) wire->update();
 }
 
 uint8_t Grid::getId(const Int2& position) const
@@ -178,12 +189,13 @@ void Grid::setId(const Int2& position, const uint8_t& id)
 	switch (id)
 	{
 		case 0: remove(position); return;
-		case 5: addGate(position); return;
+		case 5: addInverter(position); return;
 		case 6: addBridge(position); return;
 		case 7: addNote(position); return;
+		case 8: addTransistor(position); return;
 		case 1: addWire(position); return;
-		case 2: addWire(position); break;
-		case 3: addWire(position); break;
+		case 2:
+		case 3:
 		case 4: addWire(position); break;
 		default: return;
 	}
@@ -211,10 +223,10 @@ void Grid::removeWire(const Int2& position)
 	for (const Int2& offset : Int2::edges4) scanPort(position + offset);
 }
 
-void Grid::removeGate(const Int2& position)
+void Grid::removeInverter(const Int2& position)
 {
 	Cell* const previous = get(position);
-	removeFrom(gates, (Gate*)previous);
+	removeFrom(inverters, (Inverter*)previous);
 
 	set(position, nullptr);
 }
@@ -227,6 +239,14 @@ void Grid::removeBridge(const Int2& position)
 
 void Grid::removeNote(const Int2& position)
 {
+	set(position, nullptr);
+}
+
+void Grid::removeTransistor(const Int2& position)
+{
+	Cell* const previous = get(position);
+	removeFrom(transistors, (Transistor*)previous);
+
 	set(position, nullptr);
 }
 
@@ -280,17 +300,11 @@ bool Grid::splitNeighbors(const Int2& position)
 }
 
 /// <summary>
-/// Updates either the gate or bridge at position
+/// Updates either the inverter or bridge at position
 /// by scanning its neighbors/surroundings
 /// </summary>
 void Grid::scanPort(const Int2& position)
 {
 	Port* port = dynamic_cast<Port*>(get(position));
-	if (port == nullptr) return;
-
-	Gate* const gate = dynamic_cast<Gate*>(port);
-	Bridge* const bridge = dynamic_cast<Bridge*>(port);
-
-	if (gate != nullptr) gate->refresh(*this, position);
-	if (bridge != nullptr) bridge->refresh(*this, position);
+	if (port != nullptr) port->refresh(*this, position);
 }

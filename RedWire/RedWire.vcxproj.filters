@@ -21,7 +21,7 @@
     <ClCompile Include="src\core\Grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Gate.cpp">
+    <ClCompile Include="src\Core\Inverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Bridge.cpp">
@@ -144,10 +144,13 @@
     <ClCompile Include="src\Interface\TextSerializer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Junction.cpp">
+    <ClCompile Include="src\Core\Gate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Cell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Transistor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -161,7 +164,7 @@
     <ClInclude Include="src\Core\Wire.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Gate.h">
+    <ClInclude Include="src\Core\Inverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Bridge.h">
@@ -272,7 +275,10 @@
     <ClInclude Include="src\Interface\TextSerializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Junction.h">
+    <ClInclude Include="src\Core\Gate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Transistor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,18 +1,27 @@
 #pragma once
 
-#include "Junction.h"
+#include "Port.h"
 #include <memory>
 
 namespace RedWire
 {
 	struct Grid;
+	struct Cell;
 	struct Wire;
 
-	struct Gate : Junction
+	/// <summary>
+	/// A Port that takes in exactly 3 inputs that forms a T shape.
+	/// </summary>
+	struct Gate : Port
 	{
-		uint32_t getColor() const override;
-		uint8_t getCellId() const override;
+		void refresh(Grid& grid, const Int2& position) override;
 
-		void update() const;
+	protected:
+		const std::shared_ptr<Cell>* sourceWire = nullptr;
+		const std::shared_ptr<Cell>* targetWire = nullptr;
+		const std::shared_ptr<Cell>* controlWire = nullptr;
+
+	private:
+		Grid* grid{};
 	};
 }

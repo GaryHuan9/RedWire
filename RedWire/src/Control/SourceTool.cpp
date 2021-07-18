@@ -22,6 +22,7 @@ void SourceTool::update(const Float2& position, const Int2& cell, const bool& do
 	{
 		case Type::permanent: pointer = &wire->isSource;    break;
 		case Type::temporary: pointer = &wire->poweredLast; break;
+		case Type::disabled: return;
 	}
 
 	if (pointer == nullptr) return;
@@ -45,10 +46,10 @@ void SourceTool::showUI()
 	int* typePtr = reinterpret_cast<int*>(&type);
 
 	static const char* modeNames[] = { "Toggle", "Power", "Unpower" };
-	static const char* typeNames[] = { "Permanent", "Temporary" };
+	static const char* typeNames[] = { "Permanent", "Temporary", "Disabled" };
 
 	ImGui::SliderInt("Mode", modePtr, 0, 2, modeNames[*modePtr]);
-	ImGui::SliderInt("Type", typePtr, 0, 1, typeNames[*typePtr]);
+	ImGui::SliderInt("Type", typePtr, 0, 2, typeNames[*typePtr]);
 }
 
 void SourceTool::showHelpUI()

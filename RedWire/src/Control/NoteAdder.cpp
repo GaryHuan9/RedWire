@@ -25,7 +25,7 @@ void NoteAdder::update(const Float2& position, const Int2& cell, const bool& dow
 
 bool NoteAdder::activationPredicate()
 {
-	return InputManager::isPressed(sf::Keyboard::Num3);
+	return InputManager::isPressed(sf::Keyboard::Z);
 }
 
 void NoteAdder::setCell(const Int2& cell)
@@ -51,7 +51,7 @@ void NoteAdder::showUI()
 	if (ImGui::Button("Confirm"))
 	{
 		//do something that does the note serializing :D
-		
+
 	}
 
 	if (disabled)
@@ -68,5 +68,5 @@ void NoteAdder::showHelpUI()
 
 	ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
-	ImGui::Text("Keyboard Shortcut: Number Key 3");
+	ImGui::Text("Keyboard Shortcut: Number Key Z");
 }

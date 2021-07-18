@@ -15,12 +15,12 @@ Bridge::Bridge()
 
 uint32_t Bridge::getColor() const
 {
-	return getEnabled() ? 0xFF10BB00u : 0xFF042200u;
+	return getEnabled() ? 0xFF1022CCu : 0xFF050844u;
 }
 
 uint8_t Bridge::getCellId() const
 {
-	return 6;
+	return 6u;
 }
 
 void Bridge::refresh(Grid& grid, const Int2& position)

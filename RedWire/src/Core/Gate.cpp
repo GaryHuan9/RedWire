@@ -7,24 +7,42 @@
 
 using namespace RedWire;
 
-uint32_t Gate::getColor() const
+void Gate::refresh(Grid& grid, const Int2& position)
 {
-	return getEnabled() ? 0xFFEE2200u : 0xFF330400u;
-}
+	//Count all wire neighbors
+	int count = 0;
 
-uint8_t Gate::getCellId() const
-{
-	return 5;
-}
+	for (const Int2& offset : Int2::edges4)
+	{
+		Cell* const cell = grid.get(position + offset);
+		Wire* const wire = dynamic_cast<Wire*>(cell);
 
-void Gate::update() const
-{
+		if (wire != nullptr) ++count;
+	}
+
+	//Refresh
+	setEnabled(count == 3);
 	if (!getEnabled()) return;
 
-	Wire* const source = (Wire*)sourceWire->get();
-	Wire* const target = (Wire*)targetWire->get();
-	Wire* const control = (Wire*)controlWire->get();
+	Int2 direction;
 
-	bool powered = source->getPowered();
-	if (control->getPowered() ? !powered : powered) target->setPowered(true);
+	for (const Int2& offset : Int2::edges4)
+	{
+		Cell* const cell = grid.get(position + offset);
+		Wire* const wire = dynamic_cast<Wire*>(cell);
+
+		if (wire != nullptr) continue;
+
+		direction = offset * -1;
+		break;
+	}
+
+	this->grid = &grid;
+
+	Int2 swizzle(-direction.y, direction.x);
+
+	controlWire = grid.getAddress(position + direction);
+
+	sourceWire = grid.getAddress(position + swizzle);
+	targetWire = grid.getAddress(position - swizzle);
 }

@@ -13,10 +13,10 @@ namespace RedWire
 		virtual void show() override;
 
 	private:
-		const float FPS_UPDATE_INTERVAL = 1.f;
+		const float FPSUpdateInterval = 1.0f;
 
-		float currentInterval = 0.f;
-		float lastAverageFPS = 0.f;
+		float currentInterval = 0.0f;
+		float lastAverageFPS = 0.0f;
 		int frameCount = 0;
 	};
 }

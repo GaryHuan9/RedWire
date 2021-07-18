@@ -160,8 +160,9 @@
     <ClCompile Include="src\Control\SaveManager.cpp" />
     <ClCompile Include="src\Core\Cell.cpp" />
     <ClCompile Include="src\Core\IdField.cpp" />
-    <ClCompile Include="src\Core\Junction.cpp" />
+    <ClCompile Include="src\Core\Gate.cpp" />
     <ClCompile Include="src\Core\Region.cpp" />
+    <ClCompile Include="src\Core\Transistor.cpp" />
     <ClCompile Include="src\Interface\SaveHotkeyAction.cpp" />
     <ClCompile Include="src\Interface\HotkeyAction.cpp" />
     <ClCompile Include="src\Interface\CreditWindow.cpp" />
@@ -188,7 +189,7 @@
     <ClCompile Include="src\Control\InputManager.cpp" />
     <ClCompile Include="src\Core\Area.cpp" />
     <ClCompile Include="src\CXMath.cpp" />
-    <ClCompile Include="src\Core\Gate.cpp" />
+    <ClCompile Include="src\Core\Inverter.cpp" />
     <ClCompile Include="src\core\Grid.cpp" />
     <ClCompile Include="src\Core\Bridge.cpp" />
     <ClCompile Include="src\Core\Port.cpp" />
@@ -207,8 +208,9 @@
     <ClInclude Include="Assets\Resource\resource.h" />
     <ClInclude Include="src\Control\SaveManager.h" />
     <ClInclude Include="src\Core\IdField.h" />
-    <ClInclude Include="src\Core\Junction.h" />
+    <ClInclude Include="src\Core\Gate.h" />
     <ClInclude Include="src\Core\Region.h" />
+    <ClInclude Include="src\Core\Transistor.h" />
     <ClInclude Include="src\Interface\SaveHotkeyAction.h" />
     <ClInclude Include="src\Interface\HotkeyAction.h" />
     <ClInclude Include="src\Interface\CreditWindow.h" />
@@ -236,7 +238,7 @@
     <ClInclude Include="src\Interface\Serialization.h" />
     <ClInclude Include="src\Interface\Toolbox.h" />
     <ClInclude Include="src\Type2.h" />
-    <ClInclude Include="src\Core\Gate.h" />
+    <ClInclude Include="src\Core\Inverter.h" />
     <ClInclude Include="src\Core\Grid.h" />
     <ClInclude Include="src\Core\Cell.h" />
     <ClInclude Include="src\Core\Bridge.h" />

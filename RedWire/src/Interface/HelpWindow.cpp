@@ -29,7 +29,7 @@ void HelpWindow::showUI()
 
 		if (ImGui::CollapsingHeader("How to basics"))
 		{
-			ImGui::Text("You can navigate around the [Grid] by dragging with the Middle Mouse Button or pressing the WASD keys");
+			ImGui::Text("You can naviinverter around the [Grid] by dragging with the Middle Mouse Button or pressing the WASD keys");
 			ImGui::Text("Note that all navigation and keyboard shortcuts are disabled while you are interacting with the [Toolbox]");
 
 			ImGui::Text("The circuit logic is simulated based on [Ticks], which are usually triggered automatically as time passes");

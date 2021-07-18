@@ -42,12 +42,12 @@ uint32_t Wire::getColor() const
 
 uint8_t Wire::getCellId() const
 {
-	uint8_t result = 0;
+	uint8_t result = 0u;
 
-	if (isSource) result |= 1 << 0;
-	if (poweredLast) result |= 1 << 1;
+	if (isSource)    result |= 1u << 0;
+	if (poweredLast) result |= 1u << 1;
 
-	return result + 1; //Should occupy 1-4 (4 variants)
+	return result + 1u; //Should occupy 1-4 (4 variants)
 }
 
 bool Wire::getPowered() const

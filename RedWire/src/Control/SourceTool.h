@@ -30,7 +30,8 @@ namespace RedWire
 		enum class Type
 		{
 			permanent,
-			temporary
+			temporary,
+			disabled
 		};
 
 		Mode mode = Mode::toggle;

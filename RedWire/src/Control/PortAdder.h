@@ -21,11 +21,12 @@ namespace RedWire
 	private:
 		enum class Mode
 		{
-			gate,
-			bridge
+			inverter,
+			bridge,
+			transistor
 		};
 
-		Mode mode = Mode::gate;
+		Mode mode = Mode::inverter;
 		bool overrideCell{ true };
 	};
 }

@@ -10,22 +10,23 @@
 
 namespace RedWire
 {
+	struct Region;
 	struct Cell;
 	struct Wire;
-	struct Gate;
-	struct Region;
+	struct Inverter;
+	struct Transistor;
 
 	struct Grid : Area
 	{
-		Grid();
-
 		inline size_t getWireCount() const { return wires.size(); }
-		inline size_t getGateCount() const { return gates.size(); }
+		inline size_t getInverterCount() const { return inverters.size(); }
+		inline size_t getTransistorCount() const { return transistors.size(); }
 
 		void addWire(const Int2& position);
-		void addGate(const Int2& position);
+		void addInverter(const Int2& position);
 		void addBridge(const Int2& position);
 		void addNote(const Int2& position);
+		void addTransistor(const Int2& position);
 
 		void remove(const Int2& position);
 
@@ -59,13 +60,15 @@ namespace RedWire
 		void scanPort(const Int2& position);
 
 		void removeWire(const Int2& position);
-		void removeGate(const Int2& position);
+		void removeInverter(const Int2& position);
 		void removeBridge(const Int2& position);
 		void removeNote(const Int2& position);
+		void removeTransistor(const Int2& position);
 
 		template<typename Type> static void removeFrom(std::vector<std::shared_ptr<Type>>& vector, Type* target);
 
 		std::vector<std::shared_ptr<Wire>> wires;
-		std::vector<std::shared_ptr<Gate>> gates;
+		std::vector<std::shared_ptr<Inverter>> inverters;
+		std::vector<std::shared_ptr<Transistor>> transistors;
 	};
 }
