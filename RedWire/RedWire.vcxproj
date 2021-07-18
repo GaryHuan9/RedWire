@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Libraries\ImGUI-1.83\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="src\Control\SaveManager.cpp" />
     <ClCompile Include="src\Core\Cell.cpp" />
     <ClCompile Include="src\Core\IdField.cpp" />
@@ -206,6 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assets\Resource\resource.h" />
+    <ClInclude Include="Libraries\ImGUI-1.83\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="src\Control\SaveManager.h" />
     <ClInclude Include="src\Core\IdField.h" />
     <ClInclude Include="src\Core\Gate.h" />
@@ -257,6 +259,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Assets\Resource\Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Assets\Fonts\RedWireNote.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

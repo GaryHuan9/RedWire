@@ -1,13 +1,15 @@
 #pragma once
 
-#include "LineTool.h"
-
 #include "../Interface/TextProjector.h"
+#include "../Type2.h"
 
-#include <array>
+#include "LineTool.h"
+#include <string>
 
 namespace RedWire
 {
+	struct InputManager;
+
 	struct NoteAdder : LineTool
 	{
 		NoteAdder(InputManager& manager);
@@ -19,17 +21,15 @@ namespace RedWire
 		void setCell(const Int2& cell) override;
 
 		virtual void showUI() override;
-		
+
 		void showHelpUI() override;
 
 	private:
 		bool drawLines{};
 		bool pressed{};
 
-		std::array<char, 100ull> inputText;
-		uint32_t textSize = 1u;
-
-		//TextProjector projector;
+		std::string inputText;
+		TextProjector projector;
 	};
 }
 

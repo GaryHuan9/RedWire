@@ -26,6 +26,8 @@ namespace RedWire
 			const uint32_t width;
 
 		private:
+			size_t getIndex(const Int2& position) const;
+
 			std::unique_ptr<bool[]> pixels;
 		};
 

@@ -153,6 +153,9 @@
     <ClCompile Include="src\Core\Transistor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Libraries\ImGUI-1.83\misc\cpp\imgui_stdlib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Grid.h">
@@ -281,6 +284,9 @@
     <ClInclude Include="src\Core\Transistor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Libraries\ImGUI-1.83\misc\cpp\imgui_stdlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\JetBrainsMono\JetBrainsMono-Bold.ttf" />
@@ -297,5 +303,8 @@
     <ResourceCompile Include="Assets\Resource\Resource.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Assets\Fonts\RedWireNote.txt" />
   </ItemGroup>
 </Project>

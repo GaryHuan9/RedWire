@@ -1,6 +1,7 @@
 #include "TextProjector.h"
 
 #include "../Core/Region.h"
+#include "../Core/Note.h"
 #include "../Type2.h"
 
 #include <string>
@@ -34,8 +35,8 @@ TextProjector::TextProjector(const char* fileName)
 				char character;
 				stream >> character;
 
-				Int2 size((int32_t)nextWidth, (int32_t)lineHeight);
-				map.emplace(character, Glyph(stream, size));
+				Int2 size = Int2((int32_t)nextWidth, (int32_t)lineHeight);
+				map.emplace(std::tolower(character), Glyph(stream, size));
 
 				break;
 			}
@@ -43,18 +44,13 @@ TextProjector::TextProjector(const char* fileName)
 	}
 }
 
-
 Region TextProjector::fromText(std::string text) const
 {
-	Int2 resultSize(0, lineHeight);
-
-	for (auto& letter : text) resultSize += Int2(map.at(letter).width, 0);
-
-	Region resultRegion(resultSize);
+	int32_t totalWidth = text.length() - 1; //Spaces between letters
+	for (auto& letter : text) totalWidth += map.at(letter).width;
 
 	Grid grid;
-
-	Int2 letterPos(0, 0);
+	int32_t cursor{ 0 };
 
 	for (auto& letter : text)
 	{
@@ -67,36 +63,44 @@ Region TextProjector::fromText(std::string text) const
 				const Int2 offset(x, y);
 
 				if (!glyph.get(offset)) continue;
-
-				grid.addNote(letterPos + offset);
+				grid.addNote(Int2(cursor + x, y));
 			}
 		}
 
-		letterPos += Int2(glyph.width, 0);
+		cursor += glyph.width + 1;
 	}
 
-	resultRegion.copyFrom(Int2(0, 0), grid);
+	Region region(Int2(totalWidth, lineHeight));
+	region.copyFrom(Int2(0, 0), grid);
 
-	return resultRegion;
+	return region;
 }
 
-// == Glyph == //
+static size_t getLength(const Int2& size)
+{
+	return (size_t)size.x * size.y;
+}
 
-TextProjector::Glyph::Glyph(std::istream& stream, const Int2& size) : width((uint32_t)size.x)
+TextProjector::Glyph::Glyph(std::istream& stream, const Int2& size) : width((uint32_t)size.x), pixels(std::make_unique<bool[]>(getLength(size)))
 {
 	for (int32_t y = 0; y < size.y; y++)
 	{
 		for (int32_t x = 0; x < size.x; x++)
 		{
-			int value;
+			int value{ 0 };
 			stream >> value;
 
-			//TODO
+			pixels[getIndex(Int2(x, y))] = value != 0;
 		}
 	}
 }
 
 bool TextProjector::Glyph::get(const Int2& position) const
 {
-	return pixels[(size_t)position.y * width + position.x];
+	return pixels[getIndex(position)];
+}
+
+size_t TextProjector::Glyph::getIndex(const Int2& position) const
+{
+	return (size_t)position.y * width + position.x;
 }

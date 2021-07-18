@@ -36,7 +36,7 @@ uint32_t Region::getColor(const Int2& position)
 	return color;
 }
 
-size_t getLength(const Int2& size)
+static size_t getLength(const Int2& size)
 {
 	return static_cast<size_t>(size.x) * size.y;
 }

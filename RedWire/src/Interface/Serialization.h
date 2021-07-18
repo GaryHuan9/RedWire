@@ -17,7 +17,6 @@ namespace RedWire
 	private:
 		void setMessage(const char* text);
 
-	private:
 		static const float MESSAGE_DISPLAY_SPAN; // second
 
 		enum class Mode
@@ -39,7 +38,7 @@ namespace RedWire
 		//finalized message
 		std::string message;
 
-		float messageTimeSpan = 0.f;
+		float messageTimeSpan = 0.0f;
 
 		bool messageSet{ false };
 		bool confirming{ false };

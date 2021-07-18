@@ -1,14 +1,21 @@
 #include "NoteAdder.h"
-
+#include "LineTool.h"
 #include "InputManager.h"
-#include "../Core/Grid.h"
-#include "imgui.h"
 
+#include "../Interface/TextProjector.h"
+#include "../Core/Region.h"
+#include "../Core/Grid.h"
+#include "../Type2.h"
+
+#include <string>
+
+#include "imgui.h"
 #include "imgui_internal.h"
+#include "misc/cpp/imgui_stdlib.h"
 
 using namespace RedWire;
 
-NoteAdder::NoteAdder(InputManager& manager) : LineTool(manager), inputText()//, projector("") // <- Insert file name here :D
+NoteAdder::NoteAdder(InputManager& manager) : LineTool(manager), projector("Assets/Fonts/RedWireNote.txt")
 {}
 
 void NoteAdder::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
@@ -36,11 +43,9 @@ void NoteAdder::setCell(const Int2& cell)
 void NoteAdder::showUI()
 {
 	ImGui::Checkbox("Draw Lines", &drawLines);
-	LineTool::showUI();
+	ImGui::InputText("Text", &inputText);
 
-	ImGui::InputText("Text", inputText.data(), inputText.size());
-
-	bool disabled = inputText[0] == '\0';
+	bool disabled = inputText.length() == 0;
 
 	if (disabled)
 	{
@@ -50,13 +55,8 @@ void NoteAdder::showUI()
 
 	if (ImGui::Button("Confirm"))
 	{
-		//do something that does the note serializing :D
-
-		throw std::exception("Not implemented yet!");
-
-		//Region region = projector.fromText(std::string(inputText.data()));
-
-		//do something like clipboard's copy paste
+		Region region = projector.fromText(inputText);
+		region.pasteTo(Int2(0, 0), *grid);
 	}
 
 	if (disabled)
@@ -64,6 +64,8 @@ void NoteAdder::showUI()
 		ImGui::PopItemFlag();
 		ImGui::PopStyleVar();
 	}
+
+	LineTool::showUI();
 }
 
 void NoteAdder::showHelpUI()
