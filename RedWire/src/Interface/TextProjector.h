@@ -6,10 +6,10 @@
 
 namespace RedWire
 {
-	struct TextSerializer
+	struct TextProjector
 	{
 	public:
-		TextSerializer();
+		TextProjector();
 
 		Region FromText(std::string text, uint32_t size) const;
 

@@ -202,7 +202,7 @@
     <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\Interface\UIWindow.cpp" />
     <ClCompile Include="src\Control\UIManager.cpp" />
-    <ClCompile Include="src\Interface\TextSerializer.cpp" />
+    <ClCompile Include="src\Interface\TextProjector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assets\Resource\resource.h" />
@@ -246,7 +246,7 @@
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\Interface\UIWindow.h" />
     <ClInclude Include="src\Control\UIManager.h" />
-    <ClInclude Include="src\Interface\TextSerializer.h" />
+    <ClInclude Include="src\Interface\TextProjector.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\JetBrainsMono\JetBrainsMono-Bold.ttf" />

@@ -141,7 +141,7 @@
     <ClCompile Include="src\Control\SaveManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Interface\TextSerializer.cpp">
+    <ClCompile Include="src\Interface\TextProjector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Gate.cpp">
@@ -272,7 +272,7 @@
     <ClInclude Include="src\Control\SaveManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Interface\TextSerializer.h">
+    <ClInclude Include="src\Interface\TextProjector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Gate.h">

@@ -1,12 +1,12 @@
-#include "TextSerializer.h"
+#include "TextProjector.h"
 
 using namespace RedWire;
 
-const Int2 TextSerializer::SINGLE_CHAR_SIZE = Int2(4, 5);
+const Int2 TextProjector::SINGLE_CHAR_SIZE = Int2(4, 5);
 
-TextSerializer::TextSerializer() {}
+TextProjector::TextProjector() {}
 
-Region TextSerializer::FromText(std::string text, uint32_t size) const
+Region TextProjector::FromText(std::string text, uint32_t size) const
 {
 	const Int2 resultSize = SINGLE_CHAR_SIZE * size + SINGLE_CHAR_SIZE.x * (text.size() - 1ull);
 
@@ -16,8 +16,6 @@ Region TextSerializer::FromText(std::string text, uint32_t size) const
 
 	for (const char& letter : text)
 	{
-		
-
 		//do stuff
 	}
 
