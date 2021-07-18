@@ -1,19 +1,35 @@
 #pragma once
 
 #include "../Core/Region.h"
+#include "../Type2.h"
 
 #include <string>
+#include <memory>
+#include <stdint.h>
+#include <unordered_map>
 
 namespace RedWire
 {
 	struct TextProjector
 	{
-	public:
-		TextProjector();
+		TextProjector(char* fileName);
 
-		Region FromText(std::string text, uint32_t size) const;
+		Region fromText(std::string text) const;
 
 	private:
-		static const Int2 SINGLE_CHAR_SIZE;
+		struct Glyph
+		{
+			Glyph(std::istream& stream, const Int2& size);
+
+			bool get(const Int2& position) const;
+
+			const uint32_t width;
+
+		private:
+			std::unique_ptr<bool[]> pixels;
+		};
+
+		uint32_t lineHeight{};
+		std::unordered_map<char, Glyph> map;
 	};
 }

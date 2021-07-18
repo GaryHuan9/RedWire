@@ -164,10 +164,10 @@ void Grid::remove(const Int2& position)
 
 	//We must use else if because previous might become corruped/undefined when we remove something
 
-	/**/ if (dynamic_cast<Wire*>(previous) != nullptr) removeWire(position);
-	else if (dynamic_cast<Inverter*>(previous) != nullptr) removeInverter(position);
-	else if (dynamic_cast<Bridge*>(previous) != nullptr) removeBridge(position);
-	else if (dynamic_cast<Note*>(previous) != nullptr) removeNote(position);
+	/**/ if (dynamic_cast<Wire*>(previous) != nullptr)       removeWire(position);
+	else if (dynamic_cast<Inverter*>(previous) != nullptr)   removeInverter(position);
+	else if (dynamic_cast<Bridge*>(previous) != nullptr)     removeBridge(position);
+	else if (dynamic_cast<Note*>(previous) != nullptr)       removeNote(position);
 	else if (dynamic_cast<Transistor*>(previous) != nullptr) removeTransistor(position);
 }
 
