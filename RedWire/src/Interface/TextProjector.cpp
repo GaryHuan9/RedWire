@@ -11,7 +11,7 @@
 
 using namespace RedWire;
 
-TextProjector::TextProjector(char* fileName)
+TextProjector::TextProjector(const char* fileName)
 {
 	std::ifstream stream(fileName);
 
@@ -22,7 +22,7 @@ TextProjector::TextProjector(char* fileName)
 
 	while (stream >> token)
 	{
-		stream.seekg(stream.tellg() + (std::streampos)1); //Eat the space
+		stream.seekg(stream.tellg() + (std::streampos)1); //Eat the space, delicious!
 
 		switch (std::tolower(token))
 		{
@@ -46,21 +46,41 @@ TextProjector::TextProjector(char* fileName)
 
 Region TextProjector::fromText(std::string text) const
 {
-	//const Int2 resultSize = SINGLE_CHAR_SIZE * size + SINGLE_CHAR_SIZE.x * (text.size() - 1ull);
+	Int2 resultSize(0, lineHeight);
 
-	//Region result(resultSize);
+	for (auto& letter : text) resultSize += Int2(map.at(letter).width, 0);
 
-	////assign and combine the region
+	Region resultRegion(resultSize);
 
-	//for (const char& letter : text)
-	//{
-	//	//do stuff
-	//}
+	Grid grid;
 
-	//return result;
+	Int2 letterPos(0, 0);
 
-	throw nullptr;
+	for (auto& letter : text)
+	{
+		const Glyph& glyph = map.at(letter);
+
+		for (uint32_t y = 0u; y < lineHeight; y++)
+		{
+			for (uint32_t x = 0u; x < glyph.width; x++)
+			{
+				const Int2 offset(x, y);
+
+				if (!glyph.get(offset)) continue;
+
+				grid.addNote(letterPos + offset);
+			}
+		}
+
+		letterPos += Int2(glyph.width, 0);
+	}
+
+	resultRegion.copyFrom(Int2(0, 0), grid);
+
+	return resultRegion;
 }
+
+// == Glyph == //
 
 TextProjector::Glyph::Glyph(std::istream& stream, const Int2& size) : width((uint32_t)size.x)
 {

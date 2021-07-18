@@ -8,7 +8,7 @@
 
 using namespace RedWire;
 
-NoteAdder::NoteAdder(InputManager& manager) : LineTool(manager), inputText()
+NoteAdder::NoteAdder(InputManager& manager) : LineTool(manager), inputText()//, projector("") // <- Insert file name here :D
 {}
 
 void NoteAdder::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
@@ -52,6 +52,11 @@ void NoteAdder::showUI()
 	{
 		//do something that does the note serializing :D
 
+		throw std::exception("Not implemented yet!");
+
+		//Region region = projector.fromText(std::string(inputText.data()));
+
+		//do something like clipboard's copy paste
 	}
 
 	if (disabled)

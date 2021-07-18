@@ -2,6 +2,8 @@
 
 #include "LineTool.h"
 
+#include "../Interface/TextProjector.h"
+
 #include <array>
 
 namespace RedWire
@@ -26,6 +28,8 @@ namespace RedWire
 
 		std::array<char, 100ull> inputText;
 		uint32_t textSize = 1u;
+
+		//TextProjector projector;
 	};
 }
 

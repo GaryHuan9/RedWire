@@ -12,7 +12,7 @@ namespace RedWire
 {
 	struct TextProjector
 	{
-		TextProjector(char* fileName);
+		TextProjector(const char* fileName);
 
 		Region fromText(std::string text) const;
 
