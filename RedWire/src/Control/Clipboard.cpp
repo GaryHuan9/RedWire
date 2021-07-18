@@ -29,39 +29,23 @@ void Clipboard::update(const Float2& position, const Int2& cell, const bool& dow
 
 	lastCell = cell;
 
-	if (changed && down)
+	if (!changed)
+	{
+		if (lastCell != oldCell || mode != oldMode) updatePreview();
+		return;
+	}
+
+	bool express = InputManager::isPressed(sf::Keyboard::LShift);
+
+	if (!isCopying && down)
 	{
 		switch (mode)
 		{
 			case Mode::copy:
 			case Mode::cut:
 			{
-				if (isCopying)
-				{
-					Int2 min = startCell.min(cell);
-					Int2 max = startCell.max(cell);
-
-					buffer.setSize(max - min + Int2(1));
-					buffer.copyFrom(min, *grid);
-
-					isCopying = false;
-
-					if (mode == Mode::cut)
-					{
-						for (int32_t y = min.y; y <= max.y; y++)
-						{
-							for (int32_t x = min.x; x <= max.x; x++)
-							{
-								grid->remove(Int2(x, y));
-							}
-						}
-					}
-				}
-				else
-				{
-					startCell = cell;
-					isCopying = true;
-				}
+				startCell = cell;
+				isCopying = true;
 
 				break;
 			}
@@ -73,10 +57,30 @@ void Clipboard::update(const Float2& position, const Int2& cell, const bool& dow
 				break;
 			}
 		}
-
-		updatePreview();
 	}
-	else if (lastCell != oldCell || mode != oldMode) updatePreview();
+	else if (isCopying && (down || express))
+	{
+		Int2 min = startCell.min(cell);
+		Int2 max = startCell.max(cell);
+
+		buffer.setSize(max - min + Int2(1));
+		buffer.copyFrom(min, *grid);
+
+		isCopying = false;
+
+		if (mode == Mode::cut)
+		{
+			for (int32_t y = min.y; y <= max.y; y++)
+			{
+				for (int32_t x = min.x; x <= max.x; x++)
+				{
+					grid->remove(Int2(x, y));
+				}
+			}
+		}
+	}
+
+	updatePreview();
 }
 
 void Clipboard::onDisable()

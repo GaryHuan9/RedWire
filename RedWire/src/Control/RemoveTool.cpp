@@ -4,6 +4,7 @@
 #include "../Core/Grid.h"
 
 #include <iostream>
+#include <stdint.h>
 #include "imgui.h"
 
 using namespace RedWire;
@@ -13,35 +14,39 @@ RemoveTool::RemoveTool(InputManager& manager) : Tool(manager)
 
 void RemoveTool::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
-	Int2 old = lastCell;
+	Int2 oldCell = lastCell;
 	lastCell = cell;
 
-	if (changed && down)
+	if (!changed)
 	{
-		if (started)
-		{
-			Int2 min = startCell.min(cell);
-			Int2 max = startCell.max(cell);
-
-			for (int y = min.y; y <= max.y; y++)
-			{
-				for (int x = min.x; x <= max.x; x++)
-				{
-					grid->remove(Int2(x, y));
-				}
-			}
-
-			started = false;
-		}
-		else
-		{
-			started = true;
-			startCell = cell;
-		}
-
-		updatePreview();
+		if (lastCell != oldCell) updatePreview();
+		return;
 	}
-	else if (lastCell != old) updatePreview();
+
+	bool express = InputManager::isPressed(sf::Keyboard::LShift);
+
+	if (!started && down)
+	{
+		started = true;
+		startCell = cell;
+	}
+	else if (started && (down || express))
+	{
+		Int2 min = startCell.min(cell);
+		Int2 max = startCell.max(cell);
+
+		for (int32_t y = min.y; y <= max.y; y++)
+		{
+			for (int32_t x = min.x; x <= max.x; x++)
+			{
+				grid->remove(Int2(x, y));
+			}
+		}
+
+		started = false;
+	}
+
+	updatePreview();
 }
 
 void RemoveTool::onDisable()
