@@ -15,6 +15,11 @@ namespace RedWire
 		virtual void show() override;
 
 	private:
+		void setMessage(const char* text);
+
+	private:
+		static const float MESSAGE_DISPLAY_SPAN; // second
+
 		enum class Mode
 		{
 			circuit,
@@ -34,6 +39,9 @@ namespace RedWire
 		//finalized message
 		std::string message;
 
+		float messageTimeSpan = 0.f;
+
+		bool messageSet{ false };
 		bool confirming{ false };
 	};
 }

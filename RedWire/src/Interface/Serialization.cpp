@@ -16,6 +16,8 @@ using namespace RedWire;
 
 namespace fs = std::filesystem;
 
+const float Serialization::MESSAGE_DISPLAY_SPAN = 5.f; // second
+
 Serialization::Serialization(Toolbox& toolbox) : Section(toolbox)
 {}
 
@@ -56,7 +58,7 @@ void Serialization::show()
 		else
 		{
 			bool created = fs::create_directory(savePath);
-			if (!created) message = "Failed to create path";
+			if (!created) setMessage("Failed to create path");
 		}
 
 		ImGui::EndCombo();
@@ -108,20 +110,20 @@ void Serialization::show()
 							case Mode::circuit:
 							{
 								toolbox.application.grid = Area::readFrom(stream, manager.viewCenter, manager.viewExtend);
-								message = "Successfully loaded circuit";
+								setMessage("Successfully loaded circuit");
 
 								break;
 							}
 							case Mode::clipboard:
 							{
 								manager.find<Clipboard>().readFrom(stream);
-								message = "Successfully loaded clipboard";
+								setMessage("Successfully loaded clipboard");
 
 								break;
 							}
 						}
 					}
-					else message = "Failed to open path";
+					else setMessage("Failed to open path");
 
 					break;
 				}
@@ -140,28 +142,28 @@ void Serialization::show()
 							case Mode::circuit:
 							{
 								toolbox.application.grid->writeTo(stream, manager.viewCenter, manager.viewExtend);
-								message = "Successfully saved circuit";
+								setMessage("Successfully saved circuit");
 
 								break;
 							}
 							case Mode::clipboard:
 							{
 								manager.find<Clipboard>().writeTo(stream);
-								message = "Successfully saved clipboard";
+								setMessage("Successfully saved clipboard");
 
 								break;
 							}
 						}
 					}
-					else message = "Failed to open path";
+					else setMessage("Failed to open path");
 					break;
 				}
 				case FileMode::remove:
 				{
 					fs::path path = saveManager.getLastFilePath();
 
-					if (fs::exists(path) && fs::remove(path)) message = "Successfully deleted circuit";
-					else message = "Failed to delete path";
+					if (fs::exists(path) && fs::remove(path)) setMessage("Successfully deleted circuit");
+					else setMessage("Failed to delete path");
 					break;
 				}
 			}
@@ -172,7 +174,7 @@ void Serialization::show()
 		if (ImGui::Button("Cancel"))
 		{
 			confirming = false;
-			message = "Cancelled";
+			setMessage("Cancelled");
 		}
 	}
 
@@ -183,15 +185,26 @@ void Serialization::show()
 		ImGui::PopStyleVar();
 	}
 
-	if (!message.empty())
+	bool inTimeSpan = messageTimeSpan < MESSAGE_DISPLAY_SPAN; // I Dunno what to call this boolean
+	
+	if (!message.empty() && inTimeSpan)
 	{
 		ImGui::SameLine();
 		ImGui::Text(message.c_str());
+
+		messageTimeSpan += toolbox.application.getDeltaTime().asSeconds();
 	}
 
+	//except this message can exist forever
 	if (!hasName)
 	{
 		ImGui::SameLine();
 		ImGui::Text("Missing file name");
 	}
+}
+
+void Serialization::setMessage(const char* text)
+{
+	message = text;
+	messageTimeSpan = 0.f;
 }
