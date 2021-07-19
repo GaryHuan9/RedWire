@@ -43,6 +43,6 @@ void Gate::refresh(Grid& grid, const Int2& position)
 
 	controlWire = grid.getAddress(position + direction);
 
-	sourceWire = grid.getAddress(position + swizzle);
-	targetWire = grid.getAddress(position - swizzle);
+	wire0 = grid.getAddress(position + swizzle);
+	wire1 = grid.getAddress(position - swizzle);
 }

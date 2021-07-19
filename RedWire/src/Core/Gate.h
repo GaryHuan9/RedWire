@@ -17,8 +17,8 @@ namespace RedWire
 		void refresh(Grid& grid, const Int2& position) override;
 
 	protected:
-		const std::shared_ptr<Cell>* sourceWire = nullptr;
-		const std::shared_ptr<Cell>* targetWire = nullptr;
+		const std::shared_ptr<Cell>* wire0 = nullptr;
+		const std::shared_ptr<Cell>* wire1 = nullptr;
 		const std::shared_ptr<Cell>* controlWire = nullptr;
 
 	private:

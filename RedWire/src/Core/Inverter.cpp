@@ -21,8 +21,8 @@ void Inverter::update() const
 {
 	if (!getEnabled()) return;
 
-	Wire* const source = (Wire*)sourceWire->get();
-	Wire* const target = (Wire*)targetWire->get();
+	Wire* const source = (Wire*)wire0->get();
+	Wire* const target = (Wire*)wire1->get();
 	Wire* const control = (Wire*)controlWire->get();
 
 	bool powered = source->getPowered();
