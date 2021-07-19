@@ -161,6 +161,7 @@ void Grid::addTransistor(const Int2& position)
 void Grid::remove(const Int2& position)
 {
 	Cell* const previous = get(position);
+	if (previous == nullptr) return;
 
 	//We must use else if because previous might become corruped/undefined when we remove something
 
@@ -188,15 +189,14 @@ void Grid::setId(const Int2& position, const uint8_t& id)
 {
 	switch (id)
 	{
-		case 0: remove(position); return;
-		case 5: addInverter(position); return;
-		case 6: addBridge(position); return;
-		case 7: addNote(position); return;
-		case 8: addTransistor(position); return;
 		case 1: addWire(position); return;
 		case 2:
 		case 3:
 		case 4: addWire(position); break;
+		case 5: addInverter(position); return;
+		case 6: addBridge(position); return;
+		case 7: addNote(position); return;
+		case 8: addTransistor(position); return;
 		default: return;
 	}
 

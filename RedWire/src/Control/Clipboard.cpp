@@ -18,6 +18,17 @@ using namespace RedWire;
 Clipboard::Clipboard(InputManager& manager) : Tool(manager)
 {}
 
+static void removeRectangle(Grid& grid, const Int2& min, const Int2& max)
+{
+	for (int32_t y = min.y; y <= max.y; y++)
+	{
+		for (int32_t x = min.x; x <= max.x; x++)
+		{
+			grid.remove(Int2(x, y));
+		}
+	}
+}
+
 void Clipboard::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
 	Mode oldMode = mode;
@@ -51,9 +62,16 @@ void Clipboard::update(const Float2& position, const Int2& cell, const bool& dow
 			}
 			case Mode::paste:
 			{
-				if (buffer.getSize() == Int2(0)) break;
-				buffer.pasteTo(cell, *grid);
+				Int2 size = buffer.getSize();
+				if (size == Int2(0)) break;
 
+				if (overrideCell)
+				{
+					Int2 max = cell + size - Int2(1);
+					removeRectangle(*grid, cell, max);
+				}
+
+				buffer.pasteTo(cell, *grid);
 				break;
 			}
 		}
@@ -68,16 +86,7 @@ void Clipboard::update(const Float2& position, const Int2& cell, const bool& dow
 
 		isCopying = false;
 
-		if (mode == Mode::cut)
-		{
-			for (int32_t y = min.y; y <= max.y; y++)
-			{
-				for (int32_t x = min.x; x <= max.x; x++)
-				{
-					grid->remove(Int2(x, y));
-				}
-			}
-		}
+		if (mode == Mode::cut) removeRectangle(*grid, min, max);
 	}
 
 	updatePreview();
@@ -106,6 +115,8 @@ void Clipboard::showUI()
 		isCopying = false;
 		updatePreview();
 	}
+
+	ImGui::Checkbox("Override Previous", &overrideCell);
 
 	Int2 size = buffer.getSize();
 

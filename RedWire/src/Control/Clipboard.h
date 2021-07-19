@@ -39,6 +39,7 @@ namespace RedWire
 		};
 
 		Mode mode = Mode::copy;
+		bool overrideCell{ true };
 
 		Int2 startCell;
 		Int2 lastCell;
