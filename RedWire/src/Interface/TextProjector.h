@@ -20,6 +20,7 @@ namespace RedWire
 		struct Glyph
 		{
 			Glyph(std::istream& stream, const Int2& size);
+			Glyph(const Int2& size);
 
 			bool get(const Int2& position) const;
 

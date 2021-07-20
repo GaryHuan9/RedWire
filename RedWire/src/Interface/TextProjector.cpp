@@ -4,11 +4,11 @@
 #include "../Core/Note.h"
 #include "../Type2.h"
 
-#include <iostream>
-
+#include <limits>
 #include <string>
 #include <memory>
 #include <fstream>
+#include <iostream>
 #include <stdint.h>
 #include <unordered_map>
 
@@ -29,7 +29,11 @@ TextProjector::TextProjector(const char* fileName)
 
 		switch (std::tolower(token))
 		{
-			case '#': continue; //Ignore comments
+			case '#':
+			{
+				stream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				break;
+			}
 			case 'h': stream >> lineHeight; break;
 			case 'w': stream >> nextWidth;  break;
 			case 'c':
@@ -37,8 +41,8 @@ TextProjector::TextProjector(const char* fileName)
 				char character;
 				stream >> character;
 
-				Int2 size = Int2((int32_t)nextWidth, (int32_t)lineHeight);
 				//NOTE: Stored as lower case
+				Int2 size = Int2((int32_t)nextWidth, (int32_t)lineHeight);
 				map.emplace(std::tolower(character), Glyph(stream, size));
 
 				break;
@@ -46,10 +50,11 @@ TextProjector::TextProjector(const char* fileName)
 		}
 	}
 
+	//Add space glyph
+	map.emplace(' ', Glyph(Int2(3, (int32_t)lineHeight)));
+
 	//debug ->
 	//for (auto& item : map) std::cout << item.first << ": " << item.second.width << '\n';
-
-	stream.close();
 }
 
 Region TextProjector::fromText(std::string text) const
@@ -64,11 +69,10 @@ Region TextProjector::fromText(std::string text) const
 	for (auto& letter : text)
 	{
 		const char lower = std::tolower(letter);
+		const auto&& pair = map.find(lower);
 
-		// checks if exists
-		if (map.find(lower) == map.end()) continue;
-
-		const Glyph& glyph = map.at(lower);
+		if (pair == map.end()) continue;
+		const Glyph& glyph = pair->second;
 
 		for (uint32_t y = 0u; y < lineHeight; y++)
 		{
@@ -77,7 +81,6 @@ Region TextProjector::fromText(std::string text) const
 				const Int2 offset(x, y);
 
 				if (!glyph.get(offset)) continue;
-
 				grid.addNote(Int2(cursor + x, y));
 			}
 		}
@@ -96,7 +99,7 @@ static size_t getLength(const Int2& size)
 	return (size_t)size.x * size.y;
 }
 
-TextProjector::Glyph::Glyph(std::istream& stream, const Int2& size) : width((uint32_t)size.x), pixels(std::make_unique<bool[]>(getLength(size)))
+TextProjector::Glyph::Glyph(std::istream& stream, const Int2& size) : Glyph(size)
 {
 	for (int32_t y = 0; y < size.y; y++)
 	{
@@ -109,6 +112,9 @@ TextProjector::Glyph::Glyph(std::istream& stream, const Int2& size) : width((uin
 		}
 	}
 }
+
+TextProjector::Glyph::Glyph(const Int2& size) : width((uint32_t)size.x), pixels(std::make_unique<bool[]>(getLength(size)))
+{}
 
 bool TextProjector::Glyph::get(const Int2& position) const
 {
