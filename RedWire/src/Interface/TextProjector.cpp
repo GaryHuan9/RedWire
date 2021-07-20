@@ -46,7 +46,8 @@ TextProjector::TextProjector(const char* fileName)
 		}
 	}
 
-	for (auto& item : map) std::cout << item.first << ": " << item.second.width << '\n';
+	//debug ->
+	//for (auto& item : map) std::cout << item.first << ": " << item.second.width << '\n';
 
 	stream.close();
 }
@@ -54,7 +55,7 @@ TextProjector::TextProjector(const char* fileName)
 Region TextProjector::fromText(std::string text) const
 {
 	//NOTE: remember to make it lower case
-	int32_t totalWidth = text.length() - 1; //Spaces between letters
+	int32_t totalWidth = static_cast<int32_t>(text.length() - 1ull); //Spaces between letters
 	for (auto& letter : text) totalWidth += map.at(std::tolower(letter)).width;
 
 	Grid grid;
@@ -62,12 +63,12 @@ Region TextProjector::fromText(std::string text) const
 
 	for (auto& letter : text)
 	{
-		const char letterLower = std::tolower(letter);
+		const char lower = std::tolower(letter);
 
 		// checks if exists
-		if (map.find(letterLower) == map.end()) continue;
+		if (map.find(lower) == map.end()) continue;
 
-		const Glyph& glyph = map.at(letterLower);
+		const Glyph& glyph = map.at(lower);
 
 		for (uint32_t y = 0u; y < lineHeight; y++)
 		{
@@ -76,6 +77,7 @@ Region TextProjector::fromText(std::string text) const
 				const Int2 offset(x, y);
 
 				if (!glyph.get(offset)) continue;
+
 				grid.addNote(Int2(cursor + x, y));
 			}
 		}
