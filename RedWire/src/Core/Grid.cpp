@@ -120,6 +120,21 @@ void Grid::addInverter(const Int2& position)
 	inverter->refresh(*this, position);
 }
 
+void Grid::addTransistor(const Int2& position)
+{
+	Cell* previous = get(position);
+
+	if (dynamic_cast<Transistor*>(previous) != nullptr) return;
+	if (previous != nullptr) remove(position);
+
+	shared_ptr<Transistor> transistor = make_shared<Transistor>();
+
+	set(position, transistor);
+	transistors.push_back(transistor);
+
+	transistor->refresh(*this, position);
+}
+
 void Grid::addBridge(const Int2& position)
 {
 	Cell* previous = get(position);
@@ -143,21 +158,6 @@ void Grid::addNote(const Int2& position)
 	set(position, make_shared<Note>());
 }
 
-void Grid::addTransistor(const Int2& position)
-{
-	Cell* previous = get(position);
-
-	if (dynamic_cast<Transistor*>(previous) != nullptr) return;
-	if (previous != nullptr) remove(position);
-
-	shared_ptr<Transistor> transistor = make_shared<Transistor>();
-
-	set(position, transistor);
-	transistors.push_back(transistor);
-
-	transistor->refresh(*this, position);
-}
-
 void Grid::remove(const Int2& position)
 {
 	Cell* const previous = get(position);
@@ -167,9 +167,9 @@ void Grid::remove(const Int2& position)
 
 	/**/ if (dynamic_cast<Wire*>(previous) != nullptr)       removeWire(position);
 	else if (dynamic_cast<Inverter*>(previous) != nullptr)   removeInverter(position);
+	else if (dynamic_cast<Transistor*>(previous) != nullptr) removeTransistor(position);
 	else if (dynamic_cast<Bridge*>(previous) != nullptr)     removeBridge(position);
 	else if (dynamic_cast<Note*>(previous) != nullptr)       removeNote(position);
-	else if (dynamic_cast<Transistor*>(previous) != nullptr) removeTransistor(position);
 }
 
 void Grid::update()
@@ -190,13 +190,13 @@ void Grid::setId(const Int2& position, const uint8_t& id)
 	switch (id)
 	{
 		case 1: addWire(position); return;
+		case 5: addInverter(position); return;
+		case 8: addTransistor(position); return;
+		case 6: addBridge(position); return;
+		case 7: addNote(position); return;
 		case 2:
 		case 3:
 		case 4: addWire(position); break;
-		case 5: addInverter(position); return;
-		case 6: addBridge(position); return;
-		case 7: addNote(position); return;
-		case 8: addTransistor(position); return;
 		default: return;
 	}
 
@@ -231,6 +231,14 @@ void Grid::removeInverter(const Int2& position)
 	set(position, nullptr);
 }
 
+void Grid::removeTransistor(const Int2& position)
+{
+	Cell* const previous = get(position);
+	removeFrom(transistors, (Transistor*)previous);
+
+	set(position, nullptr);
+}
+
 void Grid::removeBridge(const Int2& position)
 {
 	set(position, nullptr);
@@ -239,14 +247,6 @@ void Grid::removeBridge(const Int2& position)
 
 void Grid::removeNote(const Int2& position)
 {
-	set(position, nullptr);
-}
-
-void Grid::removeTransistor(const Int2& position)
-{
-	Cell* const previous = get(position);
-	removeFrom(transistors, (Transistor*)previous);
-
 	set(position, nullptr);
 }
 

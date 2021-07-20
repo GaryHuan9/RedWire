@@ -13,7 +13,7 @@ void CreditWindow::showUI()
 
 	if (ImGui::Begin("Credits", &active, ImGuiWindowFlags_AlwaysHorizontalScrollbar))
 	{
-		ImGui::Text("RedWire v0.0.2");
+		ImGui::Text("RedWire v0.0.3");
 
 		ImGui::Dummy(ImVec2(0.f, 20.f));
 
@@ -31,7 +31,7 @@ void CreditWindow::showUI()
 		if (ImGui::CollapsingHeader("Libraries"))
 		{
 			ImGui::Text("UI core: Dear ImGUI");
-			ImGui::Text("Underlying core: SFML");
+			ImGui::Text("Graphics core: SFML");
 		}
 	}
 

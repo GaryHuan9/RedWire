@@ -22,8 +22,8 @@ namespace RedWire
 		enum class Mode
 		{
 			inverter,
-			bridge,
-			transistor
+			transistor,
+			bridge
 		};
 
 		Mode mode = Mode::inverter;

@@ -13,8 +13,8 @@ PortAdder::PortAdder(InputManager& manager) : Tool(manager)
 void PortAdder::update(const Float2& position, const Int2& cell, const bool& down, const bool& changed)
 {
 	if (InputManager::isPressed(sf::Keyboard::Num1)) mode = Mode::inverter;
-	if (InputManager::isPressed(sf::Keyboard::Num2)) mode = Mode::bridge;
-	if (InputManager::isPressed(sf::Keyboard::Num3)) mode = Mode::transistor;
+	if (InputManager::isPressed(sf::Keyboard::Num2)) mode = Mode::transistor;
+	if (InputManager::isPressed(sf::Keyboard::Num3)) mode = Mode::bridge;
 
 	if (!down || !changed) return;
 	if (!overrideCell && grid->get(cell)) return;
@@ -22,8 +22,8 @@ void PortAdder::update(const Float2& position, const Int2& cell, const bool& dow
 	switch (mode)
 	{
 		case Mode::inverter: grid->addInverter(cell); break;
-		case Mode::bridge: grid->addBridge(cell); break;
 		case Mode::transistor: grid->addTransistor(cell); break;
+		case Mode::bridge: grid->addBridge(cell); break;
 	}
 }
 
@@ -36,9 +36,9 @@ bool PortAdder::activationPredicate()
 
 void PortAdder::showUI()
 {
-	int* ptr = reinterpret_cast<int*>(&mode);
+	static const char* modeNames[] = { "Inverter", "Transistor", "Bridge" };
 
-	static const char* modeNames[] = { "Inverter", "Bridge", "Transistor" };
+	int* ptr = reinterpret_cast<int*>(&mode);
 
 	ImGui::SliderInt("Mode", ptr, 0, 2, modeNames[*ptr]);
 	ImGui::Checkbox("Override Previous", &overrideCell);
@@ -60,18 +60,19 @@ void PortAdder::showHelpUI()
 
 	ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
+	ImGui::Text("The [Transistor] works similarly to the [Inverter]; it also requires a 'T' shape to function");
+	ImGui::Text("However, the left branch of the 'T' is the Output and the right branch of the 'T' is the Input");
+	ImGui::Text("If the Control is powered Off, the Output is also powered Off, ignoring the state of Input");
+	ImGui::Text("If the Control is powered On, the state of the Input is directly copied/passed to the Output");
+
+	ImGui::Dummy(ImVec2(0.0f, 10.0f));
+
 	ImGui::Text("The [Bridge] serves as a junction that links two [Wires] on the same axis together");
 	ImGui::Text("It allows the creation of '+' shaped circuits to transmit signals without interference");
 
 	ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
-	ImGui::Text("The [Transistor] works similarly to the [Inverter]; it also requires a 'T' shape to function");
-	ImGui::Text("If the Control is powered Off, the Output is also powered Off, ignoring the state of Input");
-	ImGui::Text("If the Control is powered On, the state of the Input is copied/passed to the Output");
-
-	ImGui::Dummy(ImVec2(0.0f, 10.0f));
-
 	ImGui::Text("Keyboard Shortcut (Inverter): Number Key 1");
-	ImGui::Text("Keyboard Shortcut (Bridge): Number Key 2");
-	ImGui::Text("Keyboard Shortcut (Transistor): Number Key 3");
+	ImGui::Text("Keyboard Shortcut (Transistor): Number Key 2");
+	ImGui::Text("Keyboard Shortcut (Bridge): Number Key 3");
 }

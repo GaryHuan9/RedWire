@@ -24,9 +24,9 @@ namespace RedWire
 
 		void addWire(const Int2& position);
 		void addInverter(const Int2& position);
+		void addTransistor(const Int2& position);
 		void addBridge(const Int2& position);
 		void addNote(const Int2& position);
-		void addTransistor(const Int2& position);
 
 		void remove(const Int2& position);
 
@@ -61,9 +61,9 @@ namespace RedWire
 
 		void removeWire(const Int2& position);
 		void removeInverter(const Int2& position);
+		void removeTransistor(const Int2& position);
 		void removeBridge(const Int2& position);
 		void removeNote(const Int2& position);
-		void removeTransistor(const Int2& position);
 
 		template<typename Type> static void removeFrom(std::vector<std::shared_ptr<Type>>& vector, Type* target);
 

@@ -4,9 +4,6 @@
 #include "../Control/InputManager.h"
 #include "../Core/TickManager.h"
 #include "../Core/Grid.h"
-#include "../Control/UIManager.h"
-#include "HelpWindow.h"
-#include "CreditWindow.h"
 
 #include <math.h>
 #include "imgui.h"
@@ -28,10 +25,6 @@ void General::show()
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("Exit")) toolbox.application.close();
-
-	ImGui::SameLine();
-
 	if (ImGui::Button("Reset Toolbox")) toolbox.resetWindow();
 
 	ImGui::SameLine();
@@ -50,19 +43,7 @@ void General::show()
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("Help"))
-	{
-		UIManager& uiManager = toolbox.application.find<UIManager>();
-		uiManager.find<HelpWindow>().toggleActive();
-	}
-
-	ImGui::SameLine();
-
-	if (ImGui::Button("Credits"))
-	{
-		UIManager& uiManager = toolbox.application.find<UIManager>();
-		uiManager.find<CreditWindow>().toggleActive();
-	}
+	if (ImGui::Button("Exit")) toolbox.application.close();
 
 	showTickControls();
 }
