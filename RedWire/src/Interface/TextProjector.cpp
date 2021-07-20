@@ -4,6 +4,8 @@
 #include "../Core/Note.h"
 #include "../Type2.h"
 
+#include <iostream>
+
 #include <string>
 #include <memory>
 #include <fstream>
@@ -36,25 +38,36 @@ TextProjector::TextProjector(const char* fileName)
 				stream >> character;
 
 				Int2 size = Int2((int32_t)nextWidth, (int32_t)lineHeight);
+				//NOTE: Stored as lower case
 				map.emplace(std::tolower(character), Glyph(stream, size));
 
 				break;
 			}
 		}
 	}
+
+	for (auto& item : map) std::cout << item.first << ": " << item.second.width << '\n';
+
+	stream.close();
 }
 
 Region TextProjector::fromText(std::string text) const
 {
+	//NOTE: remember to make it lower case
 	int32_t totalWidth = text.length() - 1; //Spaces between letters
-	for (auto& letter : text) totalWidth += map.at(letter).width;
+	for (auto& letter : text) totalWidth += map.at(std::tolower(letter)).width;
 
 	Grid grid;
 	int32_t cursor{ 0 };
 
 	for (auto& letter : text)
 	{
-		const Glyph& glyph = map.at(letter);
+		const char letterLower = std::tolower(letter);
+
+		// checks if exists
+		if (map.find(letterLower) == map.end()) continue;
+
+		const Glyph& glyph = map.at(letterLower);
 
 		for (uint32_t y = 0u; y < lineHeight; y++)
 		{
