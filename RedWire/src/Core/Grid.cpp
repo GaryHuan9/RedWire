@@ -90,7 +90,7 @@ void Grid::addWire(const Int2& position)
 			floodReplace(local, bundle);
 			removeFrom(wires, wire);
 
-			static_cast<Wire*>(bundle.get())->combine(*wire);
+			dynamic_cast<Wire*>(bundle.get())->combine(*wire);
 		}
 	}
 
@@ -163,7 +163,7 @@ void Grid::remove(const Int2& position)
 	Cell* const previous = get(position);
 	if (previous == nullptr) return;
 
-	//We must use else if because previous might become corruped/undefined when we remove something
+	//We must use else if because previous might become corrupted/undefined when we remove something
 
 	/**/ if (dynamic_cast<Wire*>(previous) != nullptr)       removeWire(position);
 	else if (dynamic_cast<Inverter*>(previous) != nullptr)   removeInverter(position);

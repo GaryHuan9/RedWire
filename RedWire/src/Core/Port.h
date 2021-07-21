@@ -10,7 +10,7 @@ namespace RedWire
 	struct Port : Cell
 	{
 		bool getEnabled() const;
-		void setEnabled(const bool enabled);
+		void setEnabled(bool enabled);
 
 		virtual void refresh(Grid& grid, const Int2& position) = 0;
 

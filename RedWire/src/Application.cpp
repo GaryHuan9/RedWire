@@ -45,7 +45,7 @@ int main()
 Application::Application() : RenderWindow(VideoMode::getDesktopMode(), "Red Wire", Style::Default, ContextSettings{ 0, 0, 2, 1, 1, ContextSettings::Attribute::Default, true }),
 grid(std::make_unique<Grid>()), components(), clock()
 {
-#define make_component(type) components[typeid(type)] = std::make_unique<type>(*this);
+#define make_component(type) components[typeid(type)] = std::make_unique<type>(*this)
 
 	make_component(InputManager);
 	make_component(TickManager);
