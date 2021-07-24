@@ -7,7 +7,7 @@
 using namespace RedWire;
 using namespace std;
 
-template<typename T> void write(ostream& stream, const T& value)
+template<typename T> static void write(ostream& stream, const T& value)
 {
 	union
 	{
@@ -21,7 +21,7 @@ template<typename T> void write(ostream& stream, const T& value)
 /// <summary>
 /// Variable length encode a lane id and lane length pair.
 /// </summary>
-void write(ostream& stream, const uint8_t& id, const uint32_t& length)
+static void write(ostream& stream, const uint8_t& id, const uint32_t& length)
 {
 	uint8_t first = id & 0b1111u;
 	uint32_t remain = length >> 3;
@@ -76,7 +76,7 @@ void IdField::writeTo(ostream& stream, const Int2& min, const Int2& max) const /
 	}
 }
 
-template<typename T> T read(istream& stream)
+template<typename T> static T read(istream& stream)
 {
 	union
 	{
@@ -91,7 +91,7 @@ template<typename T> T read(istream& stream)
 /// <summary>
 /// Variable length decode a lane id and lane length pair.
 /// </summary>
-void read(istream& stream, uint8_t& id, uint32_t& length)
+static void read(istream& stream, uint8_t& id, uint32_t& length)
 {
 	uint8_t first = read<uint8_t>(stream);
 

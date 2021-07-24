@@ -39,7 +39,7 @@ InputManager::InputManager(Application& application) : Component(application), v
 	currentTool = tools[typeid(SourceTool)].get();
 }
 
-bool imGuiStoleInput()
+static bool imGuiStoleInput()
 {
 	ImGuiIO& io = ImGui::GetIO();
 

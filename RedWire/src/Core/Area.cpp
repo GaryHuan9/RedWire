@@ -49,7 +49,7 @@ const shared_ptr<Cell>* Area::getAddress(const Int2& position) const
 	return &cells[local.y][local.x];
 }
 
-bool searchX(const vector<reference_wrapper<const Area::Tile>>& tiles, const size_t& y)
+static bool searchX(const vector<reference_wrapper<const Area::Tile>>& tiles, const size_t& y)
 {
 	for (const Area::Tile& tile : tiles)
 	{
@@ -62,7 +62,7 @@ bool searchX(const vector<reference_wrapper<const Area::Tile>>& tiles, const siz
 	return false;
 }
 
-bool searchY(const vector<reference_wrapper<const Area::Tile>>& tiles, const size_t& x)
+static bool searchY(const vector<reference_wrapper<const Area::Tile>>& tiles, const size_t& x)
 {
 	for (const Area::Tile& tile : tiles)
 	{
@@ -137,7 +137,7 @@ void Area::findBorder(Int2& min, Int2& max) const
 	}
 }
 
-template<typename T> void write(ostream& stream, const T& value)
+template<typename T> static void write(ostream& stream, const T& value)
 {
 	union
 	{
@@ -162,7 +162,7 @@ void Area::writeTo(ostream& stream, const Float2& viewCenter, const float& viewE
 	write(stream, viewExtend);
 }
 
-template<typename T> T read(istream& stream)
+template<typename T> static T read(istream& stream)
 {
 	union
 	{
