@@ -4,7 +4,7 @@
 #include <array>
 
 #include "Section.h"
-#include "UIWindow.h"
+#include "Window/UIWindow.h"
 
 namespace RedWire
 {

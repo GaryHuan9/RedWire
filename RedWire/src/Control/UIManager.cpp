@@ -1,9 +1,9 @@
 #include "imgui.h"
 
 #include "UIManager.h"
-#include "../Interface/HelpWindow.h"
 #include "../Interface/Toolbox.h"
-#include "../Interface/CreditWindow.h"
+#include "../Interface/Window/HelpWindow.h"
+#include "../Interface/Window/CreditWindow.h"
 
 using namespace RedWire;
 

@@ -166,8 +166,8 @@
     <ClCompile Include="src\Core\Transistor.cpp" />
     <ClCompile Include="src\Interface\SaveHotkeyAction.cpp" />
     <ClCompile Include="src\Interface\HotkeyAction.cpp" />
-    <ClCompile Include="src\Interface\CreditWindow.cpp" />
-    <ClCompile Include="src\Interface\HelpWindow.cpp" />
+    <ClCompile Include="src\Interface\Window\CreditWindow.cpp" />
+    <ClCompile Include="src\Interface\Window\HelpWindow.cpp" />
     <ClCompile Include="imgui-SFML.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
@@ -201,7 +201,7 @@
     <ClCompile Include="src\Interface\Serialization.cpp" />
     <ClCompile Include="src\Interface\Toolbox.cpp" />
     <ClCompile Include="src\Component.cpp" />
-    <ClCompile Include="src\Interface\UIWindow.cpp" />
+    <ClCompile Include="src\Interface\Window\UIWindow.cpp" />
     <ClCompile Include="src\Control\UIManager.cpp" />
     <ClCompile Include="src\Interface\TextProjector.cpp" />
   </ItemGroup>
@@ -215,8 +215,8 @@
     <ClInclude Include="src\Core\Transistor.h" />
     <ClInclude Include="src\Interface\SaveHotkeyAction.h" />
     <ClInclude Include="src\Interface\HotkeyAction.h" />
-    <ClInclude Include="src\Interface\CreditWindow.h" />
-    <ClInclude Include="src\Interface\HelpWindow.h" />
+    <ClInclude Include="src\Interface\Window\CreditWindow.h" />
+    <ClInclude Include="src\Interface\Window\HelpWindow.h" />
     <ClInclude Include="src\Control\LineTool.h" />
     <ClInclude Include="src\Control\NoteAdder.h" />
     <ClInclude Include="src\Core\Note.h" />
@@ -246,7 +246,7 @@
     <ClInclude Include="src\Core\Bridge.h" />
     <ClInclude Include="src\Core\Wire.h" />
     <ClInclude Include="src\Application.h" />
-    <ClInclude Include="src\Interface\UIWindow.h" />
+    <ClInclude Include="src\Interface\Window\UIWindow.h" />
     <ClInclude Include="src\Control\UIManager.h" />
     <ClInclude Include="src\Interface\TextProjector.h" />
   </ItemGroup>

@@ -114,16 +114,16 @@
     <ClCompile Include="src\Core\TickManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Interface\UIWindow.cpp">
+    <ClCompile Include="src\Interface\Window\UIWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Interface\HelpWindow.cpp">
+    <ClCompile Include="src\Interface\Window\HelpWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Control\UIManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Interface\CreditWindow.cpp">
+    <ClCompile Include="src\Interface\Window\CreditWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Interface\HotkeyAction.cpp">
@@ -245,10 +245,10 @@
     <ClInclude Include="src\Core\TickManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Interface\UIWindow.h">
+    <ClInclude Include="src\Interface\Window\UIWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Interface\HelpWindow.h">
+    <ClInclude Include="src\Interface\Window\HelpWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Control\UIManager.h">
@@ -257,7 +257,7 @@
     <ClInclude Include="Assets\Resource\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Interface\CreditWindow.h">
+    <ClInclude Include="src\Interface\Window\CreditWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Interface\HotkeyAction.h">

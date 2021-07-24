@@ -4,7 +4,7 @@
 #include <typeindex>
 #include <memory>
 #include "../Component.h"
-#include "../Interface/UIWindow.h"
+#include "../Interface/Window/UIWindow.h"
 
 namespace RedWire
 {

@@ -3,7 +3,7 @@
 #include "../Application.h"
 #include "../Control/UIManager.h"
 #include "../Control/SaveManager.h"
-#include "HelpWindow.h"
+#include "Window/HelpWindow.h"
 
 using namespace RedWire;
 

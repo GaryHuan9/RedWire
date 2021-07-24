@@ -1,7 +1,7 @@
 #include "Toolbox.h"
 #include "Information.h"
-#include "HelpWindow.h"
-#include "CreditWindow.h"
+#include "Window/HelpWindow.h"
+#include "Window/CreditWindow.h"
 
 #include "../Application.h"
 #include "../Core/Grid.h"
